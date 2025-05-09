@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4275756243036128048}
   - component: {fileID: 3692897558181781780}
+  - component: {fileID: 7552082975244199380}
   m_Layer: 0
   m_Name: MainSprite
   m_TagString: Untagged
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 41370b1fd084e3e44b3b378d037167ec, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bd9d74b6ad0126947922eef985f8c3ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -84,6 +85,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &7552082975244199380
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4912137475250029419}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5919a34517fca4b4ca2f1361143d1532, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6443820856758281112
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,6 +118,7 @@ GameObject:
   - component: {fileID: 5311524882950943088}
   - component: {fileID: 4849615972371284574}
   - component: {fileID: 2995131317264271267}
+  - component: {fileID: 8116476723746961578}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -132,8 +155,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c6a2b68c1390ae4c9e6eda5ca29db24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterRenderer: {fileID: 0}
-  WeaponPivot: {fileID: 0}
+  moveSpeed: 5
+  characterRenderer: {fileID: 3692897558181781780}
+  weaponPivot: {fileID: 1998769582237729210}
+  animator: {fileID: 7552082975244199380}
 --- !u!50 &4849615972371284574
 Rigidbody2D:
   serializedVersion: 4
@@ -206,6 +231,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.6, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &8116476723746961578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6443820856758281112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b5b7d5f6ac82e45b2b6441f5fdd0e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7260240623007538058
 GameObject:
   m_ObjectHideFlags: 0
