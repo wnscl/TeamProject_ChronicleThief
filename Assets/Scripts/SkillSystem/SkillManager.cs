@@ -8,27 +8,34 @@ public class SkillManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public List<SkillData> GetRandomSkills(int count = 3)
     {
-        List<SkillData> available = new List<SkillData>(allSkills);
+        List<SkillData> copy = new List<SkillData>(allSkills);
         List<SkillData> result = new List<SkillData>();
 
-        for (int i = 0; i < count && available.Count > 0; i++)
+        for (int i = 0; i < count && copy.Count > 0; i++)
         {
-            int index = Random.Range(0, available.Count);
-            result.Add(available[index]);
-            available.RemoveAt(index);
+            int index = Random.Range(0, copy.Count);
+            result.Add(copy[index]);
+            copy.RemoveAt(index);
         }
 
         return result;
     }
 
-   
     public void UnlockSkill(SkillData skill)
     {
-        //PlayerSkillSet.Instance.ApplySkill(skill);
+       
     }
 }
