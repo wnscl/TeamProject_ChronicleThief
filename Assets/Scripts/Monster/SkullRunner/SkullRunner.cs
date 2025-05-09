@@ -9,7 +9,7 @@ public class SkullRunner : BasicMonster
     Animator anim;
     BoxCollider2D col;
     GameObject testPlayer;
-
+    [SerializeField] float runSpeed;
 
     private void Awake()
     {
@@ -28,6 +28,7 @@ public class SkullRunner : BasicMonster
     public void FirstSetting()
     {
         moveSpeed = 5;
+        runSpeed = 6.5f;
         targetRocate = new Vector2(-30, -50);
     }
 
@@ -48,7 +49,7 @@ public class SkullRunner : BasicMonster
         while (!isDetectedPlayer)
         {
             Vector2 nowPos = transform.position;
-            direction = (targetRocate - nowPos).normalized;
+            Vector2 direction = (targetRocate - nowPos).normalized;
 
             float distanceOfPlayer = Vector2.Distance(transform.position, testPlayer.transform.position);
 
@@ -66,22 +67,44 @@ public class SkullRunner : BasicMonster
 
             yield return null;
         }
-        
-        SetMonsterState(MonsterState.Chase);
+
         rigid.velocity = Vector2.zero;
         anim.SetBool("isMove", false);
+        SetMonsterState(MonsterState.Chase);
     }
 
     protected override IEnumerator ChaseCoroutine()
     {
         bool isAttackPlayer = false;
+
+        
+        bool isFailToChasePlayer = false;
         anim.SetBool("isMove", true);
 
-        /*while (!isAttackPlayer)
+        while (!isFailToChasePlayer)
         {
-            //float distanceOfPlayer = Vector2.Distance()
-        }*/
-        yield return null;
+            Vector2 nowPos = transform.position;
+            Vector2 playerPos = testPlayer.transform.position;
+            Vector2 direction = (playerPos - nowPos).normalized;
+
+            float distanceOfPlayer = Vector2.Distance(transform.position, testPlayer.transform.position);
+
+            Debug.DrawLine(transform.position, testPlayer.transform.position, Color.green);
+
+
+            if (distanceOfPlayer > 10f)
+            {
+                isFailToChasePlayer = true;
+            }
+            else
+            {
+                rigid.velocity = direction * runSpeed;
+            }
+            yield return null;
+        }
+        SetMonsterState(MonsterState.MoveRocate);
+        rigid.velocity = Vector2.zero;
+        anim.SetBool("isMove", false);
     }
 
     //protected override IEnumerator AttackCoroutine()
