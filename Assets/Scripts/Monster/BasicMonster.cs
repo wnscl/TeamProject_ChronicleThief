@@ -1,25 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public enum MonsterState
 {
     None,
-    Spawn,
-    Idle,
-    MoveRocate,
-    Chase,
-    Attack,
-    Dead
+    Spawn, // 생성 됫을 때 상태 (초기화)
+    GetDamage, // 플레이어가 공격할 텀을 만들어주는 상태 몬스터에 따라 다름
+    MoveRocate, //정해진 목표지점으로 이동 그러나 이동 중 플레이어 발견 시 체이스로 상태 전환
+    Chase, //플레이어를 발견해 쫒아오는 패턴
+    Attack, //공격 후 휴식패턴 전환 몬스터에 따라 다름
+    Dead // 사망시 모든 행동 중지 
 }
 
-public class BasicMonster : MonoBehaviour
+public abstract class BasicMonster : MonoBehaviour
 {
     private MonsterState CurrentState = MonsterState.Spawn;
     private MonsterState NextState = MonsterState.None;
 
+    [Header("stat")]
+    [SerializeField] protected float moveSpeed;
+    [SerializeField] protected int hp;
+    [SerializeField] protected int maxHp;
 
-    public TestPlayer player;
+    [Header("move")]
+    [SerializeField] protected Vector2 direction;
+    [SerializeField] protected Vector2 targetRocate;
+
+
+    //public TestPlayer player;
     
     public void SetMonsterState(MonsterState state)
     {
@@ -31,78 +41,91 @@ public class BasicMonster : MonoBehaviour
                 OnSpawn();
                 break;
 
-            case MonsterState.Idle:
-
+            case MonsterState.GetDamage:
+                OnGetDamage();
                 break;
 
             case MonsterState.MoveRocate:
-
+                OnMoveRocate();
                 break;
 
             case MonsterState.Chase:
-
+                OnChase();
                 break;
 
             case MonsterState.Attack:
-
+                OnAttack();
                 break;
 
             case MonsterState.Dead:
-
+                OnDead();
                 break;
         }
     }
 
     private void OnSpawn()
     {
-        Debug.Log("몬스터 생성");
-        SetMonsterState(MonsterState.Idle);
+        Debug.Log("스컬러너 생성");
+        StartCoroutine(SpawnCoroutine());
+    }
+    protected virtual IEnumerator SpawnCoroutine()
+    {
+        yield return null;
     }
 
-    private void OnIdle()
+    private void OnGetDamage()
     {
         //idle 애니메이션 재생
         //idle에 따라 해야 할 것들을 처리
-        SetMonsterState(MonsterState.MoveRocate);
+        Debug.Log("스컬러너 데미지 상태전환");
+        StartCoroutine(GetDamageCoroutine());
+    }
+    protected virtual IEnumerator GetDamageCoroutine()
+    {
+        yield return null;
     }
 
     private void OnMoveRocate()
     {
+        Debug.Log("스컬러너 무브로케이트 상태전환");
         StartCoroutine(MoveRocateCoroutine());
     }
 
-    private IEnumerator MoveRocateCoroutine()
+    protected virtual IEnumerator MoveRocateCoroutine()
     {
-        bool isDetectedPlayer = false;
+        yield return null;
+    }
 
-        while (isDetectedPlayer == false)
-        {
-            float distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
+    private void OnChase()
+    {
+        Debug.Log("스컬러너 체이스 상태전환");
+        StartCoroutine(ChaseCoroutine());
+    }
 
-            if (distanceFromPlayer <= 3f) // 거리가 3 이하면 플레이어를 감지했다고 함
-            {
-                isDetectedPlayer = true;
-            }
-            else
-            {
-                Debug.Log("플레이어를 못 찾았습니다.");
-            }
+    protected virtual IEnumerator ChaseCoroutine()
+    {
+        yield return null;
+    }
 
-            yield return null;
-            //콘텍스트 = 맥락
-            //유니티는 한프레임에서 해야할 것들이 다양한데
-            //와일문에 코드가 갇혀버리면 다른 것들은 실행이 안되기 때문에
-            //코루틴을 사용하여 일리드 리턴으로 이 와일문을 빠져나가서
-            //다음프레임에 다시 와일문을 돌리라는 것
-            //즉 다음 프레임에 예약을 걸어둠 
-            // 그리고 이것은 yield return null이 세이브 포인트라고 생각
-            //--> 코루틴 내에 current라는 현재 상태를 담아두는 변수가 있고
-            //그래서 다음에 실행될 때 와일문이 끝나지 않았다면
-            //커런트에서 담아두는 것은 "yield return null까지 실행됬었다"
-            //즉 다음에 실행될때는 세이브포인트부터 실행
-        }
+    private void OnAttack()
+    {
+        Debug.Log("스컬러너 어택 상태전환");
+        StartCoroutine(AttackCoroutine());
+    }
+    protected virtual IEnumerator AttackCoroutine()
+    {
+        yield return null;
+    }
 
-        SetMonsterState(MonsterState.Chase);
+    private void OnDead()
+    {
+        Debug.Log("스컬러너 사망 상태전환");
+        StartCoroutine(DeadCoroutine());
+    }
+    protected virtual IEnumerator DeadCoroutine()
+    {
+        yield return null;
     }
 
 }
+
