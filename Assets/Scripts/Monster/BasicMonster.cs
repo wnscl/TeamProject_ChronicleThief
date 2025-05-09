@@ -25,7 +25,6 @@ public abstract class BasicMonster : MonoBehaviour
     [SerializeField] protected int maxHp;
 
     [Header("move")]
-    [SerializeField] protected Vector2 direction;
     [SerializeField] protected Vector2 targetRocate;
 
 
