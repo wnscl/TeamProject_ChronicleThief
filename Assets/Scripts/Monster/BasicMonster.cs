@@ -20,6 +20,7 @@ public abstract class BasicMonster : MonoBehaviour
     private MonsterState NextState = MonsterState.None;
 
     [Header("stat")]
+    [SerializeField] protected string name;
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected int currentHp;
     [SerializeField] protected int maxHp;

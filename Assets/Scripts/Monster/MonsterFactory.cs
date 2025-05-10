@@ -6,13 +6,15 @@ using UnityEngine.UIElements;
 
 public class MonsterFactory : MonoBehaviour
 {
-    private GameObject skullRunner;
+    [SerializeField] private GameObject skullRunner;
 
     [SerializeField] Vector2 createPos;
 
     public void Awake()
     {
-        skullRunner = FindObjectOfType<SkullRunner>().gameObject;
+        //skullRunner = FindObjectOfType<SkullRunner>().gameObject;
+        //skullRunner = FindAnyObjectByType<SkullRunner>().gameObject;
+        //skullRunner = 
         float createPosX = 10f;
         float createPosY = 10f;
         createPos = new Vector2(createPosX, createPosY);

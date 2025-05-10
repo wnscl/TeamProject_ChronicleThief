@@ -27,6 +27,7 @@ public class SkullRunner : BasicMonster
 
     public void FirstSetting()
     {
+        name = "스컬러너";
         moveSpeed = 5;
         runSpeed = 7f;
         currentHp = 35;
