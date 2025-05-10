@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 5901353443483178615}
   - component: {fileID: 1260344660067191912}
   m_Layer: 0
-  m_Name: MonsterTest
+  m_Name: SkullRunner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
-  hp: 0
+  currentHp: 0
   maxHp: 0
   targetRocate: {x: 0, y: 0}
   runSpeed: 0

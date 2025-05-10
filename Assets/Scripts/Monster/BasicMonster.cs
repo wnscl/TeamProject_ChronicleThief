@@ -21,15 +21,16 @@ public abstract class BasicMonster : MonoBehaviour
 
     [Header("stat")]
     [SerializeField] protected float moveSpeed;
-    [SerializeField] protected int hp;
+    [SerializeField] protected int currentHp;
     [SerializeField] protected int maxHp;
 
     [Header("move")]
     [SerializeField] protected Vector2 targetRocate;
 
 
-    //public TestPlayer player;
-    
+    protected GameObject testPlayer;
+    protected GameObject theStone;
+
     public void SetMonsterState(MonsterState state)
     {
         CurrentState = state;

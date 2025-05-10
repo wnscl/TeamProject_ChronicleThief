@@ -8,7 +8,6 @@ public class SkullRunner : BasicMonster
     Rigidbody2D rigid;
     Animator anim;
     BoxCollider2D col;
-    GameObject testPlayer;
     [SerializeField] float runSpeed;
 
     private void Awake()
@@ -17,6 +16,7 @@ public class SkullRunner : BasicMonster
         anim = GetComponentInChildren<Animator>();
         col = GetComponent<BoxCollider2D>();
         testPlayer = FindObjectOfType<TestPlayer>().gameObject;
+        theStone = FindObjectOfType<TheStone>().gameObject;
 
         FirstSetting();
 
@@ -28,8 +28,11 @@ public class SkullRunner : BasicMonster
     public void FirstSetting()
     {
         moveSpeed = 5;
-        runSpeed = 6.5f;
-        targetRocate = new Vector2(-30, -50);
+        runSpeed = 7f;
+        currentHp = 35;
+        maxHp = 35;
+
+        targetRocate = theStone.transform.position;
     }
 
 
