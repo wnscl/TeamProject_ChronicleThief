@@ -1,0 +1,48 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MapInteraction : MonoBehaviour
+{
+    protected bool inZone = false;
+
+    protected virtual void Update()
+    {
+        // if (inZone)
+        // {
+        //     Debug.Log("부모 Iteraction 호출");
+        //     Interact();
+        // }
+    }
+
+    protected virtual void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            inZone = true;
+        }
+    }
+
+    protected virtual void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            inZone = false;
+        }
+    }
+
+    protected virtual void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            inZone = true;
+        }
+        Debug.Log("부모 클래스에서 Stay2D 점검 중 inZone :" + inZone);
+    }
+
+    protected virtual void Interact()
+    {
+        Debug.Log("MapInteraction: 부모 클래스 작동.");
+    }
+}
