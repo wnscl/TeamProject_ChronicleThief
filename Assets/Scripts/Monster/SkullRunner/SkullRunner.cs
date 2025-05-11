@@ -8,8 +8,9 @@ public class SkullRunner : BasicMonster
     Rigidbody2D rigid;
     Animator anim;
     BoxCollider2D col;
+    SkullRunnerWeapon weapon;
     [SerializeField] float runSpeed;
-
+    
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -17,12 +18,13 @@ public class SkullRunner : BasicMonster
         col = GetComponent<BoxCollider2D>();
         testPlayer = FindObjectOfType<TestPlayer>().gameObject;
         theStone = FindObjectOfType<TheStone>().gameObject;
+        weapon = GetComponentInChildren<SkullRunnerWeapon>();
 
         FirstSetting();
 
         SetMonsterState(MonsterState.Spawn);
         anim.SetBool("isSpawn", true);
-
+        
     }
 
     private void Start()
@@ -34,6 +36,11 @@ public class SkullRunner : BasicMonster
         //각 몬스터가 생성될 때 마다 start에서 애니메이션을 연결하는 허브인 아이들을
         //시작타이밍이 어긋나게해서 겹쳤을 때 여러마리처럼 보이게 하는 방식
         
+    }
+
+    private void LateUpdate()
+    {
+        LookPlayer();
     }
 
     public void FirstSetting()
@@ -58,6 +65,7 @@ public class SkullRunner : BasicMonster
     {
         int readyToNextState = 0;
         anim.SetBool("isMove", true);
+        weapon.MoveSet(true);
 
         while (readyToNextState == 0)
         {
@@ -185,6 +193,7 @@ public class SkullRunner : BasicMonster
     {
         rigid.velocity = Vector2.zero;
         anim.SetBool("isMove", false);
+        weapon.MoveSet(false);
     }
 }
 

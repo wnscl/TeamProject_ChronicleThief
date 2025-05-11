@@ -33,6 +33,28 @@ public abstract class BasicMonster : MonoBehaviour
     protected GameObject testPlayer;
     protected GameObject theStone;
 
+    protected void LookPlayer()
+    {
+        
+        if (testPlayer != null)
+        {
+            if (transform.position.x > testPlayer.transform.position.x)
+            {
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                //transform.localScale = new Vector3(-1, 1, 1); // 왼쪽 보기
+                //로컬스케일로도 구현가능
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                //transform.localScale = new Vector3(1, 1, 1); // 오른쪽 보기
+                //로컬스케일로도 구현가능
+            }
+        }
+
+    }
+
+
     public void SetMonsterState(MonsterState state)
     {
         CurrentState = state;
