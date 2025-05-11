@@ -11,6 +11,11 @@ public class PlayerStats : MonoBehaviour
     public float Speed { get => speed; set => speed = Mathf.Clamp(value, 0, 10); }
 
     //플레이어 자체 공격력
+    [SerializeField] private float playerAttackPower = 10f;
+    public float PlayerAttackPower { get => playerAttackPower; set => playerAttackPower = Mathf.Max(1, value); }
+
     //플레이어 자체 방어력
+    [SerializeField] private float playerDefensePower = 5;
+    public float PlayerDefensePower { get => playerDefensePower; set => playerDefensePower = Mathf.Max(0, value); }
 
 }

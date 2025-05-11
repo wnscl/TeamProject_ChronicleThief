@@ -8,30 +8,51 @@ public class SkullRunner : BasicMonster
     Rigidbody2D rigid;
     Animator anim;
     BoxCollider2D col;
-    GameObject testPlayer;
-
-
+    SkullRunnerWeapon weapon;
+    [SerializeField] float runSpeed;
+    
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         col = GetComponent<BoxCollider2D>();
         testPlayer = FindObjectOfType<TestPlayer>().gameObject;
+        theStone = FindObjectOfType<TheStone>().gameObject;
+        weapon = GetComponentInChildren<SkullRunnerWeapon>();
 
         FirstSetting();
 
         SetMonsterState(MonsterState.Spawn);
         anim.SetBool("isSpawn", true);
+        
+    }
 
+    private void Start()
+    {
+        anim.Play("SkullRunnerIdle", 0, Random.Range(0f, 0.1f));
+        //생성되는 스컬러너는 같은 애니메이터를 공유하기 때문에
+        //스폰되는 시점이 다르더라도 목표를 쫒는 상황일 때 애니메이션이 동시점에 실행되어
+        //몬스터가 겹쳤을 때 정말 한마리처럼 보이는 현상을 해결하기 위해
+        //각 몬스터가 생성될 때 마다 start에서 애니메이션을 연결하는 허브인 아이들을
+        //시작타이밍이 어긋나게해서 겹쳤을 때 여러마리처럼 보이게 하는 방식
+        
+    }
+
+    private void LateUpdate()
+    {
+        LookPlayer();
     }
 
     public void FirstSetting()
     {
+        name = "스컬러너";
         moveSpeed = 5;
-        targetRocate = new Vector2(-30, -50);
+        runSpeed = 7f;
+        currentHp = 35;
+        maxHp = 35;
+
+        targetRocate = theStone.transform.position;
     }
-
-
 
     protected override IEnumerator SpawnCoroutine()
     {
@@ -42,52 +63,121 @@ public class SkullRunner : BasicMonster
 
     protected override IEnumerator MoveRocateCoroutine()
     {
-        bool isDetectedPlayer = false;
+        int readyToNextState = 0;
         anim.SetBool("isMove", true);
+        weapon.MoveSet(true);
 
-        while (!isDetectedPlayer)
+        while (readyToNextState == 0)
         {
             Vector2 nowPos = transform.position;
-            direction = (targetRocate - nowPos).normalized;
+            Vector2 direction = (targetRocate - nowPos).normalized;
+            Vector2 nextPos = direction * moveSpeed * Time.deltaTime;
 
             float distanceOfPlayer = Vector2.Distance(transform.position, testPlayer.transform.position);
+            float distanceOfStone = Vector2.Distance(transform.position, targetRocate);
 
             Debug.DrawLine(transform.position, testPlayer.transform.position, Color.red);
 
-            if (distanceOfPlayer <= 5f) // 거리가 5 이하면 플레이어를 감지했다고 함
+            if (distanceOfPlayer <= 7f) // 거리가 7 이하면 플레이어를 감지했다고 함
             {
-                isDetectedPlayer = true;
+                readyToNextState = 1; //플레이어 추격모드로 전환
+                break;
+            }
+            else if (distanceOfStone <= 4f)
+            { 
+                readyToNextState = 2; //오브젝트 공격모드로 전환
+                break;
             }
             else
             {
-                rigid.velocity = direction * moveSpeed;
+                //rigid.velocity = direction * moveSpeed;
                 //a = 이오브젝트 b = 타겟로케이트 b에서 a를 빼줘야함 그리고 노멀라이즈
+                rigid.MovePosition(rigid.position + nextPos);
+                rigid.velocity = Vector2.zero;
             }
 
-            yield return null;
+            //yield return null;  
+            yield return new WaitForFixedUpdate();
         }
         
-        SetMonsterState(MonsterState.Chase);
-        rigid.velocity = Vector2.zero;
-        anim.SetBool("isMove", false);
+        switch(readyToNextState)
+        {
+            case 1:
+                StopMove();
+                SetMonsterState(MonsterState.Chase);
+                break;
+
+            case 2:
+                StopMove();
+                SetMonsterState(MonsterState.Attack);
+                break;
+        }
     }
 
     protected override IEnumerator ChaseCoroutine()
     {
-        bool isAttackPlayer = false;
+        int readyToNextState = 0;
+
         anim.SetBool("isMove", true);
 
-        /*while (!isAttackPlayer)
+        while (readyToNextState == 0)
         {
-            //float distanceOfPlayer = Vector2.Distance()
-        }*/
-        yield return null;
+            Vector2 nowPos = transform.position;
+            Vector2 playerPos = testPlayer.transform.position;
+            Vector2 direction = (playerPos - nowPos).normalized;
+            Vector2 nextPos = direction * runSpeed * Time.deltaTime;
+
+            float distanceOfPlayer = Vector2.Distance(transform.position, testPlayer.transform.position);
+
+            Debug.DrawLine(transform.position, testPlayer.transform.position, Color.green);
+
+
+            if (distanceOfPlayer > 10f)
+            {
+                readyToNextState = 1; //플레이어 추격 실패
+                //다시 오브젝트 이동 모드로 전환 1
+                break;
+            }
+            else if (distanceOfPlayer <= 4f)
+            {
+                readyToNextState = 2; //플레이어 공격범위 체크
+                //공격모드로 전환 2
+                break;
+            }
+            else
+            {
+                //rigid.velocity = direction * runSpeed;
+                rigid.MovePosition(rigid.position + nextPos);
+                rigid.velocity = Vector2.zero;
+                //플레이어 추격 중
+            }
+
+            //yield return null;
+            yield return new WaitForFixedUpdate(); 
+            //MovePosition같은 물리 연산은
+            //픽스드업데이트에서 하는 것이 맞다.
+        }
+
+        switch (readyToNextState)
+        {
+            case 1:
+                StopMove();
+                SetMonsterState(MonsterState.MoveRocate);
+                break;
+
+            case 2:
+                StopMove();
+                SetMonsterState (MonsterState.Attack);
+                break;
+        }
     }
 
-    //protected override IEnumerator AttackCoroutine()
-    //{
+    protected override IEnumerator AttackCoroutine()
+    {
 
-    //}
+
+        yield return null;
+    }
 
     //protected override IEnumerator DeadCoroutine()
     //{
@@ -98,6 +188,13 @@ public class SkullRunner : BasicMonster
     //{
 
     //}
+
+    public void StopMove()
+    {
+        rigid.velocity = Vector2.zero;
+        anim.SetBool("isMove", false);
+        weapon.MoveSet(false);
+    }
 }
 
 

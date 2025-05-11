@@ -2,16 +2,25 @@ using UnityEngine;
 
 public class NPCSpawner : MonoBehaviour
 {
-    public GameObject npcPrefab;
-    public Transform spawnPoint;
-    private bool hasSpawned;
+    [Header("Spawn Settings")]
+    public GameObject[] npcPrefabs;    // 소환할 NPC 프리팹들 (2개)
+    public Transform[] spawnPoints;    // 소환 위치들 (2개)
+
+    private bool hasSpawned = false;   // 한 번만 소환하도록
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!hasSpawned && other.CompareTag("Player"))
+        if (hasSpawned) return;
+        if (!other.CompareTag("Player")) return;
+
+        // npcPrefabs.Length와 spawnPoints.Length가 같다고 가정하고,
+        // i번째 프리팹을 i번째 위치에 소환합니다.
+        int count = Mathf.Min(npcPrefabs.Length, spawnPoints.Length);
+        for (int i = 0; i < count; i++)
         {
-            Instantiate(npcPrefab, spawnPoint.position, Quaternion.identity);
-            hasSpawned = true;
+            Instantiate(npcPrefabs[i], spawnPoints[i].position, Quaternion.identity);
         }
+
+        hasSpawned = true;
     }
 }
