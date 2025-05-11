@@ -18,7 +18,7 @@ public enum MonsterState
 public abstract class BasicMonster : MonoBehaviour
 {
     private MonsterState CurrentState = MonsterState.Spawn;
-    private MonsterState NextState = MonsterState.None;
+    //private MonsterState NextState = MonsterState.None;
 
     [Header("stat")]
     [SerializeField] protected string name;
@@ -89,7 +89,7 @@ public abstract class BasicMonster : MonoBehaviour
 
     private void OnSpawn()
     {
-        Debug.Log("스컬러너 생성");
+        //Debug.Log("스컬러너 생성");
         StartCoroutine(SpawnCoroutine());
     }
     protected virtual IEnumerator SpawnCoroutine()
@@ -101,7 +101,7 @@ public abstract class BasicMonster : MonoBehaviour
     {
         //idle 애니메이션 재생
         //idle에 따라 해야 할 것들을 처리
-        Debug.Log("스컬러너 데미지 상태전환");
+        //Debug.Log("스컬러너 데미지 상태전환");
         StartCoroutine(GetDamageCoroutine());
     }
     protected virtual IEnumerator GetDamageCoroutine()
@@ -111,7 +111,7 @@ public abstract class BasicMonster : MonoBehaviour
 
     private void OnMoveRocate()
     {
-        Debug.Log("스컬러너 무브로케이트 상태전환");
+        //Debug.Log("스컬러너 무브로케이트 상태전환");
         StartCoroutine(MoveRocateCoroutine());
     }
 
@@ -122,7 +122,7 @@ public abstract class BasicMonster : MonoBehaviour
 
     private void OnChase()
     {
-        Debug.Log("스컬러너 체이스 상태전환");
+        //Debug.Log("스컬러너 체이스 상태전환");
         StartCoroutine(ChaseCoroutine());
     }
 
@@ -133,7 +133,7 @@ public abstract class BasicMonster : MonoBehaviour
 
     private void OnAttack()
     {
-        Debug.Log("스컬러너 어택 상태전환");
+        //Debug.Log("스컬러너 어택 상태전환");
         StartCoroutine(AttackCoroutine());
     }
     protected virtual IEnumerator AttackCoroutine()
@@ -143,7 +143,7 @@ public abstract class BasicMonster : MonoBehaviour
 
     private void OnDead()
     {
-        Debug.Log("스컬러너 사망 상태전환");
+        //Debug.Log("스컬러너 사망 상태전환");
         StartCoroutine(DeadCoroutine());
     }
     protected virtual IEnumerator DeadCoroutine()
