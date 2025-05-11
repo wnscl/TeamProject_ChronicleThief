@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,13 @@ public class ResourcesHandler : MonoBehaviour
 
     public float CurrentHealth { get; private set; }
     public float MaxHealth => playerStats.Health;
+
+    [Header("Gold")]
+    [SerializeField] private int gold = 0;
+    public int Gold => gold; // 읽기전용
+
+    // 골드 변경 시 UI 등에 알릴 이벤트
+    //public event Action<int> OnGoldChanged;
 
     private void Awake()
     {
@@ -60,6 +68,25 @@ public class ResourcesHandler : MonoBehaviour
 
 
         return true;
+    }
+
+    public void AddGold(int amount) // 몬스터 처치 함수에 추가해주면 됨.
+    {
+        if (amount <= 0) return;
+
+        gold += amount;
+        //OnGoldChanged?.Invoke(gold); // 이벤트로 UI 알림
+        Debug.Log($"Gold Added : {amount} | Total : {gold}");
+    }
+
+    public void SpendGold()//public bool SpendGold(int amount) 상점 부분에 넣어주면 됨.
+    {
+        //if (amount <= 0 || gold < amount) return false; // 잔고 부족 시 실패
+
+        //gold -= amount; //음수방지
+        //OnGoldChanged?.Invoke(gold); // 이벤트로 UI 알림
+        //Debug.Log($"Gold Spent: {amount} | Remaining: {gold}");
+        //return true;
     }
 
     private void Death()

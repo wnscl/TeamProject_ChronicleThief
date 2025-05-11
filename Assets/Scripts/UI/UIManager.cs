@@ -14,33 +14,36 @@ namespace UI
         public TMP_Text speakerText;    // 화자 이름
         public TMP_Text contentText;    // 대사 내용
         public GameObject messageUIPrefab;  // 메시지 UI 프리팹
-        public Button useButton, skipButton; // qjxms
+        public Button useButton, skipButton; //
 
         void Awake()
         {
-            // 싱글톤 초기화
             if (Instance == null)
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
                 SceneManager.sceneLoaded += OnSceneLoaded;
+                // 처음 씬도 찾아 주기
                 OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
             }
             else Destroy(gameObject);
-
-            useButton = dialogPanel.transform.Find("UseButton").GetComponent<Button>();
-            skipButton = dialogPanel.transform.Find("SkipButton").GetComponent<Button>();
-            HideChoice();
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            // 씬 이름 체크 제거 → 언제든찾기
             var dlg = GameObject.Find("DialogPanel");
-            if (dlg != null && scene.name == "GameScene")
+            if (dlg != null)
             {
                 dialogPanel = dlg;
-                speakerText = dlg.transform.Find("SpeakerText").GetComponent<TMP_Text>();
-                contentText = dlg.transform.Find("ContentText").GetComponent<TMP_Text>();
+                speakerText = dlg.transform.Find("SpeakerText")
+                                  .GetComponent<TMP_Text>();
+                contentText = dlg.transform.Find("ContentText")
+                                  .GetComponent<TMP_Text>();
+            }
+            else
+            {
+                Debug.LogWarning($"DialogPanel not found in scene {scene.name}");
             }
         }
 
@@ -61,14 +64,7 @@ namespace UI
             var messageUI = Instantiate(messageUIPrefab);
             messageUI.GetComponent<MessageUI>().SetMessage(message);
         }
-        void HideChoice()
-        {
-            useButton.gameObject.SetActive(false);
-            skipButton.gameObject.SetActive(false);
-        }
-
-        public void ShowChoice(string speaker, string line,
-                       UnityAction onUse, UnityAction onSkip)
+        public void ShowChoice(string speaker, string line, UnityAction onUse, UnityAction onSkip)
         {
             ShowDialog(speaker, line);
             useButton.gameObject.SetActive(true);
@@ -77,6 +73,11 @@ namespace UI
             skipButton.onClick.RemoveAllListeners();
             useButton.onClick.AddListener(() => { HideChoice(); onUse(); });
             skipButton.onClick.AddListener(() => { HideChoice(); onSkip(); });
+        }
+        public void HideChoice()
+        {
+            useButton.gameObject.SetActive(false);
+            skipButton.gameObject.SetActive(false);
         }
     }
 }

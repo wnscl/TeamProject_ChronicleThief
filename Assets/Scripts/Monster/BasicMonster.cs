@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
@@ -20,16 +21,40 @@ public abstract class BasicMonster : MonoBehaviour
     private MonsterState NextState = MonsterState.None;
 
     [Header("stat")]
+    [SerializeField] protected string name;
     [SerializeField] protected float moveSpeed;
-    [SerializeField] protected int hp;
+    [SerializeField] protected int currentHp;
     [SerializeField] protected int maxHp;
 
     [Header("move")]
     [SerializeField] protected Vector2 targetRocate;
 
 
-    //public TestPlayer player;
-    
+    protected GameObject testPlayer;
+    protected GameObject theStone;
+
+    protected void LookPlayer()
+    {
+        
+        if (testPlayer != null)
+        {
+            if (transform.position.x > testPlayer.transform.position.x)
+            {
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                //transform.localScale = new Vector3(-1, 1, 1); // 왼쪽 보기
+                //로컬스케일로도 구현가능
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                //transform.localScale = new Vector3(1, 1, 1); // 오른쪽 보기
+                //로컬스케일로도 구현가능
+            }
+        }
+
+    }
+
+
     public void SetMonsterState(MonsterState state)
     {
         CurrentState = state;
