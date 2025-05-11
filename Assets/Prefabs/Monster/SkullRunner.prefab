@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 4022076033253195499}
   - component: {fileID: 5901353443483178615}
   - component: {fileID: 1260344660067191912}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkullRunner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad275e15b7e0d35499e74ab5ea1e15b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: 
   moveSpeed: 0
   currentHp: 0
   maxHp: 0

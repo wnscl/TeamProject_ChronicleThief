@@ -22,16 +22,22 @@ public class MonsterFactory : MonoBehaviour
 
     public void Start()
     {
-        MakeMonster();
+        OnMakeMonster();
         //ClearAllMonsterByName("SkullRunner");
         ClearAllMonsterByName("SkullRunner(Clone)");
     }
 
-    public void MakeMonster()
+    public void OnMakeMonster()
+    {
+        StartCoroutine(MakeMonster());
+    }
+
+    public IEnumerator MakeMonster()
     {
         for (int i = 0; i < 10; i++)
         {
             Instantiate(skullRunner, createPos, Quaternion.identity, this.transform);
+            yield return new WaitForSeconds(0.5f);
         }
 
         /*Instantiate(original);                           // 가장 기본
