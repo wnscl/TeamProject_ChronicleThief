@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class SkullRunner : BasicMonster, IBattleEntity
 {
-    SkullRunnerWeapon weapon;
     GameObject theLine;
-    [SerializeField] float runSpeed;
-    Vector2 targetPos;
 
     private void Start()
     {
-        weapon = GetComponentInChildren<SkullRunnerWeapon>();
         theLine = transform.Find("Line").gameObject;
         FirstSetting();
 
@@ -31,147 +27,68 @@ public class SkullRunner : BasicMonster, IBattleEntity
         currentHp = 35;
         maxHp = 35;
         atk = 10;
+        detectDistancePlayer = 7f;
+        detectDistanceStone = 1f;
+        failDistancePlayer = 10f;
+        attackDistance = 1.2f;
 
         targetRocate = theStone.transform.position;
         StartAction("startSpawn");
         SetMonsterState(MonsterState.Spawn);
     }
 
-    protected override IEnumerator ChaseCoroutine()
-    {
-        int readyToNextState = 0;
-        StartAction("startMove");
 
-        while (readyToNextState == 0)
+    /*    protected override IEnumerator AttackCoroutine()
         {
-            Vector2 nowPos = transform.position;
-            Vector2 playerPos = testPlayer.transform.position;
-            Vector2 direction = (playerPos - nowPos).normalized;
-            Vector2 nextPos = direction * runSpeed * Time.deltaTime;
+            int readyToNextState = 0;
+            bool isAttack = false;
+            StartAction("startAttack");
+            float attackSpeed = 20f;
+            float attackTimer = 0f;
 
-            float distanceOfPlayer = Vector2.Distance(transform.position, testPlayer.transform.position);
+            Vector2 startPos = transform.position;
+            Vector2 attackDirection = (targetPos - (Vector2)transform.position).normalized;
+            //몬스터가 목표지점을 바라보는 방향값
+            float angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
+            //각도를 라디안으로 구하고 라디안을 디그리(도단위)로 변한
 
-            Debug.DrawLine(transform.position, testPlayer.transform.position, Color.green);
+            theLine.SetActive(true);
+            theLine.transform.rotation = Quaternion.Euler(0, 0, angle);
 
-
-            if (distanceOfPlayer > 10f)
+            while (attackTimer < 0.5f)
             {
-                readyToNextState = 1; //플레이어 추격 실패
-                //다시 오브젝트 이동 모드로 전환 1
-                break;
+                attackTimer += Time.deltaTime;
+                yield return null;
             }
-            else if (distanceOfPlayer <= 2f)
+            theLine.SetActive(false);
+            col.isTrigger = true;
+
+            while (!isAttack)
             {
-                readyToNextState = 2; //플레이어 공격범위 체크
-                //공격모드로 전환 2
-                targetPos = playerPos;
-                Debug.Log("플레이어를 공격타겟으로 지정");
-                break;
-            }
-            else
-            {
-                //rigid.velocity = direction * runSpeed;
+                Vector2 nextPos = attackDirection * attackSpeed * Time.deltaTime;
                 rigid.MovePosition(rigid.position + nextPos);
-                rigid.velocity = Vector2.zero;
-                //플레이어 추격 중
+
+                if (Vector2.Distance(startPos, transform.position) >= 3.5f )
+                {
+                    isAttack = true;
+                    readyToNextState = 1; //공격 성공
+                    break;
+                }
+
+                yield return new WaitForFixedUpdate();
             }
 
-            //yield return null;
-            yield return new WaitForFixedUpdate(); 
-            //MovePosition같은 물리 연산은
-            //픽스드업데이트에서 하는 것이 맞다.
-        }
 
-        switch (readyToNextState)
-        {
-            case 1:
-                StopAction("dontStopMove");
-                yield return new WaitForSeconds(0.001f);
-                SetMonsterState(MonsterState.MoveRocate);
-                break;
-
-            case 2:
-                StopAction("stopAll");
-                yield return new WaitForSeconds(0.001f);
-                SetMonsterState (MonsterState.Attack);
-                break;
-        }
-    }
-
-    protected override IEnumerator AttackCoroutine()
-    {
-        int readyToNextState = 0;
-        bool isAttack = false;
-        StartAction("startAttack");
-        float attackSpeed = 20f;
-        float attackTimer = 0f;
-
-        Vector2 startPos = transform.position;
-        Vector2 attackDirection = (targetPos - (Vector2)transform.position).normalized;
-        //몬스터가 목표지점을 바라보는 방향값
-        float angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
-        //각도를 라디안으로 구하고 라디안을 디그리(도단위)로 변한
-
-        theLine.SetActive(true);
-        theLine.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        while (attackTimer < 0.5f)
-        {
-            attackTimer += Time.deltaTime;
-            yield return null;
-        }
-        theLine.SetActive(false);
-        col.isTrigger = true;
-
-        while (!isAttack)
-        {
-            Vector2 nextPos = attackDirection * attackSpeed * Time.deltaTime;
-            rigid.MovePosition(rigid.position + nextPos);
-
-            if (Vector2.Distance(startPos, transform.position) >= 3.5f )
+            switch (readyToNextState)
             {
-                isAttack = true;
-                readyToNextState = 1; //공격 성공
-                break;
+                case 1:
+                    StopAction("stopAttack");
+                    yield return new WaitForSeconds(0.001f);
+                    SetMonsterState(MonsterState.Chase);
+                    break;
             }
+        }*/
 
-            yield return new WaitForFixedUpdate();
-        }
-
-
-        switch (readyToNextState)
-        {
-            case 1:
-                StopAction("stopAttack");
-                yield return new WaitForSeconds(0.001f);
-                SetMonsterState(MonsterState.Chase);
-                break;
-        }
-    }
-
-    public override void StartAction(string action)
-    {
-        switch (action)
-        {
-            case "startSpawn":
-                anim.SetInteger("StateNum", 10);
-                break;
-            case "startMove":
-                anim.SetInteger("StateNum", 1);
-                weapon.MoveSet(true);
-                break;
-            case "startDamage":
-                anim.SetInteger("StateNum", 2);
-                break;
-            case "startAttack":
-                anim.SetInteger("StateNum", 3);
-                weapon.AttackSet(true);
-                break;
-            case "startDead":
-                anim.SetInteger("StateNum", 4);
-                break;
-        }
-    }
 
     public void TakeDamage(IBattleEntity attacker, int dmg)
     {

@@ -23,14 +23,23 @@ public abstract class BasicMonster : MonoBehaviour
     [Header("stat")]
     [SerializeField] protected string name;
     [SerializeField] protected float moveSpeed;
+    [SerializeField] protected float runSpeed;
     [SerializeField] protected int currentHp;
     [SerializeField] protected int maxHp;
     [SerializeField] protected int atk;
     [SerializeField] protected bool isAlive;
 
+    [Header("attack stat")]
+    protected float atkSpeed;
+    [SerializeField] protected float attackDistance;
+
     [Header("move")]
     [SerializeField] protected Vector2 targetRocate;
-    Vector2 targetPos;
+    protected Vector2 targetPos;
+    [SerializeField] protected float detectDistanceStone;
+    [SerializeField] protected float detectDistancePlayer;
+    [SerializeField] protected float failDistancePlayer;
+
 
     [Header("basic field")]
     protected Rigidbody2D rigid;
@@ -38,7 +47,7 @@ public abstract class BasicMonster : MonoBehaviour
     protected BoxCollider2D col;
     protected GameObject testPlayer;
     protected GameObject theStone;
-    //protected GameObject theEnemy;
+    protected MonsterMeleeWeapon weapon;
 
     private void Awake()
     {
@@ -47,6 +56,7 @@ public abstract class BasicMonster : MonoBehaviour
         col = GetComponent<BoxCollider2D>();
         testPlayer = FindObjectOfType<TestPlayer>().gameObject;
         theStone = FindObjectOfType<TheStone>().gameObject;
+        weapon = GetComponentInChildren<MonsterMeleeWeapon>();
     }
 
     private void LateUpdate()
@@ -155,13 +165,13 @@ public abstract class BasicMonster : MonoBehaviour
             Debug.DrawLine(transform.position, testPlayer.transform.position, Color.red);
             Debug.DrawLine(transform.position, targetRocate, Color.red);
 
-            if (distanceOfPlayer <= 7f) // 거리가 7 이하면 플레이어를 감지했다고 함
+            if (distanceOfPlayer <= detectDistancePlayer) // 거리가 7 이하면 플레이어를 감지했다고 함
             {
                 Debug.Log("추격모드전환");
                 readyToNextState = 1; //플레이어 추격모드로 전환
                 break;
             }
-            else if (distanceOfStone <= 2f)
+            else if (distanceOfStone <= detectDistanceStone)
             {
                 Debug.Log("공격모드전환");
                 readyToNextState = 2; //오브젝트 공격모드로 전환
@@ -213,20 +223,20 @@ public abstract class BasicMonster : MonoBehaviour
             Vector2 nowPos = transform.position;
             Vector2 playerPos = testPlayer.transform.position;
             Vector2 direction = (playerPos - nowPos).normalized;
-            Vector2 nextPos = direction * moveSpeed * Time.deltaTime;
+            Vector2 nextPos = direction * runSpeed * Time.deltaTime;
 
             float distanceOfPlayer = Vector2.Distance(transform.position, testPlayer.transform.position);
 
             Debug.DrawLine(transform.position, testPlayer.transform.position, Color.green);
 
 
-            if (distanceOfPlayer > 10f)
+            if (distanceOfPlayer > failDistancePlayer)
             {
                 readyToNextState = 1; //플레이어 추격 실패
                 //다시 오브젝트 이동 모드로 전환 1
                 break;
             }
-            else if (distanceOfPlayer <= 2f)
+            else if (distanceOfPlayer <= attackDistance)
             {
                 readyToNextState = 2; //플레이어 공격범위 체크
                 //공격모드로 전환 2
@@ -275,10 +285,15 @@ public abstract class BasicMonster : MonoBehaviour
         float attackTimer = 0f;
         StartAction("startAttack");
 
+        /*Vector2 attackDirection = (targetPos - (Vector2)transform.position).normalized;
+        float angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
+        Vector3 startAngle = weapon.transform.eulerAngles;
+        weapon.transform.rotation = Quaternion.Euler(startAngle.x, startAngle.y, angle);*/
+
         while (attackTimer < 1f || readyToNextState == 2)
         {
             attackTimer += Time.deltaTime;
-
+            readyToNextState = 1;
 
             yield return null;
         }
@@ -333,6 +348,7 @@ public abstract class BasicMonster : MonoBehaviour
             case "stopAll":
                 anim.SetInteger("StateNum", 0);
                 rigid.velocity = Vector2.zero;
+                weapon.MoveSet(false);
                 break;
         }
     }
@@ -345,12 +361,14 @@ public abstract class BasicMonster : MonoBehaviour
                 break;
             case "startMove":
                 anim.SetInteger("StateNum", 1);
+                weapon.MoveSet(true);
                 break;
             case "startDamage":
                 anim.SetInteger("StateNum", 2);
                 break;
             case "startAttack":
                 anim.SetInteger("StateNum", 3);
+                weapon.AttackSet(true);
                 break;
             case "startDead":
                 anim.SetInteger("StateNum", 4);

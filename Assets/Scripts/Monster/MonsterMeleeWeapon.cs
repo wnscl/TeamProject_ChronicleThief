@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkullRunnerWeapon : MonoBehaviour
+public class MonsterMeleeWeapon : MonoBehaviour
 {
     Animator weaponAnim;
     BoxCollider2D weaponCol;
@@ -12,6 +12,13 @@ public class SkullRunnerWeapon : MonoBehaviour
         weaponAnim = GetComponentInChildren<Animator>();
         weaponCol = GetComponent<BoxCollider2D>();
     }
+
+    //public void SettingMelee()
+    //{
+    //    Vector3 startAngle = this.transform.eulerAngles;
+
+    //}
+
 
     public void MoveSet(bool isMoving)
     {
@@ -36,6 +43,4 @@ public class SkullRunnerWeapon : MonoBehaviour
             weaponAnim.SetInteger("actionNum", 0);
         }
     }
-
-
 }
