@@ -41,11 +41,14 @@ public class WeaponHandler : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private ProjectileManager projectileManager;
 
+    private IBattleEntity owner; // 플레이어 참조
+
     private void Awake()
     {
         playerController = GetComponentInParent<PlayerController>();
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        owner = GetComponentInParent<IBattleEntity>(); // 플레이어에서 구현됨
 
         animator.speed = 1.0f / delay;
         transform.localScale = Vector3.one * weaponSize;
@@ -79,7 +82,7 @@ public class WeaponHandler : MonoBehaviour
     {
         Vector2 normalizedDir = _lookDirection.normalized; // 반드시 정규화
         Vector2 rotatedDir = RotateVector2(normalizedDir, angle);
-        ProjectileManager.Instance.ShootBullet(this, projectileSpawnPosition.position, rotatedDir);
+        ProjectileManager.Instance.ShootBullet(this, projectileSpawnPosition.position, rotatedDir, (IBattleEntity)owner);
     }
 
     public void AttackAnim()
