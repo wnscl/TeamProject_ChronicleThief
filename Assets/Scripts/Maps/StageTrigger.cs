@@ -7,6 +7,7 @@ public class StageTrigger : MonoBehaviour
 {
     public int nextStageIndex;
     public Vector3 newPosition;
+    
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -24,5 +25,5 @@ public class StageTrigger : MonoBehaviour
                 Debug.LogError("잘못된 nextStageIndex 값: " + nextStageIndex);
             }
         }
-    }
+    }  
 }
