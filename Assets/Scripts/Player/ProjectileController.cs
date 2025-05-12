@@ -58,17 +58,19 @@ public class ProjectileController : MonoBehaviour
     public void Init(Vector2 direction, WeaponHandler weaponHandlers)
     {
         weaponHandler = weaponHandlers;
-
         this.direction = direction;
         currentDuration = 0;
         transform.localScale = Vector3.one * weaponHandler.WeaponSize;
 
-        transform.right = this.direction;
+        // 스프라이트가 -45° 기울어져 있으므로, +45°를 추가로 회전시켜 보정
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle + 45); // +45°로 보정
 
-        if (this.direction.x < 0)
+        // pivot 방향 처리 (좌우 반전)
+        if (direction.x < 0)
             pivot.localRotation = Quaternion.Euler(180, 0, 0);
         else
-            pivot.localRotation = Quaternion.Euler(0, 0, 0);
+            pivot.localRotation = Quaternion.Euler(0, 0, -90);
 
         isReady = true;
     }
