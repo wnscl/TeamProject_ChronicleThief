@@ -31147,7 +31147,7 @@ GameObject:
   - component: {fileID: 3323457453985473160}
   m_Layer: 0
   m_Name: Stage 0 - MainLobby
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46052,7 +46052,7 @@ GameObject:
   - component: {fileID: 5898711580306661020}
   m_Layer: 0
   m_Name: Stage 1 - DungeonFloor
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46083,6 +46083,7 @@ Transform:
   - {fileID: 6191940839073582496}
   - {fileID: 5195461015404534558}
   - {fileID: 7742609134186961756}
+  - {fileID: 6210832981168144402}
   m_Father: {fileID: 1324648663009915478}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &5898711580306661020
@@ -46469,7 +46470,7 @@ GameObject:
   - component: {fileID: 6289114136207108973}
   m_Layer: 0
   m_Name: Stage 3 - BossFloor(2)
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46639,6 +46640,97 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
+--- !u!1 &2583345678851030115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2589346937319104638}
+  - component: {fileID: 7136563720034420034}
+  - component: {fileID: 3713332821957745624}
+  m_Layer: 0
+  m_Name: MapInteraction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2589346937319104638
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2583345678851030115}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13, y: -2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8278779666009716977}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &7136563720034420034
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2583345678851030115}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.042683363, y: 2.8320742}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6.617128, y: 29.691015}
+  m_EdgeRadius: 0
+--- !u!114 &3713332821957745624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2583345678851030115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f732dcc75ea3c2646aa78d8fa6456a79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextStageIndex: 9
 --- !u!1 &2586831110046139602
 GameObject:
   m_ObjectHideFlags: 0
@@ -63680,6 +63772,97 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1949625, y: 1.370429}
   m_EdgeRadius: 0
+--- !u!1 &3334427759921717393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6210832981168144402}
+  - component: {fileID: 4411272562735498073}
+  - component: {fileID: 4744053535028528630}
+  m_Layer: 0
+  m_Name: MapInteraction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6210832981168144402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3334427759921717393}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 11, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5098841258468645651}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &4411272562735498073
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3334427759921717393}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.042683363, y: 0.7010448}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6.617128, y: 2.0997968}
+  m_EdgeRadius: 0
+--- !u!114 &4744053535028528630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3334427759921717393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f732dcc75ea3c2646aa78d8fa6456a79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextStageIndex: 3
 --- !u!1 &3365598082094076188
 GameObject:
   m_ObjectHideFlags: 0
@@ -63692,7 +63875,7 @@ GameObject:
   - component: {fileID: 2549426228453373988}
   m_Layer: 0
   m_Name: Stage 3 - BossFloor(1)
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -69888,6 +70071,7 @@ Transform:
   - {fileID: 4978509399656032550}
   - {fileID: 6559517793293107482}
   - {fileID: 6977168781671733138}
+  - {fileID: 2589346937319104638}
   m_Father: {fileID: 1585896833970509677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4943123847118386637
@@ -73181,7 +73365,7 @@ GameObject:
   - component: {fileID: 1683802992671013215}
   m_Layer: 0
   m_Name: Stage 1 - BossFloor(1)
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93590,7 +93774,7 @@ GameObject:
   - component: {fileID: 7348738183283577040}
   m_Layer: 0
   m_Name: Stage 2 - DungeonFloor2
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97099,7 +97283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7306137800342026410}
   - component: {fileID: 6899529731128891201}
-  - component: {fileID: 8839134267831787167}
+  - component: {fileID: 2854909343467081316}
   m_Layer: 0
   m_Name: MapInteraction
   m_TagString: Untagged
@@ -97167,7 +97351,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6.617128, y: 2.0997968}
   m_EdgeRadius: 0
---- !u!114 &8839134267831787167
+--- !u!114 &2854909343467081316
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97176,9 +97360,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5592552858500475926}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45adb4659922cda4ab1675d3871fd3aa, type: 3}
+  m_Script: {fileID: 11500000, guid: f732dcc75ea3c2646aa78d8fa6456a79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextStageIndex: 1
 --- !u!1 &5645649069485207116
 GameObject:
   m_ObjectHideFlags: 0
@@ -97383,6 +97568,97 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
+--- !u!1 &5694198162846669449
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 947763693175651828}
+  - component: {fileID: 6269949182336082420}
+  - component: {fileID: 8676146423491206993}
+  m_Layer: 0
+  m_Name: MapInteraction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &947763693175651828
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5694198162846669449}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6.75, y: -1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5120727668949458712}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &6269949182336082420
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5694198162846669449}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.042683363, y: 0.7010448}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6.617128, y: 2.0997968}
+  m_EdgeRadius: 0
+--- !u!114 &8676146423491206993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5694198162846669449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f732dcc75ea3c2646aa78d8fa6456a79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextStageIndex: 4
 --- !u!1 &5705010657576690181
 GameObject:
   m_ObjectHideFlags: 0
@@ -97625,7 +97901,7 @@ GameObject:
   - component: {fileID: 4618068102850486011}
   m_Layer: 0
   m_Name: Stage 2 - BossFloor(2)
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105589,7 +105865,7 @@ GameObject:
   - component: {fileID: 3648860151486830790}
   m_Layer: 0
   m_Name: Stage 3 - DungeonFloor3
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106111,7 +106387,7 @@ GameObject:
   - component: {fileID: 4911096056860067900}
   m_Layer: 0
   m_Name: Stage 1 - BossFloor(2)
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106138,6 +106414,7 @@ Transform:
   - {fileID: 8978291369442239173}
   - {fileID: 2015643366814007466}
   - {fileID: 1925879713928567022}
+  - {fileID: 947763693175651828}
   m_Father: {fileID: 1324648663009915478}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &4911096056860067900
@@ -106164,7 +106441,7 @@ GameObject:
   - component: {fileID: 4076935406357044353}
   m_Layer: 0
   m_Name: Stage 2 - BossFloor(1)
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -117444,7 +117721,7 @@ GameObject:
   - component: {fileID: 5552216315280885891}
   - component: {fileID: 72437782287253750}
   - component: {fileID: 5427877617226818228}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ColliderTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
