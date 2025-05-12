@@ -10,7 +10,7 @@ public class StageManager : MonoBehaviour
     public GameObject[] stages;
     private int currentStageIndex = 0;
     public int nextStageIndex;
-    public Vector3[] stagePos;
+    // public Vector3[] stagePos;
     
 
     private void Awake()
@@ -47,11 +47,11 @@ public class StageManager : MonoBehaviour
             Debug.Log("Stage 총 개수: " + stages.Length + " 등록.");
 
             // stagePos 배열 크기 맞추기.
-            stagePos = new Vector3[stages.Length];
-            for (int i = 0; i < stages.Length; i++)
-            {
-                stagePos[i] = stages[i].transform.position; // 각 스테이지위 위치를 저장.
-            }
+            // stagePos = new Vector3[stages.Length];
+            // for (int i = 0; i < stages.Length; i++)
+            // {
+            //     stagePos[i] = stages[i].transform.position; // 각 스테이지위 위치를 저장.
+            // }
         }
         else
         {
@@ -69,14 +69,25 @@ public class StageManager : MonoBehaviour
             stages[newIndex].SetActive(true);
             currentStageIndex = newIndex;
 
-            if (player != null)
+            GameObject spawnPoint = stages[newIndex].transform.Find("PlayerSpawn")?.gameObject;
+
+            if (spawnPoint != null && player != null)
             {
-                player.transform.position = stagePos[newIndex];
+                player.transform.position = spawnPoint.transform.position;
+                Debug.Log($"플레이어가 {newIndex}번 스테이지의 SpawnPoint로 이동");
             }
             else
             {
-                Debug.Log("player 객체가 존재하지 않습니다!");
-            }          
+                Debug.LogError("SpawnPoint를 찾을 수 없거나 Player가 존재하지 않습니다.");
+            }
+            // if (player != null)
+            // {
+            //     player.transform.position = stagePos[newIndex];
+            // }
+            // else
+            // {
+            //     Debug.Log("player 객체가 존재하지 않습니다!");
+            // }          
         }
         else
         {
