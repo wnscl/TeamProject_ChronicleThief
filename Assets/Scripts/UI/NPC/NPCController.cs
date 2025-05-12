@@ -37,8 +37,30 @@ namespace NPC
         public void Interact(GameObject interactor)
         {
             if (!isActive) return;
-            UIManager.Instance.ShowDialog(npcName, dialogueLines[0]);
-            npcFunction?.Execute(interactor);
+
+            UIManager.Instance.ShowChoice(
+                npcName,
+                dialogueLines[0],
+                // “특수 기능 사용” 선택 시
+                () =>
+                {
+                    npcFunction?.Execute(interactor);
+                    UIManager.Instance.ShowDialog(npcName, dialogueLines[1]);
+                },
+                // “건너뛰기” 선택 시
+                () =>
+                {
+                    // 1) 대사 보여주고
+                    UIManager.Instance.ShowDialog(npcName, dialogueLines[2]);
+                    // 2) 1초 뒤 숨기기 시작
+                    StartCoroutine(HideDialogAfterDelay(1f));
+                }
+            );
+        }
+        private IEnumerator HideDialogAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            UIManager.Instance.HideDialog();
         }
     }
 }
