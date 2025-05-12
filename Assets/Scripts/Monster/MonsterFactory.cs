@@ -15,8 +15,8 @@ public class MonsterFactory : MonoBehaviour
         //skullRunner = FindObjectOfType<SkullRunner>().gameObject;
         //skullRunner = FindAnyObjectByType<SkullRunner>().gameObject;
         //skullRunner = 
-        float createPosX = 10f;
-        float createPosY = 10f;
+        float createPosX = 8f;
+        float createPosY = 8f;
         createPos = new Vector2(createPosX, createPosY);
     }
 
@@ -24,7 +24,7 @@ public class MonsterFactory : MonoBehaviour
     {
         OnMakeMonster();
         //ClearAllMonsterByName("SkullRunner");
-        ClearAllMonsterByName("SkullRunner(Clone)");
+        //ClearAllMonsterByName("SkullRunner(Clone)");
     }
 
     public void OnMakeMonster()

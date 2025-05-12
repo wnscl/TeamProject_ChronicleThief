@@ -3,8 +3,8 @@ using UnityEngine;
 public class NPCSpawner : MonoBehaviour
 {
     [Header("Spawn Settings")]
-    public GameObject[] npcPrefabs;    // 소환할 NPC 프리팹들 (2개)
-    public Transform[] spawnPoints;    // 소환 위치들 (2개)
+    public GameObject[] npcPrefabs;    // 소환할 NPC 프리팹들
+    public Transform[] spawnPoints;    // 소환 위치들
 
     private bool hasSpawned = false;   // 한 번만 소환하도록
 

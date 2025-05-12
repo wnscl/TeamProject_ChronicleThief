@@ -25,6 +25,7 @@ namespace Interaction
             if (activeTrigger != null && Input.GetKeyDown(KeyCode.E))
             {   
                 activeTrigger.DoInteract();
+                Debug.Log($"E키 입력 확인");
             }
         }
 
@@ -32,6 +33,7 @@ namespace Interaction
         public void SetActiveTrigger(InteractionTrigger trigger)
         {
             activeTrigger = trigger;
+            Debug.Log($"트리거 활성화 {trigger}");
         }
 
         // 트리거가 비활성화될 때 호출
@@ -39,6 +41,7 @@ namespace Interaction
         {
             if (activeTrigger == trigger)
                 activeTrigger = null;
+            Debug.Log($"트리거 비활성화 {trigger}");
         }
     }
 }
