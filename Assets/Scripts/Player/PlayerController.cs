@@ -220,6 +220,7 @@ public class PlayerController : MonoBehaviour
         if (isDead) return;
 
         // ResourcesHandler에서 CurrentHealth를 받아와서 -dmg해주면 됨.
+        resourcesHandler.ChangeHealth(-dmg);
         Debug.Log($"플레이어가 {dmg} 데미지 받음!");
         playerAnimationHandler?.PlayDamage();
     }

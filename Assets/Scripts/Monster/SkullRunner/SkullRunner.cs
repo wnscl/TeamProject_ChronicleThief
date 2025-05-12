@@ -96,6 +96,11 @@ public class SkullRunner : BasicMonster, IBattleEntity
         if (currentHp <= 0)
         {
             isAlive = false;
+            SetMonsterState(MonsterState.Dead);
+        }
+        else
+        {
+            SetMonsterState(MonsterState.GetDamage);
         }
     }
 }
