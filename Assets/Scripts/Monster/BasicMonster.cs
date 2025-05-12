@@ -27,6 +27,7 @@ public abstract class BasicMonster : MonoBehaviour
     [SerializeField] protected int currentHp;
     [SerializeField] protected int maxHp;
     [SerializeField] protected int atk;
+    public int Atk => atk;
     [SerializeField] protected bool isAlive;
 
     [Header("attack stat")]
@@ -143,7 +144,15 @@ public abstract class BasicMonster : MonoBehaviour
     }
     protected virtual IEnumerator GetDamageCoroutine()
     {
-        yield return null;
+        StopAction("stopAll");
+        yield return new WaitForSeconds(0.001f);
+
+        StartAction("startDamage");
+
+        while (true)
+        {
+            yield return null;
+        }
     }
 
     private void OnMoveRocate()
