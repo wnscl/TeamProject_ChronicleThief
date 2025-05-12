@@ -72,12 +72,16 @@ public class PlayerUpgradeManager : MonoBehaviour
 
     public bool TryUpgradeHealth()
     {
-        if (healthCount >= maxUpgradesPerStat) return false;
-        if (!TrySpend(healthCost)) return false;
+        if (healthCount >= maxUpgradesPerStat || !TrySpend(healthCost))
+            return false;
 
-        stats.Health += 20;
+        // 1) 강화 횟수 및 비용 갱신
         healthCount++;
         healthCost = Mathf.CeilToInt(healthCost * costMultiplier);
+
+        // 2) HealthSystem에 최대 체력 고정량 증가 호출
+        HealthSystem.Instance.SetMaxHealth(5);
+
         return true;
     }
 

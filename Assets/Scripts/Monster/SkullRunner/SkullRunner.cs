@@ -53,25 +53,22 @@ public class SkullRunner : BasicMonster
         maxHp = 35;
 
         targetRocate = theStone.transform.position;
-        anim.SetInteger("StateNum", 10);
-        a = anim.GetInteger("StateNum");
+
+        StartAction("startSpawn");
     }
 
     protected override IEnumerator SpawnCoroutine()
     {
         yield return new WaitForSeconds(1f);
         anim.SetInteger("StateNum", 0);
-        yield return new WaitForSeconds(0.005f);
-        a = anim.GetInteger("StateNum");
+        yield return new WaitForSeconds(0.001f);
         SetMonsterState(MonsterState.MoveRocate);
     }
 
     protected override IEnumerator MoveRocateCoroutine()
     {
         int readyToNextState = 0;
-        anim.SetInteger("StateNum", 1);
-        a = anim.GetInteger("StateNum");
-        weapon.MoveSet(true);
+        StartAction("startMove");
 
         while (readyToNextState == 0)
         {
@@ -111,14 +108,14 @@ public class SkullRunner : BasicMonster
         switch (readyToNextState)
         {
             case 1:
-                StopMove();
-                yield return new WaitForSeconds(0.005f);
+                StopAction("dontStopMove");
+                yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.Chase);
                 break;
 
             case 2:
-                StopMove();
-                yield return new WaitForSeconds(0.005f);
+                StopAction("stopAll");
+                yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.Attack);
                 break;
         }
@@ -127,9 +124,7 @@ public class SkullRunner : BasicMonster
     protected override IEnumerator ChaseCoroutine()
     {
         int readyToNextState = 0;
-        anim.SetInteger("StateNum", 1);
-        a = anim.GetInteger("StateNum");
-        weapon.MoveSet(true);
+        StartAction("startMove");
 
         while (readyToNextState == 0)
         {
@@ -172,14 +167,14 @@ public class SkullRunner : BasicMonster
         switch (readyToNextState)
         {
             case 1:
-                StopMove();
-                yield return new WaitForSeconds(0.005f);
+                StopAction("dontStopMove");
+                yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.MoveRocate);
                 break;
 
             case 2:
-                StopMove();
-                yield return new WaitForSeconds(0.005f);
+                StopAction("stopAll");
+                yield return new WaitForSeconds(0.001f);
                 SetMonsterState (MonsterState.Attack);
                 break;
         }
@@ -188,22 +183,32 @@ public class SkullRunner : BasicMonster
     protected override IEnumerator AttackCoroutine()
     {
         int readyToNextState = 0;
-        anim.SetInteger("StateNum", 3);
-        a = anim.GetInteger("StateNum");
+        StartAction("startAttack");
+        float attackSpeed = 20f;
 
         Vector2 goPos = testPlayer.transform.position;
+        Vector2 startPos = transform.position;
         Vector2 attackDirection = goPos - (Vector2)transform.position;
         //몬스터가 플레이어를 바라보는 방향값
         float angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
         //각도를 라디안으로 구하고
         //라디안을 디그리(도단위)로 변한
 
+        theLine.SetActive(true);
+        theLine.transform.rotation = Quaternion.Euler(0, 0, angle);
+
         while (readyToNextState == 0)
         {
-            theLine.SetActive(true);
-            theLine.transform.rotation = Quaternion.Euler(0,0,angle);
+            Vector2 nextPos = attackDirection * attackSpeed * Time.deltaTime;
+            rigid.MovePosition(rigid.position + nextPos);
 
-            //yield return null;
+            if (Vector2.Distance(startPos, transform.position) >= 3.5f )
+            {
+                readyToNextState = 1; //공격성공
+                //플레이어 추격모드 전환
+                break;
+            }
+
             yield return new WaitForFixedUpdate();
         }
 
@@ -219,12 +224,37 @@ public class SkullRunner : BasicMonster
 
     //}
 
-    public void StopMove()
+    public void StopAction(string action)
     {
-        anim.SetInteger("StateNum", 0);
-        a = anim.GetInteger("StateNum");
-        rigid.velocity = Vector2.zero;
-        weapon.MoveSet(false);
+        switch(action)
+        {
+            case "dontStopMove":
+                anim.SetInteger("StateNum", 0);
+                rigid.velocity = Vector2.zero;
+                break;
+
+            case "stopAll":
+                anim.SetInteger("StateNum", 0);
+                rigid.velocity = Vector2.zero;
+                weapon.MoveSet(false);
+                break;
+        }
+    }
+    public void StartAction(string action)
+    {
+        switch (action)
+        {
+            case "startSpawn":
+                anim.SetInteger("StateNum", 10);
+                break;
+            case "startMove":
+                anim.SetInteger("StateNum", 1);
+                weapon.MoveSet(true);
+                break;
+            case "startAttack":
+                anim.SetInteger("StateNum", 3);
+                break;
+        }
     }
 }
 

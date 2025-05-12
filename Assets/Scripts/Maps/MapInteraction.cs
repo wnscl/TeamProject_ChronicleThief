@@ -1,19 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class MapInteraction : MonoBehaviour
 {
     protected bool inZone = false;
+    
 
     protected virtual void Update()
     {
-        // if (inZone)
-        // {
-        //     Debug.Log("부모 Iteraction 호출");
-        //     Interact();
-        // }
+        if (inZone && Input.GetKeyDown(KeyCode.E))
+        {
+            KeyInteract();
+        }
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
@@ -41,8 +42,15 @@ public class MapInteraction : MonoBehaviour
         Debug.Log("부모 클래스에서 Stay2D 점검 중 inZone :" + inZone);
     }
 
-    protected virtual void Interact()
+    protected virtual void KeyInteract()
     {
         Debug.Log("MapInteraction: 부모 클래스 작동.");
+    }
+
+
+    void SomeFunction()
+    {
+        int nextStage = StageManager.instance.nextStageIndex;
+        StageManager.instance.ChangeStage(nextStage);
     }
 }

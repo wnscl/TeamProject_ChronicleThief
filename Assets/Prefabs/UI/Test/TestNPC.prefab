@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 150
   m_Sprite: {fileID: 507435350, guid: a971b0ca3682d5b439af85ca97ff3b3a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -164,6 +164,7 @@ MonoBehaviour:
   - 
   - 
   activeTime: 60
+  despawnAnimationDuration: 1
 --- !u!114 &5095264092982870303
 MonoBehaviour:
   m_ObjectHideFlags: 0

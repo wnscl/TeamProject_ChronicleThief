@@ -15,5 +15,11 @@ public class UpgradeNPCFunction : MonoBehaviour, INPCFunction
         // 2) 업그레이드 UI 오픈
         UpgradeUI.Instance.Show(
             GetComponent<NPCController>().npcName);
+        // (3) 대화창 하단에 “스킵”만 띄워서,
+        //      누르면 업그레이드 패널과 대화창을 닫도록 연결
+        UIManager.Instance.ShowSkipOnly(() => {
+            UpgradeUI.Instance.HidePanel();
+            UIManager.Instance.HideDialog();
+        });
     }
 }
