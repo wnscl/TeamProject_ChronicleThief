@@ -10,6 +10,7 @@ public class StageManager : MonoBehaviour
     public GameObject[] stages;
     private int currentStageIndex = 0;
     public int nextStageIndex;
+    // public Vector3[] stagePos;
     
 
     private void Awake()
@@ -26,6 +27,14 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    // void Start()
+    // {
+    //     if (StageManager.instance == null)
+    //     {
+    //         Debug.Log("StageManager 인스턴스가가 null 입니다.");
+    //     }
+    // }
+
     void FindStages()
     {
         GameObject parentObject = GameObject.Find("Stage"); // 부모 오브젝트 찾기기
@@ -36,6 +45,13 @@ public class StageManager : MonoBehaviour
                 .Where(go => go.CompareTag("Stage")) // "Stage" 태그가 설정된 오브젝트만 필터링
                 .ToArray(); // 배열로 변환환
             Debug.Log("Stage 총 개수: " + stages.Length + " 등록.");
+
+            // stagePos 배열 크기 맞추기.
+            // stagePos = new Vector3[stages.Length];
+            // for (int i = 0; i < stages.Length; i++)
+            // {
+            //     stagePos[i] = stages[i].transform.position; // 각 스테이지위 위치를 저장.
+            // }
         }
         else
         {
@@ -43,7 +59,7 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    public void ChangeStage(int newIndex)
+    public void ChangeStage(int newIndex, GameObject player)
     {
         if (newIndex >= 0 && newIndex < stages.Length)
         {
@@ -52,8 +68,29 @@ public class StageManager : MonoBehaviour
             }
             stages[newIndex].SetActive(true);
             currentStageIndex = newIndex;
+
+            GameObject spawnPoint = stages[newIndex].transform.Find("PlayerSpawn")?.gameObject;
+
+            if (spawnPoint != null && player != null)
+            {
+                player.transform.position = spawnPoint.transform.position;
+                Debug.Log($"플레이어가 {newIndex}번 스테이지의 SpawnPoint로 이동");
+            }
+            else
+            {
+                Debug.LogError("SpawnPoint를 찾을 수 없거나 Player가 존재하지 않습니다.");
+            }
+            // if (player != null)
+            // {
+            //     player.transform.position = stagePos[newIndex];
+            // }
+            // else
+            // {
+            //     Debug.Log("player 객체가 존재하지 않습니다!");
+            // }          
         }
-        else {
+        else
+        {
             Debug.LogWarning("잘못된 스테이지 인덱스: " + newIndex);
         }
     }
