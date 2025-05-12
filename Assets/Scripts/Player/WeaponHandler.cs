@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WeaponHandler : MonoBehaviour
 {
+    [Header("Weapon Info")]
     [SerializeField] private float delay = 1f; // 공격 딜레이
     public float Delay { get =>  delay; set => delay = value; }
 
@@ -12,7 +13,6 @@ public class WeaponHandler : MonoBehaviour
 
     [SerializeField] private float weaponSize = 1f;
     public float WeaponSize { get =>  weaponSize; set { weaponSize = value; } }
-
     // 화살
     [SerializeField] private float duration; // 화살이 살아있는 시간
     public float Duration { get { return duration; } }
@@ -39,15 +39,24 @@ public class WeaponHandler : MonoBehaviour
 
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private ProjectileManager projectileManager;
+
+    private IBattleEntity owner; // 플레이어 참조
 
     private void Awake()
     {
         playerController = GetComponentInParent<PlayerController>();
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        owner = GetComponentInParent<IBattleEntity>(); // 플레이어에서 구현됨
 
         animator.speed = 1.0f / delay;
         transform.localScale = Vector3.one * weaponSize;
+    }
+
+    private void Start()
+    {
+        projectileManager = ProjectileManager.Instance;
     }
 
     public virtual void Attack()
@@ -63,7 +72,7 @@ public class WeaponHandler : MonoBehaviour
             float randomSpread = Random.Range(-spread, spread);
             angle += randomSpread;
 
-            CreateShot(playerController.LookDirection, angle);
+            CreateShot(playerController.LookDirection.normalized, angle);
         }
 
         AttackAnim();
@@ -71,7 +80,9 @@ public class WeaponHandler : MonoBehaviour
 
     private void CreateShot(Vector2 _lookDirection, float angle)
     {
-
+        Vector2 normalizedDir = _lookDirection.normalized; // 반드시 정규화
+        Vector2 rotatedDir = RotateVector2(normalizedDir, angle);
+        ProjectileManager.Instance.ShootBullet(this, projectileSpawnPosition.position, rotatedDir, (IBattleEntity)owner);
     }
 
     public void AttackAnim()

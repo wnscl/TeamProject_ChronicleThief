@@ -21,5 +21,4 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float playerDefensePower = 5;
     public float PlayerDefensePower { get => playerDefensePower; set => playerDefensePower = Mathf.Clamp(value, 0f, 100f); } // 최대치 100
 
-    // 무기 스탯 따로 없이 플레이어 자체 스탯으로 대체
 }

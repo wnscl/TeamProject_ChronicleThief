@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
@@ -16,7 +17,9 @@ public class ProjectileController : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private SpriteRenderer spriteRenderer;
 
-    public bool fxOnDestory = true;
+    public bool fxOnDestroy = true;
+
+    private IBattleEntity attacker; // 추가: 공격자 참조
 
     private void Awake()
     {
@@ -44,31 +47,42 @@ public class ProjectileController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (levelCollisionLayer.value == (levelCollisionLayer.value | (1 << collision.gameObject.layer)))
+        // 1. 레이어 충돌 확인 (지형/벽)
+        if ((levelCollisionLayer.value & (1 << collision.gameObject.layer)) != 0)
         {
-            DestroyProjectile(collision.ClosestPoint(transform.position) - direction * .2f, fxOnDestory);
+            // 지형 충돌 시 이펙트 생성 위치 계산
+            Vector2 hitPoint = collision.ClosestPoint(transform.position) - direction * 0.2f;
         }
-        else if (weaponHandler.target.value == (weaponHandler.target.value | (1 << collision.gameObject.layer)))
+        // 2. 몬스터 충돌
+        if ((weaponHandler.target.value & (1 << collision.gameObject.layer)) != 0)
         {
-            DestroyProjectile(collision.ClosestPoint(transform.position), fxOnDestory);
+            IBattleEntity target = collision.GetComponent<IBattleEntity>();
+            if (target != null)
+            {
+                BattleSystemManager.Instance.AttackOther(attacker, target);
+            }
+            Destroy(gameObject); // 몬스터와 충돌 시 파괴
         }
     }
 
 
-    public void Init(Vector2 direction, WeaponHandler weaponHandlers)
+    public void Init(Vector2 direction, WeaponHandler weaponHandlers, IBattleEntity attacker)
     {
+        this.attacker = attacker;
         weaponHandler = weaponHandlers;
-
         this.direction = direction;
         currentDuration = 0;
         transform.localScale = Vector3.one * weaponHandler.WeaponSize;
 
-        transform.right = this.direction;
+        // 스프라이트가 -45° 기울어져 있으므로, +45°를 추가로 회전시켜 보정
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle + 45); // +45°로 보정
 
-        if (this.direction.x < 0)
+        // pivot 방향 처리 (좌우 반전)
+        if (direction.x < 0)
             pivot.localRotation = Quaternion.Euler(180, 0, 0);
         else
-            pivot.localRotation = Quaternion.Euler(0, 0, 0);
+            pivot.localRotation = Quaternion.Euler(0, 0, -90);
 
         isReady = true;
     }

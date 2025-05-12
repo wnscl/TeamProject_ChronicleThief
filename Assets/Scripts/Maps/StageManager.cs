@@ -26,12 +26,13 @@ public class StageManager : MonoBehaviour
         }
     }
 
+
     void FindStages()
     {
         GameObject parentObject = GameObject.Find("Stage"); // 부모 오브젝트 찾기기
         if (parentObject != null)
         {
-            stages = parentObject.GetComponentsInChildren<Transform>(true) // 자식 Transform 검색
+            stages = parentObject.GetComponentsInChildren<Transform>(true) // 자식's Transform 가져온다. ture를 넣으면 비활성화된 객체까지 전부 가져온다.
                 .Select(t => t.gameObject)  //Transform을 GameObject로 변환
                 .Where(go => go.CompareTag("Stage")) // "Stage" 태그가 설정된 오브젝트만 필터링
                 .ToArray(); // 배열로 변환환
@@ -43,7 +44,7 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    public void ChangeStage(int newIndex)
+    public void ChangeStage(int newIndex, GameObject player)
     {
         if (newIndex >= 0 && newIndex < stages.Length)
         {
@@ -52,8 +53,21 @@ public class StageManager : MonoBehaviour
             }
             stages[newIndex].SetActive(true);
             currentStageIndex = newIndex;
+
+            GameObject spawnPoint = stages[newIndex].transform.Find("PlayerSpawn")?.gameObject;
+
+            if (spawnPoint != null && player != null)
+            {
+                player.transform.position = spawnPoint.transform.position;
+                Debug.Log($"플레이어가 {newIndex}번 스테이지의 Point로 이동");
+            }
+            else
+            {
+                Debug.LogError("SpawnPoint를 찾을 수 없거나 Player가 존재하지 않습니다.");
+            }        
         }
-        else {
+        else
+        {
             Debug.LogWarning("잘못된 스테이지 인덱스: " + newIndex);
         }
     }

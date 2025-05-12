@@ -9,12 +9,13 @@ public class DamageZone : MapInteraction
 
     void OnTriggerStay2D(Collider2D collision)
     {
-        // base.OnTriggerStay2D(collision);
         timer += Time.deltaTime;
+        // int damageZone = 1;
 
         if (timer >= interval && collision.CompareTag("Player"))
         {
-            Debug.Log("데미지 받는 중!");
+            Debug.Log("데미지 존 Enter!!");
+            // HealthSystem.Instance.TakeDamage(damageZone);
             timer = 0f;
         }
     }

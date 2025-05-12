@@ -46,11 +46,4 @@ public class MapInteraction : MonoBehaviour
     {
         Debug.Log("MapInteraction: 부모 클래스 작동.");
     }
-
-
-    void SomeFunction()
-    {
-        int nextStage = StageManager.instance.nextStageIndex;
-        StageManager.instance.ChangeStage(nextStage);
-    }
 }
