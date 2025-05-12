@@ -48,9 +48,16 @@ public class MapInteraction : MonoBehaviour
     }
 
 
-    void SomeFunction()
-    {
-        int nextStage = StageManager.instance.nextStageIndex;
-        StageManager.instance.ChangeStage(nextStage);
-    }
+    // void SomeFunction(GameObject player)
+    // {
+    //     if (StageManager.instance != null && player != null)
+    //     {
+    //         int nextStage = StageManager.instance.nextStageIndex;
+    //         StageManager.instance.ChangeStage(nextStage, player);
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("StageManager 또는 Player 객체를 찾을 수 없음.");
+    //     }
+    // }
 }

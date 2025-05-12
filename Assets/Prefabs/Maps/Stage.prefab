@@ -21979,7 +21979,7 @@ GameObject:
   - component: {fileID: 4974668459283276717}
   - component: {fileID: 348208138942792731}
   - component: {fileID: 6363064798972111285}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46731,6 +46731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextStageIndex: 9
+  newPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &2586831110046139602
 GameObject:
   m_ObjectHideFlags: 0
@@ -50131,7 +50132,7 @@ GameObject:
   - component: {fileID: 7742609134186961756}
   - component: {fileID: 3546620182898370860}
   - component: {fileID: 3754342647373305011}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63863,6 +63864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextStageIndex: 3
+  newPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &3365598082094076188
 GameObject:
   m_ObjectHideFlags: 0
@@ -70250,7 +70252,7 @@ GameObject:
   - component: {fileID: 7197274438099242647}
   - component: {fileID: 7898785841443196510}
   - component: {fileID: 9044981761919443229}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ColliderTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97364,6 +97366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextStageIndex: 1
+  newPosition: {x: 1, y: 1, z: 1}
 --- !u!1 &5645649069485207116
 GameObject:
   m_ObjectHideFlags: 0
@@ -97659,6 +97662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextStageIndex: 4
+  newPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &5705010657576690181
 GameObject:
   m_ObjectHideFlags: 0
@@ -98770,7 +98774,7 @@ GameObject:
   - component: {fileID: 661698610871260741}
   - component: {fileID: 9086478662245646869}
   - component: {fileID: 6724941702776522235}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
