@@ -37,9 +37,9 @@ namespace NPC
             // 2) 대화창 숨기기
             UIManager.Instance.HideDialog();
 
-            // 3) 업그레이드 패널 숨기기
+            // 3) 강화 패널 숨기기
             if (UpgradeUI.Instance != null)
-                UpgradeUI.Instance.HidePanel();
+                UpgradeUI.Instance.Hide();
 
             // 4) 스폰 해제 애니메이터 트리거
             if (animator != null)

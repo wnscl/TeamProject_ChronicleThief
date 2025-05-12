@@ -26,7 +26,7 @@ public class HealthSystem : MonoBehaviour
     [Header("무적 모드")]
     public bool GodMode; // 참이면 최대치로 자동 회복
 
-    private PlayerStats playerStats;
+    public PlayerStats playerStats;
 
     void Awake()
     {

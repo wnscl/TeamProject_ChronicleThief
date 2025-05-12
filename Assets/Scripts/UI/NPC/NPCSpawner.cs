@@ -32,8 +32,14 @@ public class NPCSpawner : MonoBehaviour
         // 2) 소환 플래그
         hasSpawned = true;
 
-        // 3) 애니메이터에 ‘SpawnReleased’ 트리거
+        // 3) 카운트 다운 시작
+        if (SpawnTimer.Instance != null)
+            SpawnTimer.Instance.StartCountdown(60); // 카운트 다운 수정은 여기서
+
+        // 4) 애니메이터에 ‘SpawnReleased’ 트리거
         if (animator != null)
             animator.SetTrigger(SpawnReleasedHash);
+
+
     }
 }

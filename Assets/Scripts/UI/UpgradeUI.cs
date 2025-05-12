@@ -8,130 +8,128 @@ public class UpgradeUI : MonoBehaviour
     public static UpgradeUI Instance { get; private set; }
 
     [Header("패널")]
-    public GameObject panel;
+    public GameObject panel;       // 강화 UI 전체 패널
+    public TMP_Text goldText;    // 남은 골드 표시
 
-    [Header("버튼")]
-    public Button attackButton;
-    public Button defenseButton;
-    public Button healthButton;
-    public Button speedButton;
+    [Header("강화 버튼")]
+    public Button attackBtn;
+    public Button defenseBtn;
+    public Button healthBtn;
+    public Button speedBtn;
 
-    [Header("버튼 내 코스트 텍스트")]
+    [Header("비용 텍스트")]
     public TMP_Text attackCostText;
     public TMP_Text defenseCostText;
     public TMP_Text healthCostText;
     public TMP_Text speedCostText;
 
-    [Header("골드 텍스트")]
-    public TMP_Text goldText;
+    [Header("참조 컴포넌트")]
+    public PlayerUpgradeManager upgradeManager;
+    public ResourcesHandler resourcesHandler;
 
-    private PlayerUpgradeManager playerStats;
-    private string npcName;
+    private enum StatType { Attack, Defense, Health, Speed }
 
-    void Awake()
+    private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        if (Instance == null) Instance = this;
+        else { Destroy(gameObject); return; }
 
         panel.SetActive(false);
 
-        var playerObj = GameObject.FindWithTag("Player");
-        if (playerObj != null)
-            playerStats = playerObj.GetComponent<PlayerUpgradeManager>();
-        else
-            Debug.LogError("Player object with PlayerUpgradeManager not found");
+        if (resourcesHandler == null)
+            resourcesHandler = ResourcesHandler.Instance;
 
-        attackButton.onClick.AddListener(() => OnUpgrade(
-            playerStats.TryUpgradeAttack(),
-            playerStats.GetAttackCost(), "공격력"));
-        defenseButton.onClick.AddListener(() => OnUpgrade(
-            playerStats.TryUpgradeDefense(),
-            playerStats.GetDefenseCost(), "방어력"));
-        healthButton.onClick.AddListener(() => OnUpgrade(
-            playerStats.TryUpgradeHealth(),
-            playerStats.GetHealthCost(), "체력"));
-        speedButton.onClick.AddListener(() => OnUpgrade(
-            playerStats.TryUpgradeSpeed(),
-            playerStats.GetSpeedCost(), "이동속도"));
+        // 버튼 클릭 시 항상 TryUpgrade만 호출 (Show에서 상태 결정)
+        attackBtn.onClick.AddListener(() => TryUpgrade(StatType.Attack));
+        defenseBtn.onClick.AddListener(() => TryUpgrade(StatType.Defense));
+        healthBtn.onClick.AddListener(() => TryUpgrade(StatType.Health));
+        speedBtn.onClick.AddListener(() => TryUpgrade(StatType.Speed));
+
+        UpdateAllTexts();
     }
 
-    public void Show(string speaker)
+    // 강화 UI 열기
+    public void Show()
     {
-        npcName = speaker;
-        UpdateCostTexts();
         panel.SetActive(true);
+
+        // 닫았다 열어도, 내부 count를 그대로 사용해서 인터랙티블 설정
+        attackBtn.interactable = upgradeManager.GetAttackCount() < upgradeManager.MaxUpgradesPerStat;
+        defenseBtn.interactable = upgradeManager.GetDefenseCount() < upgradeManager.MaxUpgradesPerStat;
+        healthBtn.interactable = upgradeManager.GetHealthCount() < upgradeManager.MaxUpgradesPerStat;
+        speedBtn.interactable = upgradeManager.GetSpeedCount() < upgradeManager.MaxUpgradesPerStat;
+
+        UpdateAllTexts();
     }
 
-    public void HidePanel()
+    // 강화 시도
+    private void TryUpgrade(StatType stat)
+    {
+        int cost = 0;
+        bool isMax = false;
+
+        // 비용·최대치 여부 조회
+        switch (stat)
+        {
+            case StatType.Attack:
+                cost = upgradeManager.GetAttackCost();
+                isMax = upgradeManager.GetAttackCount() >= upgradeManager.MaxUpgradesPerStat;
+                break;
+            case StatType.Defense:
+                cost = upgradeManager.GetDefenseCost();
+                isMax = upgradeManager.GetDefenseCount() >= upgradeManager.MaxUpgradesPerStat;
+                break;
+            case StatType.Health:
+                cost = upgradeManager.GetHealthCost();
+                isMax = upgradeManager.GetHealthCount() >= upgradeManager.MaxUpgradesPerStat;
+                break;
+            case StatType.Speed:
+                cost = upgradeManager.GetSpeedCost();
+                isMax = upgradeManager.GetSpeedCount() >= upgradeManager.MaxUpgradesPerStat;
+                break;
+        }
+
+        if (isMax)
+        {
+            UIManager.Instance.ShowDialog("강화사", "이미 최대 강화치입니다!");
+            return;
+        }
+
+        if (!resourcesHandler.SpendGold(cost))
+        {
+            UIManager.Instance.ShowDialog("강화사", "골드가 부족합니다!");
+            return;
+        }
+
+        bool success = false;
+        switch (stat)
+        {
+            case StatType.Attack: success = upgradeManager.TryUpgradeAttack(); break;
+            case StatType.Defense: success = upgradeManager.TryUpgradeDefense(); break;
+            case StatType.Health: success = upgradeManager.TryUpgradeHealth(); break;
+            case StatType.Speed: success = upgradeManager.TryUpgradeSpeed(); break;
+        }
+
+        UIManager.Instance.ShowDialog("강화사", success ? "강화 성공!" : "강화 실패");
+
+        // 강화 성공 여부와 관계없이, 버튼 상태는 Show() 로 다시 결정
+        UpdateAllTexts();
+    }
+
+    // UI 텍스트 업데이트
+    private void UpdateAllTexts()
+    {
+        attackCostText.text = $"공격력: {(upgradeManager.GetAttackCount() >= upgradeManager.MaxUpgradesPerStat ? "완료" : upgradeManager.GetAttackCost() + "G")}";
+        defenseCostText.text = $"방어력: {(upgradeManager.GetDefenseCount() >= upgradeManager.MaxUpgradesPerStat ? "완료" : upgradeManager.GetDefenseCost() + "G")}";
+        healthCostText.text = $"체력: {(upgradeManager.GetHealthCount() >= upgradeManager.MaxUpgradesPerStat ? "완료" : upgradeManager.GetHealthCost() + "G")}";
+        speedCostText.text = $"이동속도: {(upgradeManager.GetSpeedCount() >= upgradeManager.MaxUpgradesPerStat ? "완료" : upgradeManager.GetSpeedCost() + "G")}";
+
+        goldText.text = $"Gold: {resourcesHandler.Gold}G";
+    }
+
+    // 강화 UI 닫기
+    public void Hide()
     {
         panel.SetActive(false);
     }
-
-    void OnUpgrade(bool success, int nextCost, string statName)
-    {
-        bool isMaxed = false;
-        // 각 스탯별 강화 횟수 체크
-        switch (statName)
-        {
-            case "공격력":
-                isMaxed = playerStats.GetAttackCount() >= playerStats.MaxUpgradesPerStat;
-                break;
-            case "방어력":
-                isMaxed = playerStats.GetDefenseCount() >= playerStats.MaxUpgradesPerStat;
-                break;
-            case "체력":
-                isMaxed = playerStats.GetHealthCount() >= playerStats.MaxUpgradesPerStat;
-                break;
-            case "이동속도":
-                isMaxed = playerStats.GetSpeedCount() >= playerStats.MaxUpgradesPerStat;
-                break;
-        }
-        if (success)
-        {
-            if (isMaxed)
-                UIManager.Instance.ShowDialog(npcName,
-                        $"{statName} 강화 완료!");
-            else
-                UIManager.Instance.ShowDialog(npcName,
-                    $"{statName} 강화 성공! 다음 코스트: {nextCost} 골드");
-        }
-        else
-            UIManager.Instance.ShowDialog(npcName,
-                $"강화 실패! 골드가 부족하거나 모든 강화를 완료했습니다!");
-
-        UpdateCostTexts();
-    }
-
-    void UpdateCostTexts()
-    {
-        if (playerStats == null) return;
-
-        goldText.text = $"Gold: {playerStats.GetCurrentGold()}";
-
-        if (playerStats.GetAttackCount() >= playerStats.MaxUpgradesPerStat)
-            attackCostText.text = "강화 완료";
-        else
-            attackCostText.text = $"공격력: {playerStats.GetAttackCost()} G";
-
-        // 방어력
-        if (playerStats.GetDefenseCount() >= playerStats.MaxUpgradesPerStat)
-            defenseCostText.text = "강화 완료";
-        else
-            defenseCostText.text = $"방어력: {playerStats.GetDefenseCost()} G";
-
-        // 체력
-        if (playerStats.GetHealthCount() >= playerStats.MaxUpgradesPerStat)
-            healthCostText.text = "강화 완료";
-        else
-            healthCostText.text = $"체력: {playerStats.GetHealthCost()} G";
-
-        // 이동속도
-        if (playerStats.GetSpeedCount() >= playerStats.MaxUpgradesPerStat)
-            speedCostText.text = "강화 완료";
-        else
-            speedCostText.text = $"이동속도: {playerStats.GetSpeedCost()} G";
-    }
-
 }

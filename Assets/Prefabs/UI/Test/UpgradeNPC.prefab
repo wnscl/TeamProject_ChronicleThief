@@ -159,14 +159,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c65ee068c1c3094c9bc488e19a0bf19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcName: TestUpgradeNPC
+  npcName: UpgradeNPC
   dialogueLines:
   - "\uACE8\uB4DC\uB97C \uC18C\uBAA8\uD574 \uC2A4\uD14C\uC774\uD130\uC2A4\uB97C \uAC15\uD654\uD560
     \uC218 \uC788\uC2B5\uB2C8\uB2E4!"
   - "\uBAA8\uB4E0 \uAC15\uD654\uB294 \uD69F\uC218 \uC81C\uD55C\uC774 \uC788\uACE0
     \uD560 \uB54C \uB9C8\uB2E4 \uBE44\uC6A9\uC774 \uC99D\uAC00\uD569\uB2C8\uB2E4."
   - "\uB2E4\uC74C\uC5D0 \uB610 \uBCF4\uC790\uAD6C\uC694!"
-  activeTime: 10
+  activeTime: 60
   despawnAnimationDuration: 0.4
 --- !u!114 &238301429207171175
 MonoBehaviour:
@@ -180,9 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0d802897c1fd5540bea8923772d5cf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueLines:
-  - "\uACE8\uB4DC\uB97C \uC18C\uBAA8\uD574 \uC2A4\uD14C\uC774\uD130\uC2A4\uB97C \uAC15\uD654\uD560
-    \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+  initialDialogue: "\uAC15\uD654\uAC00 \uD544\uC694\uD558\uC2E0\uAC00\uC694?"
 --- !u!95 &8177987292525958097
 Animator:
   serializedVersion: 5

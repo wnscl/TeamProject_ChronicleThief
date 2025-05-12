@@ -1,24 +1,38 @@
+using UnityEngine;
 using NPC;
 using UI;
-using UnityEngine;
 
 public class UpgradeNPCFunction : MonoBehaviour, INPCFunction
 {
-    [SerializeField] private string[] dialogueLines; // [0] 선택 요청 문구
+    // NPC당 최초 한 번만 초기화하기 위한 플래그
+    private bool initialized = false;
 
+    // Inspector에서 설정 가능한 첫 대사
+    [Tooltip("NPC와 상호작용 시 처음 보여줄 대사")]
+    public string initialDialogue = "강화가 필요하신가요?";
+
+    // 상호작용 시 호출되는 메서드
     public void Execute(GameObject interactor)
     {
-        // 1) 첫 대사
-        UIManager.Instance.ShowDialog(
-            GetComponent<NPCController>().npcName,
-            dialogueLines[0]);
-        // 2) 업그레이드 UI 오픈
-        UpgradeUI.Instance.Show(
-            GetComponent<NPCController>().npcName);
-        // (3) 대화창 하단에 “스킵”만 띄워서,
-        //      누르면 업그레이드 패널과 대화창을 닫도록 연결
-        UIManager.Instance.ShowSkipOnly(() => {
-            UpgradeUI.Instance.HidePanel();
+        // 첫 실행 시에만 플레이어의 강화 기록 초기화
+        if (!initialized)
+        {
+            var mgr = interactor.GetComponent<PlayerUpgradeManager>();
+            if (mgr != null) mgr.ResetUpgrades();
+            initialized = true;
+        }
+
+        // NPC 이름과 대사 표시
+        var speaker = GetComponent<NPCController>().npcName;
+        UIManager.Instance.ShowDialog(speaker, initialDialogue);
+
+        // 강화 UI 열기
+        UpgradeUI.Instance.Show();
+
+        // 스킵 버튼만 남기고, 누르면 UI와 대화창 닫기
+        UIManager.Instance.ShowSkipOnly(() =>
+        {
+            UpgradeUI.Instance.Hide();
             UIManager.Instance.HideDialog();
         });
     }
