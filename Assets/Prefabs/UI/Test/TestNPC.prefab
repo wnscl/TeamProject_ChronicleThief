@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 901240451567241465}
   - component: {fileID: 7980960515817507743}
   - component: {fileID: 6732973300319649756}
+  - component: {fileID: 5095264092982870303}
   m_Layer: 0
   m_Name: TestNPC
   m_TagString: Untagged
@@ -159,7 +160,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcName: TestNPC
   dialogueLines:
-  - Say Hello...
-  - Say Hello...
-  - Say Hello...
+  - 
+  - 
+  - 
   activeTime: 60
+--- !u!114 &5095264092982870303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7322836907863123271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0d802897c1fd5540bea8923772d5cf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueLines:
+  - "\uACE8\uB4DC\uB97C \uC18C\uBAA8\uD574 \uC2A4\uD14C\uC774\uD130\uC2A4\uB97C \uAC15\uD654\uD560
+    \uC218 \uC788\uC2B5\uB2C8\uB2E4."
