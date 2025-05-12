@@ -9,10 +9,10 @@ public class InteractionTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && EnterObject != null && ExitObject != null)
+        if (other.CompareTag("Player"))
         {
-            EnterObject.SetActive(false);
             ExitObject.SetActive(true);
+            EnterObject.SetActive(false);
         }
     }
 }
