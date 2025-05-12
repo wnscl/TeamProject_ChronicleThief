@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
@@ -16,7 +17,9 @@ public class ProjectileController : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private SpriteRenderer spriteRenderer;
 
-    public bool fxOnDestory = true;
+    public bool fxOnDestroy = true;
+
+    private IBattleEntity attacker; // 추가: 공격자 참조
 
     private void Awake()
     {
@@ -44,19 +47,28 @@ public class ProjectileController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (levelCollisionLayer.value == (levelCollisionLayer.value | (1 << collision.gameObject.layer)))
+        // 1. 레이어 충돌 확인 (지형/벽)
+        if ((levelCollisionLayer.value & (1 << collision.gameObject.layer)) != 0)
         {
-            DestroyProjectile(collision.ClosestPoint(transform.position) - direction * .2f, fxOnDestory);
+            // 지형 충돌 시 이펙트 생성 위치 계산
+            Vector2 hitPoint = collision.ClosestPoint(transform.position) - direction * 0.2f;
         }
-        else if (weaponHandler.target.value == (weaponHandler.target.value | (1 << collision.gameObject.layer)))
+        // 2. 몬스터 충돌
+        if ((weaponHandler.target.value & (1 << collision.gameObject.layer)) != 0)
         {
-            DestroyProjectile(collision.ClosestPoint(transform.position), fxOnDestory);
+            IBattleEntity target = collision.GetComponent<IBattleEntity>();
+            if (target != null)
+            {
+                BattleSystemManager.Instance.AttackOther(attacker, target);
+            }
+            Destroy(gameObject); // 몬스터와 충돌 시 파괴
         }
     }
 
 
-    public void Init(Vector2 direction, WeaponHandler weaponHandlers)
+    public void Init(Vector2 direction, WeaponHandler weaponHandlers, IBattleEntity attacker)
     {
+        this.attacker = attacker;
         weaponHandler = weaponHandlers;
         this.direction = direction;
         currentDuration = 0;
