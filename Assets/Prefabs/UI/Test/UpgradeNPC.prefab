@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 8070239284121700804}
   - component: {fileID: 2574105369799905625}
   - component: {fileID: 238301429207171175}
+  - component: {fileID: 8177987292525958097}
   m_Layer: 0
-  m_Name: TestUpgradeNPC
+  m_Name: UpgradeNPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,8 +77,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 507435350, guid: a971b0ca3682d5b439af85ca97ff3b3a, type: 3}
+  m_SortingOrder: 150
+  m_Sprite: {fileID: -536943977, guid: 3247a6a6025da6c49bf28514faa0862a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -124,7 +125,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 2}
+    oldSize: {x: 0.75, y: 1.5}
     newSize: {x: 2, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -165,7 +166,8 @@ MonoBehaviour:
   - "\uBAA8\uB4E0 \uAC15\uD654\uB294 \uD69F\uC218 \uC81C\uD55C\uC774 \uC788\uACE0
     \uD560 \uB54C \uB9C8\uB2E4 \uBE44\uC6A9\uC774 \uC99D\uAC00\uD569\uB2C8\uB2E4."
   - "\uB2E4\uC74C\uC5D0 \uB610 \uBCF4\uC790\uAD6C\uC694!"
-  activeTime: 60
+  activeTime: 10
+  despawnAnimationDuration: 0.4
 --- !u!114 &238301429207171175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,3 +183,24 @@ MonoBehaviour:
   dialogueLines:
   - "\uACE8\uB4DC\uB97C \uC18C\uBAA8\uD574 \uC2A4\uD14C\uC774\uD130\uC2A4\uB97C \uAC15\uD654\uD560
     \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+--- !u!95 &8177987292525958097
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9151115914093552943}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6a6107de0f9ac9940b03e1f3fac356de, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

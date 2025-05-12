@@ -7,6 +7,11 @@ public class PlayerController : MonoBehaviour
     [Header("Component References")]
     [SerializeField] private SpriteRenderer characterRenderer;
     [SerializeField] private Transform weaponPivot;
+    [SerializeField] public WeaponHandler weaponPrefab;
+    protected WeaponHandler weaponHandler;
+
+    protected bool isAttacking;
+    private float timeSinceLastAttack = float.MaxValue;
 
     protected PlayerAnimationHandler playerAnimationHandler;
     protected PlayerStats playerStats;
@@ -37,6 +42,11 @@ public class PlayerController : MonoBehaviour
         playerAnimationHandler = GetComponent<PlayerAnimationHandler>();
         playerStats = GetComponent<PlayerStats>();
         _camera = Camera.main;
+
+        if (weaponPrefab != null)
+            weaponHandler = Instantiate(weaponPrefab, weaponPivot);
+        else
+            weaponHandler = GetComponentInChildren<WeaponHandler>();
     }
 
     private void Update()
@@ -46,6 +56,7 @@ public class PlayerController : MonoBehaviour
         HandleInput(); // 입력 처리
         RotateCharacter(); // 무기 회전
         UpdateAnimation(); // 애니메이션 업데이트
+        AttackDelay(); // 공격 입력 관리
 
         if (Input.GetKeyDown(KeyCode.Space) && CanBlink())
             StartCoroutine(PerformBlink());
@@ -62,7 +73,7 @@ public class PlayerController : MonoBehaviour
             HandleMovement(); // 물리 이동 처리
     }
 
-    private void HandleInput()
+    private void HandleInput() // 이동, 공격
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -76,9 +87,11 @@ public class PlayerController : MonoBehaviour
             lookDirection = Vector2.zero;
         else
             lookDirection = lookDirection.normalized;
+
+        isAttacking = Input.GetMouseButtonDown(0);
     }
 
-    private void RotateCharacter()
+    private void RotateCharacter() // 회전
     {
         if (lookDirection == Vector2.zero) return;
 
@@ -89,13 +102,17 @@ public class PlayerController : MonoBehaviour
             characterRenderer.flipX = isLeft;
 
         if (weaponPivot != null)
-            weaponPivot.rotation= Quaternion.Euler(0, 0, rotZ);
+            weaponPivot.rotation = Quaternion.Euler(0, 0, rotZ);
+
+        weaponHandler?.Rotate(isLeft);
     }
 
     private void HandleMovement()
     {
         Vector2 velocity = movementDirection * playerStats.Speed;
         _rigidbody.velocity = velocity;
+
+        //isAttacking = Input.GetMouseButtonDown(0);
     }
 
     private void UpdateAnimation()
@@ -106,7 +123,7 @@ public class PlayerController : MonoBehaviour
         playerAnimationHandler.SetMovement(isMoving);
     }
 
-    private IEnumerator PerformBlink()
+    private IEnumerator PerformBlink() // 점멸
     {
         isBlink = true;
         lastBlinkTime = Time.time;
@@ -172,15 +189,29 @@ public class PlayerController : MonoBehaviour
         isBlink = false;
     }
 
-    //private Vector2 CalculateBlinkDestination(Vector2 direction)
-    //{
-    //    RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, blinkDistance);
-    //    if (hit.collider != null && !hit.collider.isTrigger)
-    //    {
-    //        return hit.point - direction * 0.5f;
-    //    }
-    //    return (Vector2)transform.position + direction * blinkDistance;
-    //}
+    private void AttackDelay()
+    {
+        if (weaponHandler ==  null) return;
+
+        if (timeSinceLastAttack <= weaponHandler.Delay)
+        {
+            timeSinceLastAttack += Time.deltaTime;
+        }
+
+        if (isAttacking && timeSinceLastAttack > weaponHandler.Delay)
+        {
+            timeSinceLastAttack = 0;
+            Attack();
+        }
+    }
+
+    private void Attack()
+    {
+        if (lookDirection != Vector2.zero)
+        {
+            weaponHandler?.Attack();
+        }
+    }
 
     public void TakeDamage()
     {

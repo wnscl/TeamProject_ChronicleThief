@@ -64,11 +64,39 @@ public class UpgradeUI : MonoBehaviour
         panel.SetActive(true);
     }
 
+    public void HidePanel()
+    {
+        panel.SetActive(false);
+    }
+
     void OnUpgrade(bool success, int nextCost, string statName)
     {
+        bool isMaxed = false;
+        // 각 스탯별 강화 횟수 체크
+        switch (statName)
+        {
+            case "공격력":
+                isMaxed = playerStats.GetAttackCount() >= playerStats.MaxUpgradesPerStat;
+                break;
+            case "방어력":
+                isMaxed = playerStats.GetDefenseCount() >= playerStats.MaxUpgradesPerStat;
+                break;
+            case "체력":
+                isMaxed = playerStats.GetHealthCount() >= playerStats.MaxUpgradesPerStat;
+                break;
+            case "이동속도":
+                isMaxed = playerStats.GetSpeedCount() >= playerStats.MaxUpgradesPerStat;
+                break;
+        }
         if (success)
-            UIManager.Instance.ShowDialog(npcName,
-                $"{statName} 강화 성공! 다음 코스트: {nextCost} 골드");
+        {
+            if (isMaxed)
+                UIManager.Instance.ShowDialog(npcName,
+                        $"{statName} 강화 완료!");
+            else
+                UIManager.Instance.ShowDialog(npcName,
+                    $"{statName} 강화 성공! 다음 코스트: {nextCost} 골드");
+        }
         else
             UIManager.Instance.ShowDialog(npcName,
                 $"강화 실패! 골드가 부족하거나 모든 강화를 완료했습니다!");
