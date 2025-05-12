@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     protected PlayerAnimationHandler playerAnimationHandler;
     protected PlayerStats playerStats;
+    protected ResourcesHandler resourcesHandler;
 
     private Rigidbody2D _rigidbody;
     private Camera _camera;
@@ -213,9 +215,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void TakeDamage()
+    public void TakeDamage(IBattleEntity attacker, int dmg)
     {
         if (isDead) return;
+
+        // ResourcesHandler에서 CurrentHealth를 받아와서 -dmg해주면 됨.
+        Debug.Log($"플레이어가 {dmg} 데미지 받음!");
         playerAnimationHandler?.PlayDamage();
     }
 
