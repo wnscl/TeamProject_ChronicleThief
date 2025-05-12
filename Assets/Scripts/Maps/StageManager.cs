@@ -64,7 +64,7 @@ public class StageManager : MonoBehaviour
             else
             {
                 Debug.LogError("SpawnPoint를 찾을 수 없거나 Player가 존재하지 않습니다.");
-            }        
+            }
         }
         else
         {
