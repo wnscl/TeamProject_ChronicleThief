@@ -25,5 +25,17 @@ public class SkullRunnerWeapon : MonoBehaviour
         }
     }
 
+    public void AttackSet(bool isAttack)
+    {
+        if (isAttack)
+        {
+            weaponAnim.SetInteger("actionNum", 3);
+        }
+        else
+        {
+            weaponAnim.SetInteger("actionNum", 0);
+        }
+    }
+
 
 }

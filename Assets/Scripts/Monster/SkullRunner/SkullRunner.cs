@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkullRunner : BasicMonster
+public class SkullRunner : BasicMonster, IBattleEntity
 {
 
     Rigidbody2D rigid;
@@ -11,7 +11,8 @@ public class SkullRunner : BasicMonster
     SkullRunnerWeapon weapon;
     GameObject theLine;
     [SerializeField] float runSpeed;
-    [SerializeField] int a;
+    Vector2 targetPos;
+
     
     private void Awake()
     {
@@ -23,7 +24,6 @@ public class SkullRunner : BasicMonster
         weapon = GetComponentInChildren<SkullRunnerWeapon>();
         theLine = transform.Find("Line").gameObject;
         //transform.Find("자식이름")은 직속 자식 중 이름이 일치하는 오브젝트 하나만 찾는 것
-        a = anim.GetInteger("StateNum");
     }
 
     private void Start()
@@ -80,7 +80,7 @@ public class SkullRunner : BasicMonster
             float distanceOfStone = Vector2.Distance(transform.position, targetRocate);
 
             Debug.DrawLine(transform.position, testPlayer.transform.position, Color.red);
-
+            Debug.DrawLine(transform.position, targetRocate, Color.red);
             if (distanceOfPlayer <= 7f) // 거리가 7 이하면 플레이어를 감지했다고 함
             {
                 Debug.Log("추격모드전환");
@@ -91,6 +91,8 @@ public class SkullRunner : BasicMonster
             {
                 Debug.Log("공격모드전환");
                 readyToNextState = 2; //오브젝트 공격모드로 전환
+                targetPos = theStone.transform.position;
+                Debug.Log("오브젝트를 공격타겟으로 지정");
                 break;
             }
             else
@@ -148,6 +150,8 @@ public class SkullRunner : BasicMonster
             {
                 readyToNextState = 2; //플레이어 공격범위 체크
                 //공격모드로 전환 2
+                targetPos = playerPos;
+                Debug.Log("플레이어를 공격타겟으로 지정");
                 break;
             }
             else
@@ -183,21 +187,29 @@ public class SkullRunner : BasicMonster
     protected override IEnumerator AttackCoroutine()
     {
         int readyToNextState = 0;
+        bool isAttack = false;
         StartAction("startAttack");
         float attackSpeed = 20f;
+        float attackTimer = 0f;
 
-        Vector2 goPos = testPlayer.transform.position;
         Vector2 startPos = transform.position;
-        Vector2 attackDirection = goPos - (Vector2)transform.position;
-        //몬스터가 플레이어를 바라보는 방향값
+        Vector2 attackDirection = (targetPos - (Vector2)transform.position).normalized;
+        //몬스터가 목표지점을 바라보는 방향값
         float angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
-        //각도를 라디안으로 구하고
-        //라디안을 디그리(도단위)로 변한
+        //각도를 라디안으로 구하고 라디안을 디그리(도단위)로 변한
 
         theLine.SetActive(true);
         theLine.transform.rotation = Quaternion.Euler(0, 0, angle);
 
-        while (readyToNextState == 0)
+        while (attackTimer < 0.5f)
+        {
+            attackTimer += Time.deltaTime;
+            yield return null;
+        }
+        theLine.SetActive(false);
+        col.isTrigger = true;
+
+        while (!isAttack)
         {
             Vector2 nextPos = attackDirection * attackSpeed * Time.deltaTime;
             rigid.MovePosition(rigid.position + nextPos);
@@ -212,6 +224,9 @@ public class SkullRunner : BasicMonster
             yield return new WaitForFixedUpdate();
         }
 
+        yield return new WaitForSeconds(0.1f);
+        StopAction("stopAttack");
+
     }
 
     //protected override IEnumerator DeadCoroutine()
@@ -221,7 +236,7 @@ public class SkullRunner : BasicMonster
 
     //protected override IEnumerator GetDamageCoroutine()
     //{
-
+    //    
     //}
 
     public void StopAction(string action)
@@ -232,7 +247,12 @@ public class SkullRunner : BasicMonster
                 anim.SetInteger("StateNum", 0);
                 rigid.velocity = Vector2.zero;
                 break;
-
+            case "stopAttack":
+                anim.SetInteger("StateNum", 0);
+                rigid.velocity = Vector2.zero;
+                weapon.AttackSet(false);
+                col.isTrigger = false;
+                break;
             case "stopAll":
                 anim.SetInteger("StateNum", 0);
                 rigid.velocity = Vector2.zero;
@@ -253,8 +273,17 @@ public class SkullRunner : BasicMonster
                 break;
             case "startAttack":
                 anim.SetInteger("StateNum", 3);
+                weapon.AttackSet(true);
+                break;
+            case "startDamage":
+                anim.SetInteger("StateNum", 2);
                 break;
         }
+    }
+
+    public void TakeDamage(IBattleEntity attacker, int dmg)
+    {
+        currentHp -= dmg;
     }
 }
 
