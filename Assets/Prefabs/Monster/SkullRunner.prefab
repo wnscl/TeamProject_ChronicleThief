@@ -232,7 +232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4562430209592163309}
   - component: {fileID: 1728259189997718869}
-  - component: {fileID: 3812426035720848070}
+  - component: {fileID: 3728294734092647125}
   m_Layer: 7
   m_Name: Weapon
   m_TagString: Untagged
@@ -301,7 +301,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.3945961, y: 1.1037846}
   m_EdgeRadius: 0
---- !u!114 &3812426035720848070
+--- !u!114 &3728294734092647125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -310,7 +310,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3136910507332332815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4ebf95b41e3d744fb788b54f6ec5930, type: 3}
+  m_Script: {fileID: 11500000, guid: b11d3750d8d01e3448a1c1e52709098c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3279446173402691790
@@ -438,7 +438,10 @@ MonoBehaviour:
   moveSpeed: 0
   currentHp: 0
   maxHp: 0
+  atk: 0
+  isAlive: 0
   targetRocate: {x: 0, y: 0}
+  anim: {fileID: 0}
   runSpeed: 0
 --- !u!1 &4147082151498163709
 GameObject:

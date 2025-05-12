@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class TestPlayer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Rigidbody2D r;
 
-    // Update is called once per frame
+    private void Awake()
+    {
+        r = GetComponent<Rigidbody2D>();
+    }
     void Update()
     {
-        
+        r.velocity = Vector3.zero;  
     }
 }
