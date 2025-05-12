@@ -17,7 +17,7 @@ public enum MonsterState
 
 public abstract class BasicMonster : MonoBehaviour
 {
-    private MonsterState CurrentState; //= MonsterState.Spawn;
+    private MonsterState CurrentState = MonsterState.Spawn;
     //private MonsterState NextState = MonsterState.None;
 
     [Header("stat")]
@@ -50,6 +50,7 @@ public abstract class BasicMonster : MonoBehaviour
     protected GameObject player;
     protected GameObject theStone;
     protected MonsterMeleeWeapon weapon;
+    protected Coroutine currentCoroutine;
 
     private void Awake()
     {
@@ -64,10 +65,6 @@ public abstract class BasicMonster : MonoBehaviour
     private void LateUpdate()
     {
         LookObject();
-        if (currentHp <= 0)
-        {
-            SetMonsterState(MonsterState.Dead);
-        }
     }
 
     protected virtual void LookObject()
@@ -89,16 +86,21 @@ public abstract class BasicMonster : MonoBehaviour
         }
     }
 
-    public void SetMonsterState(MonsterState state)
+    public void SetMonsterState(MonsterState newstate)
     {
 /*        if (CurrentState == state && state == MonsterState.GetDamage)
         {
             
         }*/
 
-        CurrentState = state;
+        if (currentCoroutine != null)
+        {
+            StopCoroutine(currentCoroutine);
+        }
 
-        switch (CurrentState)
+        currentCoroutine = StartCoroutine(StateCoroutine(newstate));
+
+/*        switch (CurrentState)
         {
             case MonsterState.Spawn:
                 OnSpawn();
@@ -122,6 +124,36 @@ public abstract class BasicMonster : MonoBehaviour
 
             case MonsterState.Dead:
                 OnDead();
+                break;
+        }*/
+    }
+
+    protected IEnumerator StateCoroutine(MonsterState state)
+    {
+        switch (state)
+        {
+            case MonsterState.Spawn:
+                yield return StartCoroutine(SpawnCoroutine());
+                break;
+
+            case MonsterState.GetDamage:
+                yield return StartCoroutine(GetDamageCoroutine());
+                break;
+
+            case MonsterState.MoveRocate:
+                yield return StartCoroutine(MoveRocateCoroutine());
+                break;
+
+            case MonsterState.Chase:
+                yield return StartCoroutine(ChaseCoroutine());
+                break;
+
+            case MonsterState.Attack:
+                yield return StartCoroutine(AttackCoroutine());
+                break;
+
+            case MonsterState.Dead:
+                yield return StartCoroutine(DeadCoroutine());
                 break;
         }
     }
@@ -161,7 +193,7 @@ public abstract class BasicMonster : MonoBehaviour
         StopAction("stopAll");
         yield return new WaitForSeconds(0.001f);
         SetMonsterState(MonsterState.MoveRocate);
-
+        yield break;
     }
 
     private void OnMoveRocate()
@@ -218,14 +250,17 @@ public abstract class BasicMonster : MonoBehaviour
             case 1:
                 StopAction("dontStopMove");
                 yield return new WaitForSeconds(0.001f);
+                
                 SetMonsterState(MonsterState.Chase);
-                break;
+                yield break;
+                //break;
 
             case 2:
                 StopAction("stopAll");
                 yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.Attack);
-                break;
+                yield break;
+                //break;
         }
     }
 
@@ -286,13 +321,15 @@ public abstract class BasicMonster : MonoBehaviour
                 StopAction("dontStopMove");
                 yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.MoveRocate);
-                break;
+                yield break;
+                //break;
 
             case 2:
                 StopAction("stopAll");
                 yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.Attack);
-                break;
+                yield break;
+                //break;
         }
     }
 
@@ -314,7 +351,7 @@ public abstract class BasicMonster : MonoBehaviour
 
         while (attackTimer < 1f || readyToNextState == 2)
         {
-            attackTimer += Time.deltaTime;
+            attackTimer += 0.1f;
             readyToNextState = 1;
 
             yield return null;
@@ -326,12 +363,14 @@ public abstract class BasicMonster : MonoBehaviour
                 StopAction("stopAttack");
                 yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.Chase);
-                break;
+                yield break;
+                //break;
             case 2:
                 StopAction("stopAttack");
                 yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.GetDamage);
-                break;
+                yield break;
+                //break;
         }
     }
 
@@ -342,16 +381,14 @@ public abstract class BasicMonster : MonoBehaviour
     }
     protected virtual IEnumerator DeadCoroutine()
     {
-        float deadCount = 1f;
-        float Timer = 0f;
+        StopAction("stopAll");
+        yield return new WaitForSeconds(0.001f);
+
         StartAction("startDead");
+        yield return new WaitForSeconds(1f);
 
-        while (Timer < deadCount)
-        {
-            Timer += Time.deltaTime;
-
-            yield return null;
-        }
+        Destroy(this);
+        yield break;
     }
 
     public virtual void StopAction(string action)
@@ -398,7 +435,7 @@ public abstract class BasicMonster : MonoBehaviour
                 break;
             case "startDead":
                 anim.SetInteger("StateNum", 4);
-
+                weapon.DeadSet(true);
                 break;
         }
     }
