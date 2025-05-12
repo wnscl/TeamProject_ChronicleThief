@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     // Blink 관련 변수
     private bool isBlink = false;
     //private float blinkDistance = 5f;
-    private float blinkCooldown = 5f;
+    private float blinkCooldown = 2f;
     private float lastBlinkTime = -999f;
     private float blinkDuration = 0.4f;
 
@@ -110,52 +110,66 @@ public class PlayerController : MonoBehaviour
     {
         isBlink = true;
         lastBlinkTime = Time.time;
-
-        // 1. 정확한 마우스 방향 계산
-        Vector2 mouseWorldPos = _camera.ScreenToWorldPoint(new Vector3(
-            Input.mousePosition.x,
-            Input.mousePosition.y,
-            _camera.transform.position.z));
-
-        Vector2 blinkDirection = (mouseWorldPos - (Vector2)transform.position).normalized;
-
-        // 2. 최소 이동 거리 보장 (Y값이 너무 작을 경우)
-        if (Mathf.Abs(blinkDirection.y) < 0.1f)
-        {
-            blinkDirection.y = blinkDirection.x > 0 ? 0.1f : -0.1f;
-            blinkDirection = blinkDirection.normalized;
-        }
-
-        // 3. 실제 이동 거리 계산
-        float actualBlinkDistance = 3f;
-        Vector2 blinkDestination = (Vector2)transform.position + (blinkDirection * actualBlinkDistance);
-
-        // 4. 애니메이션 bool 먼저 활성화
         playerAnimationHandler?.SetBlink(true);
 
-        // 5. Rigidbody가 있을 경우 물리 이동
+        // 1. 목표 위치 계산
+        Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 blinkDirection = (mouseWorldPos - (Vector2)transform.position).normalized;
+        float blinkDistance = 3f;
+
+        // 2. 충돌 검사 (Raycast + OverlapCircle)
+        RaycastHit2D hit = Physics2D.Raycast( // 광선을 발사해 충돌체를 감지하는 핵심 물리 함수(꼭 알고 있어야 하는 것중 하나인듯)
+            transform.position, // origin 광선 시작 위치 (플레이어 현 위치)
+            blinkDirection, // direction 광선 방향 (마우스 방향)
+            blinkDistance, // distance 검사 거리 위에서 3f로 설정
+            LayerMask.GetMask("Obstacle")); // 검사할 Layer
+
+        if (hit.collider != null)
+        {
+            blinkDistance = hit.distance * 0.95f; // 5% 여유 공간 확보
+        }
+
+        Vector2 targetPos = (Vector2)transform.position + (blinkDirection * blinkDistance);
+
+        // 3. 실제 이동 전 물리 동기화
+        Physics2D.SyncTransforms(); // 현재 위치를 물리엔진에 강제 반영
+        // Unity는 기본적으로 프레임 종료 시 Transform 변경사항을 물리엔진에 반영하기때문에
+        // 수동으로 동기화하면 순간이동 후 즉시 충돌 검사가 가능해진다고 한다.
+        // Raycast : 이동 전 장애물 존재 여부 확인하고
+        // OverlapCircle : 이동 후 미세한 끼임 현상 보정 해줌.
+
+        // 4. Rigidbody로 이동 (물리 엔진 적용)
         if (_rigidbody != null)
         {
-            _rigidbody.MovePosition(blinkDestination);
+            _rigidbody.MovePosition(targetPos); // transform.position보다 물리 엔진과의 호환성이 좋다고 한다.
+                                                // 하지만 SyncTransforms()가 없으면 문제 발생 가능함.
         }
         else
         {
-            transform.position = new Vector3(blinkDestination.x, blinkDestination.y, transform.position.z);
+            transform.position = targetPos;
         }
 
-        // 6. 이동 결과 강제 동기화
-        yield return null; // 한 프레임 대기
+        // 5. 이동 후 다시 물리 동기화
+        Physics2D.SyncTransforms();
 
-        // 7. 애니메이션 유지 시간
-        yield return new WaitForSeconds(blinkDuration - Time.deltaTime);
+        yield return new WaitForSeconds(blinkDuration);
 
-        // 8. 애니메이션 종료
+        // 6. 이동 후 추가 충돌 검사 (끼임 방지)
+        Collider2D[] overlaps = Physics2D.OverlapCircleAll(
+            transform.position,
+            0.4f,
+            LayerMask.GetMask("Obstacle"));
+
+        if (overlaps.Length > 0)
+        {
+            // 충돌 발생 시 가장 가까운 안전한 위치로 조정
+            Vector2 escapeDir = (transform.position - (Vector3)overlaps[0].ClosestPoint(transform.position)).normalized;
+            transform.position += (Vector3)(escapeDir * 0.1f);
+            Physics2D.SyncTransforms();
+        }
+
         playerAnimationHandler?.SetBlink(false);
-
         isBlink = false;
-
-        // 디버그 로그
-        Debug.Log($"Blink: From {transform.position} To {blinkDestination} | Direction: {blinkDirection}");
     }
 
     //private Vector2 CalculateBlinkDestination(Vector2 direction)
