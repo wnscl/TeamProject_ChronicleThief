@@ -183,15 +183,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae9c9ecc3d722df4d8ce006d683ef9d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 1
+  delay: 0.5
   bulletIndex: 0
   weaponSize: 1
   duration: 10
-  attackSpeed: 1
-  spread: 10
-  perShot: 3
+  attackSpeed: 15
+  spread: 1
+  perShot: 150
   shotAngle: 3
   projectileSpawnPosition: {fileID: 7319934926604328805}
   target:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512

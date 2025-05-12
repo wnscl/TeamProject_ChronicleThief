@@ -25,13 +25,34 @@ public abstract class BasicMonster : MonoBehaviour
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected int currentHp;
     [SerializeField] protected int maxHp;
+    [SerializeField] protected int atk;
+    [SerializeField] protected bool isAlive;
 
     [Header("move")]
     [SerializeField] protected Vector2 targetRocate;
+    Vector2 targetPos;
 
-
+    [Header("basic field")]
+    protected Rigidbody2D rigid;
+    [SerializeField] protected Animator anim;
+    protected BoxCollider2D col;
     protected GameObject testPlayer;
     protected GameObject theStone;
+    //protected GameObject theEnemy;
+
+    private void Awake()
+    {
+        rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponentInChildren<Animator>();
+        col = GetComponent<BoxCollider2D>();
+        testPlayer = FindObjectOfType<TestPlayer>().gameObject;
+        theStone = FindObjectOfType<TheStone>().gameObject;
+    }
+
+    private void LateUpdate()
+    {
+        LookPlayer();
+    }
 
     protected void LookPlayer()
     {
@@ -53,7 +74,6 @@ public abstract class BasicMonster : MonoBehaviour
         }
 
     }
-
 
     public void SetMonsterState(MonsterState state)
     {
@@ -89,12 +109,15 @@ public abstract class BasicMonster : MonoBehaviour
 
     private void OnSpawn()
     {
-        //Debug.Log("스컬러너 생성");
+        Debug.Log("생성 상태전환");
         StartCoroutine(SpawnCoroutine());
     }
     protected virtual IEnumerator SpawnCoroutine()
     {
-        yield return null;
+        yield return new WaitForSeconds(1f);
+        StopAction("stopSpawn");
+        yield return new WaitForSeconds(0.001f);
+        SetMonsterState(MonsterState.MoveRocate);
     }
 
     private void OnGetDamage()
@@ -111,45 +134,228 @@ public abstract class BasicMonster : MonoBehaviour
 
     private void OnMoveRocate()
     {
-        //Debug.Log("스컬러너 무브로케이트 상태전환");
+        Debug.Log("무브로케이트 상태전환");
         StartCoroutine(MoveRocateCoroutine());
     }
 
     protected virtual IEnumerator MoveRocateCoroutine()
     {
-        yield return null;
+        int readyToNextState = 0;
+        StartAction("startMove");
+
+        while (readyToNextState == 0)
+        {
+            Vector2 nowPos = transform.position;
+            Vector2 direction = (targetRocate - nowPos).normalized;
+            Vector2 nextPos = direction * moveSpeed * Time.deltaTime;
+
+            float distanceOfPlayer = Vector2.Distance(transform.position, testPlayer.transform.position);
+            float distanceOfStone = Vector2.Distance(transform.position, targetRocate);
+
+            Debug.DrawLine(transform.position, testPlayer.transform.position, Color.red);
+            Debug.DrawLine(transform.position, targetRocate, Color.red);
+
+            if (distanceOfPlayer <= 7f) // 거리가 7 이하면 플레이어를 감지했다고 함
+            {
+                Debug.Log("추격모드전환");
+                readyToNextState = 1; //플레이어 추격모드로 전환
+                break;
+            }
+            else if (distanceOfStone <= 2f)
+            {
+                Debug.Log("공격모드전환");
+                readyToNextState = 2; //오브젝트 공격모드로 전환
+                targetPos = theStone.transform.position;
+                Debug.Log("오브젝트를 공격타겟으로 지정");
+                break;
+            }
+            else
+            {
+                //rigid.velocity = direction * moveSpeed;
+                //a = 이오브젝트 b = 타겟로케이트 b에서 a를 빼줘야함 그리고 노멀라이즈
+                rigid.MovePosition(rigid.position + nextPos);
+                rigid.velocity = Vector2.zero;
+            }
+
+            //yield return null;  
+            yield return new WaitForFixedUpdate();
+        }
+        
+        switch (readyToNextState)
+        {
+            case 1:
+                StopAction("dontStopMove");
+                yield return new WaitForSeconds(0.001f);
+                SetMonsterState(MonsterState.Chase);
+                break;
+
+            case 2:
+                StopAction("stopAll");
+                yield return new WaitForSeconds(0.001f);
+                SetMonsterState(MonsterState.Attack);
+                break;
+        }
     }
 
     private void OnChase()
     {
-        //Debug.Log("스컬러너 체이스 상태전환");
+        Debug.Log("체이스 상태전환");
         StartCoroutine(ChaseCoroutine());
     }
 
     protected virtual IEnumerator ChaseCoroutine()
     {
-        yield return null;
+        int readyToNextState = 0;
+        StartAction("startMove");
+
+        while (readyToNextState == 0)
+        {
+            Vector2 nowPos = transform.position;
+            Vector2 playerPos = testPlayer.transform.position;
+            Vector2 direction = (playerPos - nowPos).normalized;
+            Vector2 nextPos = direction * moveSpeed * Time.deltaTime;
+
+            float distanceOfPlayer = Vector2.Distance(transform.position, testPlayer.transform.position);
+
+            Debug.DrawLine(transform.position, testPlayer.transform.position, Color.green);
+
+
+            if (distanceOfPlayer > 10f)
+            {
+                readyToNextState = 1; //플레이어 추격 실패
+                //다시 오브젝트 이동 모드로 전환 1
+                break;
+            }
+            else if (distanceOfPlayer <= 2f)
+            {
+                readyToNextState = 2; //플레이어 공격범위 체크
+                //공격모드로 전환 2
+                targetPos = playerPos;
+                Debug.Log("플레이어를 공격타겟으로 지정");
+                break;
+            }
+            else
+            {
+                //rigid.velocity = direction * runSpeed;
+                rigid.MovePosition(rigid.position + nextPos);
+                rigid.velocity = Vector2.zero;
+                //플레이어 추격 중
+            }
+
+            //yield return null;
+            yield return new WaitForFixedUpdate();
+            //MovePosition같은 물리 연산은
+            //픽스드업데이트에서 하는 것이 맞다.
+        }
+
+        switch (readyToNextState)
+        {
+            case 1:
+                StopAction("dontStopMove");
+                yield return new WaitForSeconds(0.001f);
+                SetMonsterState(MonsterState.MoveRocate);
+                break;
+
+            case 2:
+                StopAction("stopAll");
+                yield return new WaitForSeconds(0.001f);
+                SetMonsterState(MonsterState.Attack);
+                break;
+        }
     }
 
     private void OnAttack()
     {
-        //Debug.Log("스컬러너 어택 상태전환");
+        Debug.Log("어택 상태전환");
         StartCoroutine(AttackCoroutine());
     }
     protected virtual IEnumerator AttackCoroutine()
     {
-        yield return null;
+        int readyToNextState = 0;
+        float attackTimer = 0f;
+        StartAction("startAttack");
+
+        while (attackTimer < 1f || readyToNextState == 2)
+        {
+            attackTimer += Time.deltaTime;
+
+
+            yield return null;
+        }
+
+        switch (readyToNextState)
+        {
+            case 1:
+                StopAction("stopAttack");
+                yield return new WaitForSeconds(0.001f);
+                SetMonsterState(MonsterState.Chase);
+                break;
+            case 2:
+                StopAction("stopAttack");
+                yield return new WaitForSeconds(0.001f);
+                SetMonsterState(MonsterState.GetDamage);
+                break;
+        }
     }
 
     private void OnDead()
     {
-        //Debug.Log("스컬러너 사망 상태전환");
+        Debug.Log("사망 상태전환");
         StartCoroutine(DeadCoroutine());
     }
     protected virtual IEnumerator DeadCoroutine()
     {
-        yield return null;
+        float deadCount = 1f;
+        StartAction("startMove");
+
+        while (isAlive)
+        {
+            yield return new WaitForFixedUpdate();
+        }
     }
 
+    public virtual void StopAction(string action)
+    {
+        switch (action)
+        {
+            case "stopSpawn":
+                anim.SetInteger("StateNum", 0);
+                break;
+            case "dontStopMove":
+                anim.SetInteger("StateNum", 0);
+                rigid.velocity = Vector2.zero;
+                break;
+            case "stopAttack":
+                anim.SetInteger("StateNum", 0);
+                rigid.velocity = Vector2.zero;
+                col.isTrigger = false;
+                break;
+            case "stopAll":
+                anim.SetInteger("StateNum", 0);
+                rigid.velocity = Vector2.zero;
+                break;
+        }
+    }
+    public virtual void StartAction(string action)
+    {
+        switch (action)
+        {
+            case "startSpawn":
+                anim.SetInteger("StateNum", 10);
+                break;
+            case "startMove":
+                anim.SetInteger("StateNum", 1);
+                break;
+            case "startDamage":
+                anim.SetInteger("StateNum", 2);
+                break;
+            case "startAttack":
+                anim.SetInteger("StateNum", 3);
+                break;
+            case "startDead":
+                anim.SetInteger("StateNum", 4);
+                break;
+        }
+    }
 }
 
