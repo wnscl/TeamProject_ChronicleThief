@@ -62,6 +62,10 @@ public abstract class BasicMonster : MonoBehaviour
     private void LateUpdate()
     {
         LookPlayer();
+        if (currentHp <= 0)
+        {
+            SetMonsterState(MonsterState.Dead);
+        }
     }
 
     protected void LookPlayer()
@@ -323,10 +327,15 @@ public abstract class BasicMonster : MonoBehaviour
         float deadCount = 1f;
         StartAction("startMove");
 
-        while (isAlive)
+        if (!isAlive)
+        {
+            Destroy(this.gameObject);
+            yield return null;
+        }
+/*        while (!isAlive)
         {
             yield return new WaitForFixedUpdate();
-        }
+        }*/
     }
 
     public virtual void StopAction(string action)
