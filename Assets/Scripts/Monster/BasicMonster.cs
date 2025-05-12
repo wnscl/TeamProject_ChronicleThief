@@ -38,6 +38,7 @@ public abstract class BasicMonster : MonoBehaviour
     protected BoxCollider2D col;
     protected GameObject testPlayer;
     protected GameObject theStone;
+    //protected GameObject theEnemy;
 
     private void Awake()
     {
@@ -179,7 +180,7 @@ public abstract class BasicMonster : MonoBehaviour
             //yield return null;  
             yield return new WaitForFixedUpdate();
         }
-
+        
         switch (readyToNextState)
         {
             case 1:
@@ -270,7 +271,31 @@ public abstract class BasicMonster : MonoBehaviour
     }
     protected virtual IEnumerator AttackCoroutine()
     {
-        yield return null;
+        int readyToNextState = 0;
+        float attackTimer = 0f;
+        StartAction("startAttack");
+
+        while (attackTimer < 1f || readyToNextState == 2)
+        {
+            attackTimer += Time.deltaTime;
+
+
+            yield return null;
+        }
+
+        switch (readyToNextState)
+        {
+            case 1:
+                StopAction("stopAttack");
+                yield return new WaitForSeconds(0.001f);
+                SetMonsterState(MonsterState.Chase);
+                break;
+            case 2:
+                StopAction("stopAttack");
+                yield return new WaitForSeconds(0.001f);
+                SetMonsterState(MonsterState.GetDamage);
+                break;
+        }
     }
 
     private void OnDead()
