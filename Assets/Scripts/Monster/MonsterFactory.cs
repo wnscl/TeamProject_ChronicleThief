@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.UI.Image;
 using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 public class MonsterFactory : MonoBehaviour
 {
     [SerializeField] private GameObject skullRunner;
-
     [SerializeField] Vector2 createPos;
+    [SerializeField] Vector2 minPos;
+    [SerializeField] Vector2 maxPos;
 
     public void Awake()
     {
         //skullRunner = FindObjectOfType<SkullRunner>().gameObject;
         //skullRunner = FindAnyObjectByType<SkullRunner>().gameObject;
         //skullRunner = 
-        float createPosX = 8f;
-        float createPosY = 8f;
-        createPos = new Vector2(createPosX, createPosY);
+
     }
 
     public void Start()
@@ -29,23 +29,42 @@ public class MonsterFactory : MonoBehaviour
 
     public void OnMakeMonster()
     {
-        StartCoroutine(MakeMonster());
+        for (int i = 0; i < 10; i++)
+        {
+            minPos = new Vector2(-6, -6);
+            maxPos = new Vector2(6, 6);
+            float randomPosX = UnityEngine.Random.Range(minPos.x, maxPos.x);
+            float randomPosY = UnityEngine.Random.Range(minPos.y, maxPos.y);
+
+            createPos = new Vector2(randomPosX, randomPosY);
+            Instantiate(skullRunner, createPos, Quaternion.identity, this.transform);
+
+            //yield return new WaitForSeconds(0.5f);
+        }
+        //StartCoroutine(MakeMonster());
     }
 
-    public IEnumerator MakeMonster()
+/*    public IEnumerator MakeMonster()
     {
         for (int i = 0; i < 10; i++)
         {
+            minPos = new Vector2(-6, -6);
+            maxPos = new Vector2(6, 6);
+            float randomPosX = UnityEngine.Random.Range(minPos.x, maxPos.x);
+            float randomPosY = UnityEngine.Random.Range(minPos.y, maxPos.y);
+
+            createPos = new Vector2(randomPosX, randomPosY);
             Instantiate(skullRunner, createPos, Quaternion.identity, this.transform);
+
             yield return new WaitForSeconds(0.5f);
         }
 
-        /*Instantiate(original);                           // 가장 기본
+        *//*Instantiate(original);                           // 가장 기본
         Instantiate(original, position, rotation);       // 위치와 회전 지정
         Instantiate(original, parent);                   // 부모만 지정 (Transform 기준)
-        Instantiate(original, position, rotation, parent); // 위치 + 회전 + 부모 전부 지정*/
+        Instantiate(original, position, rotation, parent); // 위치 + 회전 + 부모 전부 지정*//*
     }
-
+*/
     public void DestroyTestMonster()
     {
 /*        while (transform.FindChild("SkullRunner") != null)

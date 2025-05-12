@@ -5136,6 +5136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterRenderer: {fileID: 3692897558181781780}
   weaponPivot: {fileID: 1998769582237729210}
+  weaponPrefab: {fileID: 0}
 --- !u!114 &8116476723746961578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5177,7 +5178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthChangeDelay: 0.5
-  gold: 2000
+  gold: 50000
 --- !u!114 &6086911703460718100
 MonoBehaviour:
   m_ObjectHideFlags: 0

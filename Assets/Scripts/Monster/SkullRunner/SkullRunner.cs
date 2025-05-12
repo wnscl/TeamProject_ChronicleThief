@@ -93,6 +93,10 @@ public class SkullRunner : BasicMonster, IBattleEntity
     public void TakeDamage(IBattleEntity attacker, int dmg)
     {
         currentHp -= dmg;
+        if (currentHp <= 0)
+        {
+            isAlive = false;
+        }
     }
 }
 

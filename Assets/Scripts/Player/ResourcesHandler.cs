@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ResourcesHandler : MonoBehaviour
 {
+    public static ResourcesHandler Instance { get; private set; }
+
     [SerializeField] private float healthChangeDelay = 0.5f;
 
     private PlayerController playerController;
@@ -25,6 +27,14 @@ public class ResourcesHandler : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         playerController = GetComponent<PlayerController>();
         playerStats = GetComponent<PlayerStats>();
         playerAnimationHandler = GetComponent<PlayerAnimationHandler>();
@@ -70,23 +80,24 @@ public class ResourcesHandler : MonoBehaviour
         return true;
     }
 
-    public void AddGold(int amount) // 몬스터 처치 함수에 추가해주면 됨.
+    public void AddGold(int amount)
     {
         if (amount <= 0) return;
 
         gold += amount;
-        //OnGoldChanged?.Invoke(gold); // 이벤트로 UI 알림
+        // OnGoldChanged?.Invoke(gold);
         Debug.Log($"Gold Added : {amount} | Total : {gold}");
     }
 
-    public void SpendGold()//public bool SpendGold(int amount) 상점 부분에 넣어주면 됨.
+    public bool SpendGold(int amount)
     {
-        //if (amount <= 0 || gold < amount) return false; // 잔고 부족 시 실패
+        if (amount <= 0 || gold < amount)
+            return false;
 
-        //gold -= amount; //음수방지
-        //OnGoldChanged?.Invoke(gold); // 이벤트로 UI 알림
-        //Debug.Log($"Gold Spent: {amount} | Remaining: {gold}");
-        //return true;
+        gold -= amount;
+        // OnGoldChanged?.Invoke(gold);
+        Debug.Log($"Gold Spent: {amount} | Remaining: {gold}");
+        return true;
     }
 
     private void Death()
