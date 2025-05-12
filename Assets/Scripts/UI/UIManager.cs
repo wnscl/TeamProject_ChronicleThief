@@ -74,6 +74,22 @@ namespace UI
             useButton.onClick.AddListener(() => { HideChoice(); onUse(); });
             skipButton.onClick.AddListener(() => { HideChoice(); onSkip(); });
         }
+        public void ShowSkipOnly(UnityEngine.Events.UnityAction onSkip)
+        {
+            // 기존 선택용 버튼 숨기기
+            HideChoice();
+
+            // 스킵 버튼만 보이도록 활성화
+            skipButton.gameObject.SetActive(true);
+
+            // 리스너 설정
+            skipButton.onClick.RemoveAllListeners();
+            skipButton.onClick.AddListener(() => {
+                HideChoice();      // 버튼들 숨기기
+                onSkip?.Invoke();  // 업그레이드 패널 숨기기 등
+            });
+        }
+
         public void HideChoice()
         {
             useButton.gameObject.SetActive(false);

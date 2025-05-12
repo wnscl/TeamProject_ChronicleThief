@@ -22,10 +22,10 @@ namespace Interaction
         void Update()
         {
             // E 키 입력 시 상호작용 실행
-            if (activeTrigger != null && Input.GetKeyDown(KeyCode.E))
+            if (activeTrigger != null && Input.GetKeyDown(KeyCode.F))
             {   
                 activeTrigger.DoInteract();
-                Debug.Log($"E키 입력 확인");
+                Debug.Log($"F키 입력 확인");
             }
         }
 

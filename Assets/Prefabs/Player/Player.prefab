@@ -5135,6 +5135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterRenderer: {fileID: 3692897558181781780}
   weaponPivot: {fileID: 1998769582237729210}
+  weaponPrefab: {fileID: 4840178218813132378, guid: fd4f4f29cf833a545af566e22e519d97, type: 3}
 --- !u!114 &8116476723746961578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5161,6 +5162,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   speed: 5
+  playerAttackPower: 10
+  playerDefensePower: 5
 --- !u!114 &8304239332557054820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5174,6 +5177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthChangeDelay: 0.5
+  gold: 0
 --- !u!1 &7260240623007538058
 GameObject:
   m_ObjectHideFlags: 0
