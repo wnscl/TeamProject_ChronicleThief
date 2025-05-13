@@ -17,7 +17,7 @@ public enum MonsterState
 
 public abstract class BasicMonster : MonoBehaviour
 {
-    private MonsterState CurrentState = MonsterState.Spawn;
+/*    private MonsterState CurrentState = MonsterState.Spawn;
     //private MonsterState NextState = MonsterState.None;
 
     [Header("stat")]
@@ -88,10 +88,10 @@ public abstract class BasicMonster : MonoBehaviour
 
     public void SetMonsterState(MonsterState newstate)
     {
-/*        if (CurrentState == state && state == MonsterState.GetDamage)
+*//*        if (CurrentState == state && state == MonsterState.GetDamage)
         {
             
-        }*/
+        }*//*
 
         if (currentCoroutine != null)
         {
@@ -100,7 +100,7 @@ public abstract class BasicMonster : MonoBehaviour
 
         currentCoroutine = StartCoroutine(StateCoroutine(newstate));
 
-/*        switch (CurrentState)
+*//*        switch (CurrentState)
         {
             case MonsterState.Spawn:
                 OnSpawn();
@@ -125,7 +125,7 @@ public abstract class BasicMonster : MonoBehaviour
             case MonsterState.Dead:
                 OnDead();
                 break;
-        }*/
+        }*//*
     }
 
     protected IEnumerator StateCoroutine(MonsterState state)
@@ -344,10 +344,10 @@ public abstract class BasicMonster : MonoBehaviour
         float attackTimer = 0f;
         StartAction("startAttack");
 
-        /*Vector2 attackDirection = (targetPos - (Vector2)transform.position).normalized;
+        *//*Vector2 attackDirection = (targetPos - (Vector2)transform.position).normalized;
         float angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
         Vector3 startAngle = weapon.transform.eulerAngles;
-        weapon.transform.rotation = Quaternion.Euler(startAngle.x, startAngle.y, angle);*/
+        weapon.transform.rotation = Quaternion.Euler(startAngle.x, startAngle.y, angle);*//*
 
         while (attackTimer < 1f || readyToNextState == 2)
         {
@@ -438,6 +438,6 @@ public abstract class BasicMonster : MonoBehaviour
                 weapon.DeadSet(true);
                 break;
         }
-    }
+    }*/
 }
 

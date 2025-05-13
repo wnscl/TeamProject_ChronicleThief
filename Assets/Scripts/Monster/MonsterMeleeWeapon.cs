@@ -6,21 +6,29 @@ public class MonsterMeleeWeapon : MonoBehaviour
 {
     Animator weaponAnim;
     BoxCollider2D weaponCol;
+    MonsterAi mob;
 
     private void Awake()
     {
         weaponAnim = GetComponentInChildren<Animator>();
-        weaponCol = GetComponent<BoxCollider2D>();
+        weaponCol = GetComponentInParent<BoxCollider2D>();
+        mob = GetComponentInParent<MonsterAi>();
     }
 
-    //public void SettingMelee()
-    //{
-    //    Vector3 startAngle = this.transform.eulerAngles;
+    public void SpawnSetting()
+    {
+        weaponCol.enabled = false;
+    }
+    public void AttackStart()
+    {
+        weaponCol.enabled = true;
+    }
+    public void AttackEnd()
+    {
+        weaponCol.enabled = false;
+    }
 
-    //}
-
-
-    public void MoveSet(bool isMoving)
+    public void MoveAnimationSet(bool isMoving)
     {
         if (isMoving)
         {
@@ -31,7 +39,18 @@ public class MonsterMeleeWeapon : MonoBehaviour
             weaponAnim.SetInteger("actionNum", 0);
         }
     }
-    public void DeadSet(bool isHit)
+    public void AttackAnimationSet(bool isAttack)
+    {
+        if (isAttack)
+        {
+            weaponAnim.SetInteger("actionNum", 3);
+        }
+        else
+        {
+            weaponAnim.SetInteger("actionNum", 0);
+        }
+    }
+    public void DeadAnimationSet(bool isHit)
     {
         if (isHit)
         {
@@ -42,16 +61,12 @@ public class MonsterMeleeWeapon : MonoBehaviour
             weaponAnim.SetInteger("actionNum", 0);
         }
     }
-
-    public void AttackSet(bool isAttack)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isAttack)
+        if ( collision != null && (collision.gameObject.layer == LayerMask.NameToLayer("Player")) )
         {
-            weaponAnim.SetInteger("actionNum", 3);
-        }
-        else
-        {
-            weaponAnim.SetInteger("actionNum", 0);
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            BattleSystemManager.Instance.AttackOther(mob , player);
         }
     }
 }
