@@ -10,7 +10,7 @@ public class HealthSystem : MonoBehaviour
     [Header("체력 게이지")]
     public Image currentHealthBar;    // 현재 체력 바 이미지
     public Text healthText;           // 체력 텍스트
-    public int maxHitPoint = 100;  // 최대 체력치
+    public int maxHitPoint;  // 최대 체력치 (이제 값을 따로 지정하지 않고, 플레이어 스탯에서 가져옴)
 
     [Header("마나 게이지")]
     public Image currentManaBar;      // 현재 마나 바 이미지
@@ -41,6 +41,8 @@ public class HealthSystem : MonoBehaviour
 
         if (playerStats == null)
             Debug.LogError("HealthSystem: PlayerStats 컴포넌트를 찾을 수 없습니다.");
+
+        maxHitPoint = playerStats.MaxHealth; // maxHitPoint에 플레이어 스탯 반영
     }
 
     void Start()
@@ -91,11 +93,22 @@ public class HealthSystem : MonoBehaviour
     {
         if (playerStats == null) return;
         float current = playerStats.Health;
-        float ratio = current / maxHitPoint;
+        float ratio = current / (float)maxHitPoint;
         float barWidth = currentHealthBar.rectTransform.rect.width;
         currentHealthBar.rectTransform.localPosition =
             new Vector3(barWidth * ratio - barWidth, 0, 0);
         healthText.text = $"{current:0}/{maxHitPoint:0}";
+    }
+
+    public void ModifyHealth(int value)
+    {
+        if (playerStats == null) return;
+
+        // 실제 체력값 변경 (PlayerStats.Health는 MaxHealth 기준으로 clamp 처리됨)
+        playerStats.Health += value;
+
+        // UI 갱신
+        UpdateGraphics();
     }
 
     // 데미지 처리
@@ -118,6 +131,7 @@ public class HealthSystem : MonoBehaviour
     public void SetMaxHealth(int amount)
     {
         maxHitPoint += amount;
+        playerStats.MaxHealth = maxHitPoint; // 동시에 플레이어 스탯에도 값을 저장
         UpdateGraphics();
     }
 
