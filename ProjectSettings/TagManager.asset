@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Stage
+  - ManaSprite
+  - HealthSprite
+  - Stage1_Floor
   layers:
   - Default
   - TransparentFX
