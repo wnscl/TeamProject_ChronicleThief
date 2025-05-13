@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IBattleEntity
+public class PlayerController : MonoBehaviour //IBattleEntity
 {
     [Header("Component References")]
     [SerializeField] private SpriteRenderer characterRenderer;
@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour, IBattleEntity
         }
     }
 
-    public void TakeDamage(IBattleEntity attacker, int dmg)
+    public void TakeDamage(int dmg)//IBattleEntity attacker, int dmg)
     {
         if (isDead) return;
 
