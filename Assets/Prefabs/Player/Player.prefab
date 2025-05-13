@@ -5026,6 +5026,7 @@ GameObject:
   - component: {fileID: 8304239332557054820}
   - component: {fileID: 3635257872640007332}
   - component: {fileID: 839796430210967773}
+  - component: {fileID: 401482628997479134}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -5163,6 +5164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  maxHealth: 100
   speed: 5
   playerAttackPower: 10
   playerDefensePower: 5
@@ -5210,6 +5212,20 @@ MonoBehaviour:
   baseDefenseCost: 100
   baseHealthCost: 150
   baseSpeedCost: 150
+--- !u!114 &401482628997479134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6443820856758281112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd5099e275d4045448df67f730e695d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 5357555169264218661}
+  offset: {x: 0, y: 2, z: 0}
 --- !u!1 &7260240623007538058
 GameObject:
   m_ObjectHideFlags: 0

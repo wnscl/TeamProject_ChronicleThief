@@ -8,7 +8,7 @@ public class GimmickTrigger : MonoBehaviour
 {
     private Animator animator;
     public GameObject[] gimicFloorObj;
-    private bool isTriggered = false;
+    // private bool isTriggered = false;
     // public int nextFloorIndex = 0;
 
 
@@ -17,13 +17,28 @@ public class GimmickTrigger : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    // void Update() // 테스트용
+    // {
+    //     if (Input.GetKeyDown(KeyCode.F))
+    //     {
+    //         StageOneFloorGimic();
+    //     }
+    // }
+
+    //테스트용
+    // private void OnTriggerEnter2D(Collider2D collision)
+    // {
+    //     if (collision.CompareTag("Player") && !isTriggered)
+    //     {
+    //         isTriggered = true;
+    //         animator.SetTrigger("FloorShake");
+    //     }
+    // }
+
+    // 배틀매니저에서 실행할 메서드.
+    public void StageOneFloorGimic()
     {
-        if (collision.CompareTag("Player") && !isTriggered)
-        {
-            isTriggered = true;
-            animator.SetTrigger("FloorShake");
-        }
+        animator.SetTrigger("FloorShake");
     }
 
     void FindGimicObjects() // 애니메이터 연동으로 메서드 실행(FloorShake)
@@ -66,7 +81,26 @@ public class GimmickTrigger : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
         }
+        // StartCoroutine(FadeOutSprite(mySpriteRenderer, 2f));
+
+        yield break; // 코루틴 중첩 방지용.
     }
+
+    // IEnumerator FadeOutSprite(SpriteRenderer sprite, float duration)
+    // {
+    //     float time = 0;
+    //     Color startColor = sprite.color;
+
+    //     while (time < duration)
+    //     {
+    //         sprite.color = new Color(startColor.r, startColor.g, startColor.b, Mathf.Lerp(0f, 1f, time / duration));
+    //         time += Time.deltaTime;
+    //         yield return null;
+    //     }
+    //     sprite.color = new Color(startColor.r, startColor.g, startColor.b, 1f);
+
+    //     yield break;
+    // }
 
     // Trigger 메서드를 통해 이동할 인덱스를 입력하면 다음 스테이지로 이동할 수 있는 로직.
     // 기믹 연출로는 별로 좋은 방법은 아닌 듯...
