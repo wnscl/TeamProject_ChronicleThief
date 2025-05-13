@@ -47,11 +47,12 @@ public class ProjectileController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // 1. 레이어 충돌 확인 (지형/벽)
+        // 1. 지형/벽 충돌 시 이펙트 생성 후 파괴
         if ((levelCollisionLayer.value & (1 << collision.gameObject.layer)) != 0)
         {
-            // 지형 충돌 시 이펙트 생성 위치 계산
             Vector2 hitPoint = collision.ClosestPoint(transform.position) - direction * 0.2f;
+            DestroyProjectile(hitPoint, true); // FX 생성 활성화
+            return; // 이후 로직 무시
         }
         // 2. 몬스터 충돌
         if ((weaponHandler.target.value & (1 << collision.gameObject.layer)) != 0)

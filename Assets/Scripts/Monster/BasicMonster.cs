@@ -27,11 +27,13 @@ public abstract class BasicMonster : MonoBehaviour
     [SerializeField] protected int currentHp;
     [SerializeField] protected int maxHp;
     [SerializeField] protected int atk;
+    public int Atk => atk;
     [SerializeField] protected bool isAlive;
 
     [Header("attack stat")]
     protected float atkSpeed;
     [SerializeField] protected float attackDistance;
+    protected bool isTakingDmg = false;
 
     [Header("move")]
     [SerializeField] protected Vector2 targetRocate;
@@ -45,35 +47,31 @@ public abstract class BasicMonster : MonoBehaviour
     protected Rigidbody2D rigid;
     [SerializeField] protected Animator anim;
     protected BoxCollider2D col;
-    protected GameObject testPlayer;
+    protected GameObject player;
     protected GameObject theStone;
     protected MonsterMeleeWeapon weapon;
+    protected Coroutine currentCoroutine;
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         col = GetComponent<BoxCollider2D>();
-        testPlayer = FindObjectOfType<TestPlayer>().gameObject;
+        player = FindObjectOfType<PlayerController>().gameObject;
         theStone = FindObjectOfType<TheStone>().gameObject;
         weapon = GetComponentInChildren<MonsterMeleeWeapon>();
     }
 
     private void LateUpdate()
     {
-        LookPlayer();
-        if (currentHp <= 0)
-        {
-            SetMonsterState(MonsterState.Dead);
-        }
+        LookObject();
     }
 
-    protected void LookPlayer()
+    protected virtual void LookObject()
     {
-        
-        if (testPlayer != null)
+        if (player != null)
         {
-            if (transform.position.x > testPlayer.transform.position.x)
+            if (transform.position.x > player.transform.position.x)
             {
                 transform.rotation = Quaternion.Euler(0f, 180f, 0f);
                 //transform.localScale = new Vector3(-1, 1, 1); // 왼쪽 보기
@@ -86,14 +84,23 @@ public abstract class BasicMonster : MonoBehaviour
                 //로컬스케일로도 구현가능
             }
         }
-
     }
 
-    public void SetMonsterState(MonsterState state)
+    public void SetMonsterState(MonsterState newstate)
     {
-        CurrentState = state;
+/*        if (CurrentState == state && state == MonsterState.GetDamage)
+        {
+            
+        }*/
 
-        switch (CurrentState)
+        if (currentCoroutine != null)
+        {
+            StopCoroutine(currentCoroutine);
+        }
+
+        currentCoroutine = StartCoroutine(StateCoroutine(newstate));
+
+/*        switch (CurrentState)
         {
             case MonsterState.Spawn:
                 OnSpawn();
@@ -117,6 +124,36 @@ public abstract class BasicMonster : MonoBehaviour
 
             case MonsterState.Dead:
                 OnDead();
+                break;
+        }*/
+    }
+
+    protected IEnumerator StateCoroutine(MonsterState state)
+    {
+        switch (state)
+        {
+            case MonsterState.Spawn:
+                yield return StartCoroutine(SpawnCoroutine());
+                break;
+
+            case MonsterState.GetDamage:
+                yield return StartCoroutine(GetDamageCoroutine());
+                break;
+
+            case MonsterState.MoveRocate:
+                yield return StartCoroutine(MoveRocateCoroutine());
+                break;
+
+            case MonsterState.Chase:
+                yield return StartCoroutine(ChaseCoroutine());
+                break;
+
+            case MonsterState.Attack:
+                yield return StartCoroutine(AttackCoroutine());
+                break;
+
+            case MonsterState.Dead:
+                yield return StartCoroutine(DeadCoroutine());
                 break;
         }
     }
@@ -143,7 +180,20 @@ public abstract class BasicMonster : MonoBehaviour
     }
     protected virtual IEnumerator GetDamageCoroutine()
     {
-        yield return null;
+        isTakingDmg = true;
+
+        StopAction("stopAll");
+        yield return new WaitForSeconds(0.001f);
+
+        StartAction("startDamage");
+        yield return new WaitForSeconds(0.5f);
+
+        isTakingDmg = false;
+
+        StopAction("stopAll");
+        yield return new WaitForSeconds(0.001f);
+        SetMonsterState(MonsterState.MoveRocate);
+        yield break;
     }
 
     private void OnMoveRocate()
@@ -163,10 +213,10 @@ public abstract class BasicMonster : MonoBehaviour
             Vector2 direction = (targetRocate - nowPos).normalized;
             Vector2 nextPos = direction * moveSpeed * Time.deltaTime;
 
-            float distanceOfPlayer = Vector2.Distance(transform.position, testPlayer.transform.position);
+            float distanceOfPlayer = Vector2.Distance(transform.position, player.transform.position);
             float distanceOfStone = Vector2.Distance(transform.position, targetRocate);
 
-            Debug.DrawLine(transform.position, testPlayer.transform.position, Color.red);
+            Debug.DrawLine(transform.position, player.transform.position, Color.red);
             Debug.DrawLine(transform.position, targetRocate, Color.red);
 
             if (distanceOfPlayer <= detectDistancePlayer) // 거리가 7 이하면 플레이어를 감지했다고 함
@@ -200,14 +250,17 @@ public abstract class BasicMonster : MonoBehaviour
             case 1:
                 StopAction("dontStopMove");
                 yield return new WaitForSeconds(0.001f);
+                
                 SetMonsterState(MonsterState.Chase);
-                break;
+                yield break;
+                //break;
 
             case 2:
                 StopAction("stopAll");
                 yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.Attack);
-                break;
+                yield break;
+                //break;
         }
     }
 
@@ -225,13 +278,13 @@ public abstract class BasicMonster : MonoBehaviour
         while (readyToNextState == 0)
         {
             Vector2 nowPos = transform.position;
-            Vector2 playerPos = testPlayer.transform.position;
+            Vector2 playerPos = player.transform.position;
             Vector2 direction = (playerPos - nowPos).normalized;
             Vector2 nextPos = direction * runSpeed * Time.deltaTime;
 
-            float distanceOfPlayer = Vector2.Distance(transform.position, testPlayer.transform.position);
+            float distanceOfPlayer = Vector2.Distance(transform.position, player.transform.position);
 
-            Debug.DrawLine(transform.position, testPlayer.transform.position, Color.green);
+            Debug.DrawLine(transform.position, player.transform.position, Color.green);
 
 
             if (distanceOfPlayer > failDistancePlayer)
@@ -268,13 +321,15 @@ public abstract class BasicMonster : MonoBehaviour
                 StopAction("dontStopMove");
                 yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.MoveRocate);
-                break;
+                yield break;
+                //break;
 
             case 2:
                 StopAction("stopAll");
                 yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.Attack);
-                break;
+                yield break;
+                //break;
         }
     }
 
@@ -296,7 +351,7 @@ public abstract class BasicMonster : MonoBehaviour
 
         while (attackTimer < 1f || readyToNextState == 2)
         {
-            attackTimer += Time.deltaTime;
+            attackTimer += 0.1f;
             readyToNextState = 1;
 
             yield return null;
@@ -308,12 +363,14 @@ public abstract class BasicMonster : MonoBehaviour
                 StopAction("stopAttack");
                 yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.Chase);
-                break;
+                yield break;
+                //break;
             case 2:
                 StopAction("stopAttack");
                 yield return new WaitForSeconds(0.001f);
                 SetMonsterState(MonsterState.GetDamage);
-                break;
+                yield break;
+                //break;
         }
     }
 
@@ -324,18 +381,14 @@ public abstract class BasicMonster : MonoBehaviour
     }
     protected virtual IEnumerator DeadCoroutine()
     {
-        float deadCount = 1f;
-        StartAction("startMove");
+        StopAction("stopAll");
+        yield return new WaitForSeconds(0.001f);
 
-        if (!isAlive)
-        {
-            Destroy(this.gameObject);
-            yield return null;
-        }
-/*        while (!isAlive)
-        {
-            yield return new WaitForFixedUpdate();
-        }*/
+        StartAction("startDead");
+        yield return new WaitForSeconds(1f);
+
+        Destroy(this);
+        yield break;
     }
 
     public virtual void StopAction(string action)
@@ -374,6 +427,7 @@ public abstract class BasicMonster : MonoBehaviour
                 break;
             case "startDamage":
                 anim.SetInteger("StateNum", 2);
+                weapon.MoveSet(false);
                 break;
             case "startAttack":
                 anim.SetInteger("StateNum", 3);
@@ -381,6 +435,7 @@ public abstract class BasicMonster : MonoBehaviour
                 break;
             case "startDead":
                 anim.SetInteger("StateNum", 4);
+                weapon.DeadSet(true);
                 break;
         }
     }

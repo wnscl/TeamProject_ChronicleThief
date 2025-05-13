@@ -324,7 +324,6 @@ GameObject:
   - component: {fileID: 5581993687159540281}
   - component: {fileID: 4022076033253195499}
   - component: {fileID: 5901353443483178615}
-  - component: {fileID: 1260344660067191912}
   m_Layer: 7
   m_Name: SkullRunner
   m_TagString: Untagged
@@ -422,27 +421,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1260344660067191912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3279446173402691790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad275e15b7e0d35499e74ab5ea1e15b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: 
-  moveSpeed: 0
-  currentHp: 0
-  maxHp: 0
-  atk: 0
-  isAlive: 0
-  targetRocate: {x: 0, y: 0}
-  anim: {fileID: 0}
-  runSpeed: 0
 --- !u!1 &4147082151498163709
 GameObject:
   m_ObjectHideFlags: 0

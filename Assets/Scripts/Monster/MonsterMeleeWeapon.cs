@@ -31,6 +31,17 @@ public class MonsterMeleeWeapon : MonoBehaviour
             weaponAnim.SetInteger("actionNum", 0);
         }
     }
+    public void DeadSet(bool isHit)
+    {
+        if (isHit)
+        {
+            weaponAnim.SetInteger("actionNum", 2);
+        }
+        else
+        {
+            weaponAnim.SetInteger("actionNum", 0);
+        }
+    }
 
     public void AttackSet(bool isAttack)
     {

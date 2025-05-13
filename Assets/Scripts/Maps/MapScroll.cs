@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapScroll : MonoBehaviour
 {
-    public float scrollSpeed = 1f;
+    public float scrollSpeed = 0f;
 
     // Update is called once per frame
     void Update()

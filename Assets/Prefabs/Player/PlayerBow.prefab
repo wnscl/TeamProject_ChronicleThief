@@ -194,4 +194,4 @@ MonoBehaviour:
   projectileSpawnPosition: {fileID: 7319934926604328805}
   target:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 128
