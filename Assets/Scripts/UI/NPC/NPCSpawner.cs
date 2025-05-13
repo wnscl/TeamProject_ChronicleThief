@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class NPCSpawner : MonoBehaviour
 {
-    [Header("Spawn Settings")]
+    [Header("스폰 타이머 사용 여부")]
+    public bool disableSpawnTimer = false;
+
+    [Header("스폰 세팅")]
     public GameObject[] npcPrefabs;
     public Transform[] spawnPoints;
 
@@ -32,14 +35,19 @@ public class NPCSpawner : MonoBehaviour
         // 2) 소환 플래그
         hasSpawned = true;
 
-        // 3) 카운트 다운 시작
-        if (SpawnTimer.Instance != null)
-            SpawnTimer.Instance.StartCountdown(60); // 카운트 다운 수정은 여기서
+        // 3) 카운트 다운 시작 (disableSpawnTimer가 false일 때만)
+        if (!disableSpawnTimer && SpawnTimer.Instance != null)
+        {
+            SpawnTimer.Instance.StartCountdown(60);
+        }
 
         // 4) 애니메이터에 ‘SpawnReleased’ 트리거
         if (animator != null)
+        {
             animator.SetTrigger(SpawnReleasedHash);
+        }
 
-
+        // 5) 스포너 오브젝트 제거
+        Destroy(gameObject);
     }
 }
