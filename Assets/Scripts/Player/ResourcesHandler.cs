@@ -64,9 +64,7 @@ public class ResourcesHandler : MonoBehaviour
 
         timeSinceLastChange = 0;
 
-        CurrentHealth += change;
-        CurrentHealth = CurrentHealth > MaxHealth ? MaxHealth : CurrentHealth;
-        CurrentHealth = CurrentHealth < 0 ? 0 : CurrentHealth;
+        HealthSystem.Instance.ModifyHealth((int)change);
 
         if (change < 0)
         {

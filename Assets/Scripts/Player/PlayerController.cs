@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IBattleEntity
+public class PlayerController : MonoBehaviour //IBattleEntity
 {
     [Header("Component References")]
     [SerializeField] private SpriteRenderer characterRenderer;
@@ -41,10 +41,13 @@ public class PlayerController : MonoBehaviour, IBattleEntity
 
     private void Awake()
     {
+        resourcesHandler = GetComponent<ResourcesHandler>();
         _rigidbody = GetComponent<Rigidbody2D>();
         playerAnimationHandler = GetComponent<PlayerAnimationHandler>();
         playerStats = GetComponent<PlayerStats>();
+        resourcesHandler = GetComponent<ResourcesHandler>();
         _camera = Camera.main;
+        healthSystem = HealthSystem.Instance;
 
         if (weaponPrefab != null)
             weaponHandler = Instantiate(weaponPrefab, weaponPivot);
@@ -216,15 +219,14 @@ public class PlayerController : MonoBehaviour, IBattleEntity
         }
     }
 
-    public void TakeDamage(IBattleEntity attacker, int dmg)
+    public void TakeDamage(int dmg)//IBattleEntity attacker, int dmg)
     {
         if (isDead) return;
 
-        // ResourcesHandler에서 CurrentHealth를 받아와서 -dmg해주면 됨.
         resourcesHandler.ChangeHealth(-dmg);
         Debug.Log($"플레이어가 {dmg} 데미지 받음!");
         playerAnimationHandler?.PlayDamage();
-        healthSystem.UpdateGraphics();
+        healthSystem?.UpdateGraphics();
     }
 
     public void Die()
@@ -232,7 +234,13 @@ public class PlayerController : MonoBehaviour, IBattleEntity
         isDead = true;
         _rigidbody.velocity = Vector2.zero;
         playerAnimationHandler?.PlayDeath();
+
+        StartCoroutine(HandleDeathAfterAnimation());
     }
 
-
+    private IEnumerator HandleDeathAfterAnimation()
+    {
+        yield return new WaitForSeconds(2f); // 사망 애니메이션 길이만큼 대기
+        Destroy(gameObject); // 
+    }
 }

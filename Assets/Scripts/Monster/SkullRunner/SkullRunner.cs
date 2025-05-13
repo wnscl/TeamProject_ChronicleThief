@@ -7,17 +7,16 @@ public class SkullRunner : MonsterAi, IBattleEntity
     GameObject theLine;
 
 
-
     private void Start()
     {
         theLine = transform.Find("Line").gameObject;
         FirstSetting();
-        //anim.Play("SkullRunnerIdle", 0, Random.Range(0f, 0.1f));
-        //생성되는 스컬러너는 같은 애니메이터를 공유하기 때문에
-        //스폰되는 시점이 다르더라도 목표를 쫒는 상황일 때 애니메이션이 동시점에 실행되어
-        //몬스터가 겹쳤을 때 정말 한마리처럼 보이는 현상을 해결하기 위해
-        //각 몬스터가 생성될 때 마다 start에서 애니메이션을 연결하는 허브인 아이들을
-        //시작타이밍이 어긋나게해서 겹쳤을 때 여러마리처럼 보이게 하는 방식
+        /*anim.Play("SkullRunnerIdle", 0, Random.Range(0f, 0.1f));
+        생성되는 스컬러너는 같은 애니메이터를 공유하기 때문에
+        스폰되는 시점이 다르더라도 목표를 쫒는 상황일 때 애니메이션이 동시점에 실행되어
+        몬스터가 겹쳤을 때 정말 한마리처럼 보이는 현상을 해결하기 위해
+        각 몬스터가 생성될 때 마다 start에서 애니메이션을 연결하는 허브인 아이들을
+        시작타이밍이 어긋나게해서 겹쳤을 때 여러마리처럼 보이게 하는 방식*/
 
     }
 
@@ -32,6 +31,7 @@ public class SkullRunner : MonsterAi, IBattleEntity
         atk = 10;
         attackRange = 1f;
         chaseRange = 12f;
+        attackDuration = 1f;
 
         StartCoroutine(MonsterStateRepeater(MonsterAiState.Spawn));
     }
@@ -89,20 +89,6 @@ public class SkullRunner : MonsterAi, IBattleEntity
         }*/
 
 
-    public void TakeDamage(IBattleEntity attacker, int dmg)
-    {
-        hp -= dmg;
-
-        if (hp <= 0)
-        {
-            survive = false;
-            isAttacked = true;
-        }
-        else
-        {
-            isAttacked = true;
-        }
-    }
 }
 
 

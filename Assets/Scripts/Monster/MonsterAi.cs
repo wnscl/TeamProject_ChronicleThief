@@ -18,7 +18,7 @@ public enum MonsterAiState
 //protected int MaxHp;
 
 
-public class MonsterAi : MonoBehaviour
+public abstract class MonsterAi : MonoBehaviour, IBattleEntity
 {
 
     [SerializeField] MonsterAiState nowState;
@@ -35,11 +35,13 @@ public class MonsterAi : MonoBehaviour
     [SerializeField] protected bool isAttacked;
     [SerializeField] protected string name;
     [SerializeField] protected int hp;
-    [SerializeField] public int Hp { get { return hp; } }
+    public int Hp { get { return hp; } }
     [SerializeField] protected int atk;
+    public int Atk { get { return atk; } }
     [SerializeField] protected float attackRange;
     [SerializeField] protected float chaseRange;
-
+    [SerializeField] protected float attackDuration;
+    
     [Header("basic field")]
     [SerializeField] protected Rigidbody2D rigid;
     [SerializeField] protected Animator anim;
@@ -160,7 +162,7 @@ public class MonsterAi : MonoBehaviour
     protected virtual IEnumerator Idle()
     {
         StopAction("All");
-        yield return new WaitForSeconds(0.001f);
+        yield return new WaitForSeconds(0.0005f);
         yield break;    
     }
 
@@ -180,14 +182,6 @@ public class MonsterAi : MonoBehaviour
         while (!isReadyToAttack)
         {
             float distanceOfPlayer = Vector2.Distance(transform.position, player.transform.position);
-            Vector2 playerPos = player.transform.position;
-            Vector2 nowPos = transform.position;
-            Vector2 direction = (playerPos - nowPos).normalized;
-            Vector2 nextPos = direction * moveSpeed * Time.deltaTime;
-
-            rigid.MovePosition(rigid.position + nextPos);
-
-            yield return new WaitForFixedUpdate();
 
             if (distanceOfPlayer <= attackRange)
             {
@@ -197,6 +191,17 @@ public class MonsterAi : MonoBehaviour
             {
                 yield break;
             }
+
+            Vector2 playerPos = player.transform.position;
+            Vector2 nowPos = transform.position;
+            Vector2 direction = (playerPos - nowPos).normalized;
+            Vector2 nextPos = direction * moveSpeed * Time.deltaTime;
+
+            rigid.MovePosition(rigid.position + nextPos);
+            rigid.velocity = Vector2.zero;
+
+            yield return new WaitForFixedUpdate();
+
         }
         Debug.Log("추격와일문 탈출");
         yield break;
@@ -204,22 +209,38 @@ public class MonsterAi : MonoBehaviour
 
     protected virtual IEnumerator Attack()
     {
-        StartAction("Attack");
-        yield return new WaitForSeconds(1f);
+        Vector2 nowPos = transform.position;
+        float frameTimer = 0f;
 
-        if (isAttacked)
+        StartAction("Attack");
+
+        while (frameTimer < attackDuration)
+            //정해진 시간 동안 반복문을 사용
         {
-            yield break;
+            if (isAttacked)
+            {
+                yield break ;
+            }
+
+            transform.position = nowPos;
+            rigid.velocity = Vector2.zero;
+
+            frameTimer += Time.fixedDeltaTime;
+            //Time.time은 게임이 시작된 후 흐른 총 시간
+            //픽스드 업데이트 주기에 맞춤
+            //time.deltaTime update주기에 맞춤
+            yield return new WaitForFixedUpdate();
+            //여기서는 픽스드업데이트 프레임 단위로 사용
         }
 
         yield break;
-
     }
 
     protected virtual IEnumerator GetDamage()
     {
         isAttacked = false;
-        yield return new WaitForSeconds(1f);
+        StartAction("GetDamage");
+        yield return new WaitForSeconds(0.3f);
         yield break;
     }
 
@@ -228,7 +249,7 @@ public class MonsterAi : MonoBehaviour
         StartAction("Dead");
         yield return new WaitForSeconds(1f);
 
-        Destroy(this);
+        Destroy(this.gameObject);
         yield break;
     }
 
@@ -241,15 +262,11 @@ public class MonsterAi : MonoBehaviour
                 anim.SetInteger("StateNum", 0);
                 rigid.velocity = Vector2.zero;
                 break;
-            case "stopAttack":
-                anim.SetInteger("StateNum", 0);
-                rigid.velocity = Vector2.zero;
-                col.isTrigger = false;
-                break;
             case "All":
                 anim.SetInteger("StateNum", 0);
                 rigid.velocity = Vector2.zero;
-                weapon.MoveSet(false);
+                weapon.MoveAnimationSet(false);
+                weapon.AttackAnimationSet(false);
                 break;
         }
     }
@@ -259,23 +276,41 @@ public class MonsterAi : MonoBehaviour
         {
             case "Spawn":
                 anim.SetInteger("StateNum", 10);
+                weapon.SpawnSetting();
                 break;
             case "Chase":
                 anim.SetInteger("StateNum", 1);
-                weapon.MoveSet(true);
+                weapon.MoveAnimationSet(true);
                 break;
             case "GetDamage":
                 anim.SetInteger("StateNum", 2);
-                weapon.MoveSet(false);
+                weapon.MoveAnimationSet(false);
                 break;
             case "Attack":
                 anim.SetInteger("StateNum", 3);
-                weapon.AttackSet(true);
+                weapon.AttackAnimationSet(true);
                 break;
             case "Dead":
                 anim.SetInteger("StateNum", 4);
-                weapon.DeadSet(true);
+                weapon.DeadAnimationSet(true);
+                survive = false;
                 break;
+        }
+    }
+
+    public void TakeDamage(IBattleEntity attacker, int dmg)
+    {
+        if(!survive) { return; }    
+
+        hp -= dmg;
+
+        if (hp <= 0)
+        {
+            isAttacked = true;
+        }
+        else
+        {
+            isAttacked = true;
         }
     }
 }
