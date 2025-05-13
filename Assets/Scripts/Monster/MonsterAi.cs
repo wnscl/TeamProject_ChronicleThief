@@ -169,7 +169,7 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
     protected virtual IEnumerator Spawn()
     {
         StartAction("Spawn");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.05f);
         isSpawn = true; 
         yield break;
 
