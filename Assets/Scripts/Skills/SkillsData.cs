@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum SkillType { Passive, Active }
 
-[CreateAssetMenu(menuName = "Skills/New Skill")]
+[CreateAssetMenu(fileName = "NewSkill", menuName = "Skills/SkillData")]
 public class SkillData : ScriptableObject
 {
     public string skillName;

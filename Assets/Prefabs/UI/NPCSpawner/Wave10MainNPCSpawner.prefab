@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 2944902800364737277}
   - component: {fileID: 6501900146990378303}
   m_Layer: 0
-  m_Name: LobbyMainNPCSpawner
+  m_Name: Wave10MainNPCSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -156,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   disableSpawnTimer: 1
   npcPrefabs:
-  - {fileID: 9151115914093552943, guid: c75cc7bdf87756d40b19d8b5eda3eb18, type: 3}
+  - {fileID: 9151115914093552943, guid: c684df7d779c8ec48b5a8a6726bccb09, type: 3}
   spawnPoints:
   - {fileID: 3559976285130756759}
+  spawnOnTrigger: 0
