@@ -25,16 +25,19 @@ public class BattleSystemManager : MonoBehaviour
     [Header("Basic Field")]
     [SerializeField] PlayerController player;
     [SerializeField] MonsterFactory monsterFactory;
+    public GameObject firstNpc;
 
     [Header("True or False")]
     [SerializeField] bool isRunning;
-    [SerializeField] bool isFirstGame;
+    [SerializeField] public bool isFirstGame;
     [SerializeField] bool isInBattle;
     [SerializeField] bool isInReady;
+    [SerializeField] bool isInBoss;
     [SerializeField] bool isGameOver;
     [SerializeField] int stageTimer;
 
     [Header("State")]
+    [SerializeField] int waveCount;
     [SerializeField] Stage currentStage;
     [SerializeField] Stage nextStage;
 
@@ -47,12 +50,14 @@ public class BattleSystemManager : MonoBehaviour
         monsterFactory = GetComponentInChildren<MonsterFactory>();
 
 
-        nextStage = Stage.FirstStart;
+        nextStage = Stage.InReadyWave;
         isRunning = true;
         isFirstGame = true;
         isInBattle = false;
         isInReady = false;
+        isInBoss = false;
         isGameOver = false;
+        waveCount = 1;
 
     }
 
@@ -83,9 +88,12 @@ public class BattleSystemManager : MonoBehaviour
 
 
 
+    public void OnStageStart()
+    {
+        StartCoroutine(StageRepeater());
+    }
 
-
-    protected IEnumerator StageRepeater()
+    public IEnumerator StageRepeater()
     {
         Debug.Log("스테이지 머신 가동");
         while (isRunning)
@@ -93,11 +101,6 @@ public class BattleSystemManager : MonoBehaviour
             currentStage = nextStage;
             switch (currentStage)
             {
-                case Stage.FirstStart:
-
-
-                    break;
-
                 case Stage.InBattleWave:
                     yield return StartCoroutine(BattleWave());
                     nextStage = DecideNextStage();
@@ -127,7 +130,7 @@ public class BattleSystemManager : MonoBehaviour
             return Stage.InReadyWave;
         }
 
-        if (stageTimer <= 0 && currentStage == Stage.InReadyWave)
+        if (stageTimer <= 0 && (currentStage == Stage.InReadyWave))
         {
             return Stage.InBattleWave;
         }
@@ -144,19 +147,34 @@ public class BattleSystemManager : MonoBehaviour
         return isGameOver;
     }
 
+
+    public void CheckEnterDungeon(bool isEnter)
+    {
+        isFirstGame = isEnter;
+    }
+
+
+
     private IEnumerator BattleWave()
     {
         isInBattle = true;
-        stageTimer = 60;
+        stageTimer = 0;
 
-        while (stageTimer > 0)
+        while (stageTimer < 5)
         {
-            stageTimer--;
+            Debug.Log($"{stageTimer}초 경과");
             //UIManager.Instance.시간흐르는메서드호출(stageTimer)
-            if (stageTimer % 10 == 0)
+            switch (stageTimer)
             {
-                monsterFactory.OnMakeMonster();
-                
+                case 0:
+                case 10:
+                case 20:
+                case 30:
+                case 40:
+                case 50:
+                    monsterFactory.OnMakeMonster();
+                    Debug.Log("몬스터 공장이 일합니다.");
+                    break;
             }
 
             if (CheckGameOver())
@@ -164,9 +182,11 @@ public class BattleSystemManager : MonoBehaviour
                 yield break;
             }
 
+            stageTimer += 1;
             yield return new WaitForSeconds(1);
         }
-
+        stageTimer = 0;
+        waveCount++;
         isInBattle = false;
         yield break;
     }
@@ -174,27 +194,35 @@ public class BattleSystemManager : MonoBehaviour
     private IEnumerator ReadyWave()
     {
         isInReady = true;
-        stageTimer = 60;
+        stageTimer = 0;
 
-        while (stageTimer > 0)
+        while (stageTimer < 5)
         {
-            stageTimer--;
+            Debug.Log($"준비웨이브 {stageTimer}초경과");
+            stageTimer += 1;
 
-            if (stageTimer % 10 == 0)
-            {
-                monsterFactory.OnMakeMonster();
-            }
             yield return new WaitForSeconds(1);
         }
-
+        stageTimer = 0;
         isInReady = false;
         yield break;
     }
 
     private IEnumerator BossWave()
     {
+        isInReady = true;
+        stageTimer = 0;
 
-        yield break ;
+        while (stageTimer < 60)
+        {
+            Debug.Log($"보스웨이브 {stageTimer}초경과");
+            stageTimer += 1;
+
+            yield return new WaitForSeconds(1);
+        }
+        stageTimer = 0;
+        isInReady = false;
+        yield break;
     }
 
 }
