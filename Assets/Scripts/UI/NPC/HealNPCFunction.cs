@@ -1,34 +1,28 @@
+// Assets/Scripts/UI/HealNPCFunction.cs
+
 using UnityEngine;
 using NPC;
 using UI;
 
 public class HealNPCFunction : MonoBehaviour, INPCFunction
 {
-    // NPC당 최초 한 번만 초기화하기 위한 플래그
+    // 이 NPC와 상호작용할 때 한 번만 회복 기록을 초기화하기 위한 플래그
     private bool initialized = false;
 
-    // Inspector에서 설정 가능한 첫 대사
-    [Tooltip("NPC와 상호작용 시 처음 보여줄 대사")]
-    public string initialDialogue = "체력이 필요하신가요?";
-
-    // 상호작용 시 호출되는 메서드
+    // INPCFunction.Execute가 호출될 때마다 실행됩니다.
     public void Execute(GameObject interactor)
     {
-        // 첫 실행 시에만 회복 기록 초기화
+        // 최초 호출 시에만 힐 UI 사용 이력 초기화
         if (!initialized)
         {
             HealUI.Instance.ResetHeals();
             initialized = true;
         }
 
-        // NPC 이름과 대사 표시
-        var speaker = GetComponent<NPCController>().npcName;
-        UIManager.Instance.ShowDialog(speaker, initialDialogue);
-
-        // 힐 UI 열기
+        // 힐 UI 표시 (NPCController에서 이미 첫 대사는 출력됨)
         HealUI.Instance.Show();
 
-        // 스킵 버튼만 남기고, 누르면 UI와 대화창 닫기
+        // '스킵' 버튼만 남기고 누르면 힐 패널과 대화창 모두 닫기
         UIManager.Instance.ShowSkipOnly(() =>
         {
             HealUI.Instance.Hide();

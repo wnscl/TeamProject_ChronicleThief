@@ -30,7 +30,7 @@ public class BattleSystemManager : MonoBehaviour
         // attacker가 몬스터인 경우
         else if (attacker is BasicMonster monsterAttacker)
         {
-            //attackPower = monsterAttacker.Atk; // protected라서 public 프로퍼티 추가 필요함 public int Atk => atk;
+            attackPower = monsterAttacker.Atk; // protected라서 public 프로퍼티 추가 필요함 public int Atk => atk;
         }
 
         float finalDamage = attackPower;
