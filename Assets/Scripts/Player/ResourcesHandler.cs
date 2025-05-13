@@ -102,6 +102,6 @@ public class ResourcesHandler : MonoBehaviour
 
     private void Death()
     {
-
+        playerController.Die();
     }
 }
