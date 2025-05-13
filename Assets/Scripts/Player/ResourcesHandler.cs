@@ -60,19 +60,28 @@ public class ResourcesHandler : MonoBehaviour
     public bool ChangeHealth(float change)
     {
         if (change == 0 | timeSinceLastChange < healthChangeDelay)
+        {
             return false;
+        }
 
         timeSinceLastChange = 0;
+
+        CurrentHealth += change;
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, playerStats.Health);
 
         HealthSystem.Instance.ModifyHealth((int)change);
 
         if (change < 0)
         {
+            Debug.Log($"피해 받음: {-change} 데미지");
             playerAnimationHandler.PlayDamage();
         }
 
         if (CurrentHealth <= 0f)
+        {
+            Debug.Log("사망! HP가 0 이하입니다.");
             Death();
+        }
 
 
         return true;
@@ -98,7 +107,7 @@ public class ResourcesHandler : MonoBehaviour
         return true;
     }
 
-    private void Death()
+    public void Death()
     {
         playerController.Die();
     }

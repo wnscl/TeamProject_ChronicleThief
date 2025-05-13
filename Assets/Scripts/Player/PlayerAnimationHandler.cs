@@ -9,8 +9,8 @@ public class PlayerAnimationHandler : MonoBehaviour
 
     private static readonly int MoveHash = Animator.StringToHash("IsMove");
     private static readonly int DamageHash = Animator.StringToHash("IsDamage");
-    private static readonly int DeathHash = Animator.StringToHash("IsDead");
-    private static readonly int BlinkHash = Animator.StringToHash("IsBlink");
+    //private static readonly int DeathHash = Animator.StringToHash("IsDead");
+    //private static readonly int BlinkHash = Animator.StringToHash("IsBlink");
 
     private void Awake()
     {
@@ -34,18 +34,9 @@ public class PlayerAnimationHandler : MonoBehaviour
 
     public void PlayDeath()
     {
-        animator.SetBool(DeathHash, true);
+        animator.Play("Dead");
+        Debug.Log("Death animation triggered");
     }
-
-    //public void PlayBlinkStart()
-    //{
-    //    animator.SetBool(BlinkHash, true);
-    //}
-
-    //public void PlayBlinkEnd()
-    //{
-    //    animator.SetBool(BlinkHash, false);
-    //}
 
     public void SetBlink(bool state)
     {
