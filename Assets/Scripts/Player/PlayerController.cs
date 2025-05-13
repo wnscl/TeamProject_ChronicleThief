@@ -38,16 +38,17 @@ public class PlayerController : MonoBehaviour //IBattleEntity
     public bool IsDead => isDead;
     public float BlinkCooldownRemaining => Mathf.Max(0, blinkCooldown - (Time.time - lastBlinkTime)); // 남은 쿨타임 계산
     public bool IsBlink => isBlink;
+    private Animator _animator;
 
     private void Awake()
     {
-        resourcesHandler = GetComponent<ResourcesHandler>();
         _rigidbody = GetComponent<Rigidbody2D>();
         playerAnimationHandler = GetComponent<PlayerAnimationHandler>();
         playerStats = GetComponent<PlayerStats>();
         resourcesHandler = GetComponent<ResourcesHandler>();
         _camera = Camera.main;
         healthSystem = HealthSystem.Instance;
+        _animator = GetComponentInChildren<Animator>();
 
         if (weaponPrefab != null)
             weaponHandler = Instantiate(weaponPrefab, weaponPivot);
@@ -66,6 +67,11 @@ public class PlayerController : MonoBehaviour //IBattleEntity
 
         if (Input.GetKeyDown(KeyCode.Space) && CanBlink())
             StartCoroutine(PerformBlink());
+
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    _animator.Play("Dead"); // 강제 호출
+        //}
     }
 
     private bool CanBlink()
@@ -233,7 +239,7 @@ public class PlayerController : MonoBehaviour //IBattleEntity
     {
         isDead = true;
         _rigidbody.velocity = Vector2.zero;
-        playerAnimationHandler?.PlayDeath();
+        playerAnimationHandler.PlayDeath();
 
         StartCoroutine(HandleDeathAfterAnimation());
     }
