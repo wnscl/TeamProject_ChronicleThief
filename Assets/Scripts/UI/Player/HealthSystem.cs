@@ -161,7 +161,7 @@ public class HealthSystem : MonoBehaviour
     //==============================================================
     // 그래픽(체력/마나 바) 전체 갱신
     //==============================================================
-    private void UpdateGraphics()
+    public void UpdateGraphics()
     {
         UpdateHealthBar();
         UpdateManaBar();
