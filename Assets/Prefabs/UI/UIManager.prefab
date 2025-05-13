@@ -381,6 +381,37 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1152584350495763546
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8600722158191087105}
+  m_Layer: 0
+  m_Name: FirstMainSpawnerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8600722158191087105
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152584350495763546}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5132055114686432665}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1334894924165716867
 GameObject:
   m_ObjectHideFlags: 0
@@ -2831,6 +2862,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8030112323690610730}
+  - {fileID: 8600722158191087105}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &340677837975584500
@@ -2845,6 +2877,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978c7791b54749a4bae39f4d90242f8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waveSpawnerPrefab: {fileID: 250736839544751618, guid: 22cf4c4f74ce880458050adc72a287ad, type: 3}
+  waveSpawnPositions: []
+  currentWaveSpawner: {fileID: 0}
+  lobbySpawnerPrefab: {fileID: 8732568039885270726, guid: 9849c0fe39a3b8f478560b49a4c3c3fb, type: 3}
+  lobbySpawnPosition: {fileID: 8600722158191087105}
+  currentLobbySpawner: {fileID: 0}
+  wave10SpawnerPrefab: {fileID: 8732568039885270726, guid: 5438091c13ccc8e4eb25b92029923392, type: 3}
+  wave10SpawnPosition: {fileID: 8600722158191087105}
+  currentWave10Spawner: {fileID: 0}
+  finalSpawnerPrefab: {fileID: 8732568039885270726, guid: 90cb057764b78884f9a1799a2f43437d, type: 3}
+  finalSpawnPosition: {fileID: 8600722158191087105}
+  currentFinalSpawner: {fileID: 0}
   dialogPanel: {fileID: 1504552904010842063}
   speakerText: {fileID: 2634564852529350759}
   contentText: {fileID: 4026109857050305967}

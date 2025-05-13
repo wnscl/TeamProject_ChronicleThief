@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 namespace UI
 {
@@ -10,6 +11,25 @@ namespace UI
     {
         public static UIManager Instance { get; private set; }
 
+        [Header("Wave NPC Spawner")]
+        public GameObject waveSpawnerPrefab;
+        public Transform[] waveSpawnPositions;
+        [HideInInspector] public NPCSpawner currentWaveSpawner;
+
+        [Header("Main NPC Spawners")]
+        public GameObject lobbySpawnerPrefab;      // 로비용
+        public Transform lobbySpawnPosition;
+        [HideInInspector] public NPCSpawner currentLobbySpawner;
+
+        public GameObject wave10SpawnerPrefab;     // 10웨이브용
+        public Transform wave10SpawnPosition;
+        [HideInInspector] public NPCSpawner currentWave10Spawner;
+
+        public GameObject finalSpawnerPrefab;      // 20웨이브용
+        public Transform finalSpawnPosition;
+        [HideInInspector] public NPCSpawner currentFinalSpawner;
+
+        [Header("대화 UI")]
         public GameObject dialogPanel;  // 대화창 패널
         public TMP_Text speakerText;    // 화자 이름
         public TMP_Text contentText;    // 대사 내용
@@ -110,6 +130,87 @@ namespace UI
         {
             useButton.gameObject.SetActive(false);
             skipButton.gameObject.SetActive(false);
+        }
+
+        // 1) 로비에서 바로 스포너 생성 (스폰만)
+        public void SpawnLobbySpawner()
+        {
+            if (currentLobbySpawner != null)
+                Destroy(currentLobbySpawner.gameObject);
+
+            var go = Instantiate(
+                lobbySpawnerPrefab,
+                lobbySpawnPosition.position,
+                Quaternion.identity,
+                transform);
+            var sp = go.GetComponent<NPCSpawner>();
+            
+            sp.Reset();
+
+            sp.spawnOnTrigger = true;
+            sp.disableSpawnTimer = true;  // 자동 해제 없음
+            currentLobbySpawner = sp;
+        }
+
+        // 2) 웨이브용 스포너 (1~9,11~19)
+        public void SpawnWaveSpawner(int wave)
+        {
+            if (currentWaveSpawner != null)
+                Destroy(currentWaveSpawner.gameObject);
+
+            if (wave < 1 || wave > waveSpawnPositions.Length) return;
+
+            var go = Instantiate(
+                waveSpawnerPrefab,
+                waveSpawnPositions[wave - 1].position,
+                Quaternion.identity,
+                transform);
+            var sp = go.GetComponent<NPCSpawner>();
+            sp.Reset();
+            sp.spawnOnTrigger = true;
+            sp.disableSpawnTimer = false;
+            currentWaveSpawner = sp;
+        }
+
+        // 3) 10웨이브 전용 스포너
+        public void SpawnWave10Spawner()
+        {
+            if (currentWave10Spawner != null)
+                Destroy(currentWave10Spawner.gameObject);
+
+            var go = Instantiate(
+                wave10SpawnerPrefab,
+                wave10SpawnPosition.position,
+                Quaternion.identity,
+                transform);
+            var sp = go.GetComponent<NPCSpawner>();
+            sp.Reset();
+            sp.spawnOnTrigger = true;
+            sp.disableSpawnTimer = true;  // 1분 제한 없음
+            currentWave10Spawner = sp;
+        }
+
+        // 4) 최종 20웨이브 전용 스포너
+        public void SpawnFinalSpawner()
+        {
+            if (currentFinalSpawner != null)
+                Destroy(currentFinalSpawner.gameObject);
+
+            var go = Instantiate(
+                finalSpawnerPrefab,
+                finalSpawnPosition.position,
+                Quaternion.identity,
+                transform);
+            var sp = go.GetComponent<NPCSpawner>();
+            sp.Reset();
+            sp.spawnOnTrigger = true;
+            sp.disableSpawnTimer = true;
+            currentFinalSpawner = sp;
+        }
+
+        private void Start()
+        {
+            SpawnLobbySpawner(); // 테스트용
         }
     }
 }
