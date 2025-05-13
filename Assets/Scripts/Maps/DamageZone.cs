@@ -10,12 +10,11 @@ public class DamageZone : MapInteraction
     void OnTriggerStay2D(Collider2D collision)
     {
         timer += Time.deltaTime;
-        // int damageZone = 1;
 
         if (timer >= interval && collision.CompareTag("Player"))
         {
             Debug.Log("데미지 존 Enter!!");
-            // HealthSystem.Instance.TakeDamage(damageZone);
+            HealthSystem.Instance.TakeDamage(3);
             timer = 0f;
         }
     }
@@ -24,6 +23,7 @@ public class DamageZone : MapInteraction
     {
         if (other.CompareTag("Player"))
         {
+            timer = 0f;
             Debug.Log("데미지 존 Exit");
         }
     }
