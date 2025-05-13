@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1207732704565458226}
   - component: {fileID: 6415156345267630424}
   m_Layer: 0
-  m_Name: NPCSpawner
+  m_Name: WaveNPCSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

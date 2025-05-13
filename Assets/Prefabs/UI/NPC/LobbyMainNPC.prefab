@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 7541196451191327888}
   - component: {fileID: 8070239284121700804}
   - component: {fileID: 2574105369799905625}
-  - component: {fileID: 238301429207171175}
-  - component: {fileID: 8177987292525958097}
+  - component: {fileID: 3817545407033702100}
+  - component: {fileID: 2680358800059878272}
   m_Layer: 0
-  m_Name: UpgradeNPC
+  m_Name: LobbyMainNPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 150
-  m_Sprite: {fileID: -536943977, guid: 3247a6a6025da6c49bf28514faa0862a, type: 3}
+  m_Sprite: {fileID: -1866301836, guid: 25a6aef36213680438713edf1f2e003f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -159,16 +159,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c65ee068c1c3094c9bc488e19a0bf19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcName: UpgradeNPC
+  npcName: "\uACE0\uACE0\uD559\uC790"
   dialogueLines:
-  - "\uACE8\uB4DC\uB97C \uC18C\uBAA8\uD574 \uC2A4\uD14C\uC774\uD130\uC2A4\uB97C \uAC15\uD654\uD560
-    \uC218 \uC788\uC2B5\uB2C8\uB2E4!"
-  - "\uBAA8\uB4E0 \uAC15\uD654\uB294 \uD69F\uC218 \uC81C\uD55C\uC774 \uC788\uACE0
-    \uD560 \uB54C \uB9C8\uB2E4 \uBE44\uC6A9\uC774 \uC99D\uAC00\uD569\uB2C8\uB2E4."
-  - "\uB2E4\uC74C\uC5D0 \uB610 \uBCF4\uC790\uAD6C\uC694!"
+  - "\uC774 \uC55E\uC73C\uB85C \uB098\uC544\uAC00\uBA74 \uBB34\uC218\uD55C \uC704\uD611\uC774
+    \uB530\uB97C\uAC78\uC138.. \uC900\uBE44\uAC00 \uB418\uC5C8\uB098?"
+  - "\uC54C\uACA0\uB124.. \uAE38\uC744 \uC5F4\uC5B4\uC8FC\uC9C0. \uD589\uC6B4\uC744
+    \uBE44\uB124."
+  - "\uB9C8\uC74C\uC758 \uC900\uBE44\uB97C \uD558\uACE0 \uC624\uC2DC\uAC8C\uB098."
   activeTime: 60
-  despawnAnimationDuration: 0.4
---- !u!114 &238301429207171175
+  despawnAnimationDuration: 0.3
+--- !u!114 &3817545407033702100
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -177,11 +177,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 9151115914093552943}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d802897c1fd5540bea8923772d5cf7, type: 3}
+  m_Script: {fileID: 11500000, guid: 389579056582fe64cb4c9f69d99f14ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialDialogue: "\uAC15\uD654\uAC00 \uD544\uC694\uD558\uC2E0\uAC00\uC694?"
---- !u!95 &8177987292525958097
+  despawnAnimationDuration: 0.3
+  dialogHideDelay: 1
+--- !u!95 &2680358800059878272
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -191,7 +192,7 @@ Animator:
   m_GameObject: {fileID: 9151115914093552943}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6a6107de0f9ac9940b03e1f3fac356de, type: 2}
+  m_Controller: {fileID: 9100000, guid: b332850e0a06a124fa818333c9a5fd51, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

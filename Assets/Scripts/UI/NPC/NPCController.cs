@@ -10,7 +10,7 @@ namespace NPC
         public string npcName;             // NPC 이름
         public string[] dialogueLines;     // 대사 목록
         [SerializeField] private float activeTime = 60f; // 활성 시간 (기본 1분)
-        [SerializeField] private float despawnAnimationDuration = 0.4f; // 애니메이션 재생 시간
+        [SerializeField] private float despawnAnimationDuration = 0.3f; // 애니메이션 재생 시간
         private bool isActive = true;
 
         private INPCFunction npcFunction;  // NPC 고유 기능
@@ -37,9 +37,11 @@ namespace NPC
             // 2) 대화창 숨기기
             UIManager.Instance.HideDialog();
 
-            // 3) 강화 패널 숨기기
+            // 3) 강화, 회복 패널 숨기기
             if (UpgradeUI.Instance != null)
                 UpgradeUI.Instance.Hide();
+            if (HealUI.Instance != null)
+                HealUI.Instance.Hide();
 
             // 4) 스폰 해제 애니메이터 트리거
             if (animator != null)
