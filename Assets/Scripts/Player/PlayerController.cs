@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour, IBattleEntity
     protected PlayerAnimationHandler playerAnimationHandler;
     protected PlayerStats playerStats;
     protected ResourcesHandler resourcesHandler;
+    protected HealthSystem healthSystem;
 
     private Rigidbody2D _rigidbody;
     private Camera _camera;
@@ -223,6 +224,7 @@ public class PlayerController : MonoBehaviour, IBattleEntity
         resourcesHandler.ChangeHealth(-dmg);
         Debug.Log($"플레이어가 {dmg} 데미지 받음!");
         playerAnimationHandler?.PlayDamage();
+        healthSystem.UpdateGraphics();
     }
 
     public void Die()
