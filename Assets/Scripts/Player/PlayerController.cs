@@ -41,7 +41,6 @@ public class PlayerController : MonoBehaviour //IBattleEntity
 
     private void Awake()
     {
-        resourcesHandler = GetComponent<ResourcesHandler>();
         _rigidbody = GetComponent<Rigidbody2D>();
         playerAnimationHandler = GetComponent<PlayerAnimationHandler>();
         playerStats = GetComponent<PlayerStats>();

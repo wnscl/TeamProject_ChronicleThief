@@ -59,29 +59,25 @@ public class BattleSystemManager : MonoBehaviour
     public void AttackOther(IBattleEntity attacker, IBattleEntity target)
     {
         float attackPower= 0;
-        
-        if (attacker is PlayerController playerAttacker)
-        // attacker가 플레이어인 경우
-        // 몬스터가 target
-        {
-            var stats = playerAttacker.GetComponent<PlayerStats>();
-            attackPower = stats.PlayerAttackPower;
-        }
+
+        var stats = player.GetComponent<PlayerStats>();
+        attackPower = stats.PlayerAttackPower;
 
         float finalDamage = attackPower;
 
+        Debug.Log($"플레이어 -> 몬스터 최종데미지 : {finalDamage}");
         target.TakeDamage(attacker, Mathf.RoundToInt(finalDamage));
     }
     public void AttackPlayer(int dmg)
     {
         float finalDamage;
-        float attackPower = dmg;
 
         var stats = player.GetComponent<PlayerStats>();
         float defense = stats.PlayerDefensePower;
 
-        finalDamage = attackPower * (100f / (100f + defense));
+        finalDamage = dmg * (100f / (100f + defense));
         finalDamage = Mathf.Max(1, finalDamage);
+        Debug.Log($"몬스터 -> 플레이어 최종데미지 : {finalDamage}");
         player.TakeDamage(Mathf.RoundToInt(finalDamage));
     }
 
@@ -202,3 +198,13 @@ public class BattleSystemManager : MonoBehaviour
     }
 
 }
+
+
+
+/*        if (attacker is PlayerController playerAttacker)
+        // attacker가 플레이어인 경우
+        // 몬스터가 target
+        {
+            var stats = playerAttacker.GetComponent<PlayerStats>();
+            attackPower = stats.PlayerAttackPower;
+        }*/

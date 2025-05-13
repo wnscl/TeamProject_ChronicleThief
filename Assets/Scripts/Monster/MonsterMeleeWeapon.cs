@@ -66,7 +66,7 @@ public class MonsterMeleeWeapon : MonoBehaviour
     {
         if ( collision != null && (collision.gameObject.layer == LayerMask.NameToLayer("Player")) )
         {
-            playerController = collision.gameObject.GetComponent<PlayerController>();
+            //playerController = collision.gameObject.GetComponent<PlayerController>();
             BattleSystemManager.Instance.AttackPlayer(mob.Atk);
         }
     }
