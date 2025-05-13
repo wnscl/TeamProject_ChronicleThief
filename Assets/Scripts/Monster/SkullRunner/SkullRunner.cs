@@ -25,12 +25,13 @@ public class SkullRunner : MonsterAi, IBattleEntity
     {
         survive = true;
         isAttacked = false;
+        isSpawn = false;
         name = "스컬러너";
         moveSpeed = 4;
         hp = 40;
         atk = 10;
-        attackRange = 2f;
-        chaseRange = 10f;
+        attackRange = 1f;
+        chaseRange = 12f;
 
         StartCoroutine(MonsterStateRepeater(MonsterAiState.Spawn));
     }
@@ -95,10 +96,11 @@ public class SkullRunner : MonsterAi, IBattleEntity
         if (hp <= 0)
         {
             survive = false;
+            isAttacked = true;
         }
-        else if (!isAttacked)
+        else
         {
-
+            isAttacked = true;
         }
     }
 }
