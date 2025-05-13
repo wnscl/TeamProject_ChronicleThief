@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public interface IBattleEntity
 {
@@ -9,15 +10,19 @@ public interface IBattleEntity
 
 public class BattleSystemManager : MonoBehaviour
 {
+    [SerializeField] PlayerController player;
+
+    [SerializeField] MonsterAi mob;
+    [SerializeField] int testAtk;
+
     public static BattleSystemManager Instance { get; private set; }
 
     private void Awake()
     {
         Instance = this;
+        player = FindObjectOfType<PlayerController>();
     }
 
-    [SerializeField] MonsterAi mob;
-    [SerializeField] int testAtk;
 
     public void AttackOther(IBattleEntity attacker, IBattleEntity target)
     {
@@ -54,5 +59,10 @@ public class BattleSystemManager : MonoBehaviour
         }
 
         target.TakeDamage(attacker, Mathf.RoundToInt(finalDamage));
+    }
+
+    public void AttackPlayer(int dmg)
+    {
+        player.TakeDamage(dmg);
     }
 }
