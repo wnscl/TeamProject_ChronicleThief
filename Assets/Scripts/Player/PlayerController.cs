@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IBattleEntity
 {
     [Header("Component References")]
     [SerializeField] private SpriteRenderer characterRenderer;
