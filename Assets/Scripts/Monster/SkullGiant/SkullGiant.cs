@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkullGiant : MonsterAi
+public class SkullGiant : MonsterAi, IBattleEntity
 {
     private void Start()
     {
@@ -14,11 +14,11 @@ public class SkullGiant : MonsterAi
         survive = true;
         isAttacked = false;
         isSpawn = false;
-        name = "스컬러너";
+        name = "스컬자이언트";
         moveSpeed = 4.5f;
         hp = 80;
-        atk = 18;
-        attackRange = 1f;
+        atk = 25;
+        attackRange = 1.9f;
         chaseRange = 12f;
         attackDuration = 1f;
 
