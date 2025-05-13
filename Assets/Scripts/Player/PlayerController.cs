@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour //IBattleEntity
         playerStats = GetComponent<PlayerStats>();
         resourcesHandler = GetComponent<ResourcesHandler>();
         _camera = Camera.main;
+        healthSystem = HealthSystem.Instance;
 
         if (weaponPrefab != null)
             weaponHandler = Instantiate(weaponPrefab, weaponPivot);
@@ -224,7 +225,7 @@ public class PlayerController : MonoBehaviour //IBattleEntity
         resourcesHandler.ChangeHealth(-dmg);
         Debug.Log($"플레이어가 {dmg} 데미지 받음!");
         playerAnimationHandler?.PlayDamage();
-        healthSystem.UpdateGraphics();
+        healthSystem?.UpdateGraphics();
     }
 
     public void Die()
