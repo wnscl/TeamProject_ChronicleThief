@@ -18,11 +18,13 @@ public enum MonsterAiState
 //protected int MaxHp;
 
 
-public class MonsterAi : MonoBehaviour
+public abstract class MonsterAi : MonoBehaviour, IBattleEntity
 {
 
     [SerializeField] MonsterAiState nowState;
     [SerializeField] MonsterAiState nextState;
+    [SerializeField] protected bool isSpawn;
+
 
     [Header("move")]
     [SerializeField] protected Vector2 targetPos;
@@ -33,11 +35,13 @@ public class MonsterAi : MonoBehaviour
     [SerializeField] protected bool isAttacked;
     [SerializeField] protected string name;
     [SerializeField] protected int hp;
-    [SerializeField] public int Hp { get { return hp; } }
+    public int Hp { get { return hp; } }
     [SerializeField] protected int atk;
+    public int Atk { get { return atk; } }
     [SerializeField] protected float attackRange;
     [SerializeField] protected float chaseRange;
-
+    [SerializeField] protected float attackDuration;
+    
     [Header("basic field")]
     [SerializeField] protected Rigidbody2D rigid;
     [SerializeField] protected Animator anim;
@@ -55,69 +59,68 @@ public class MonsterAi : MonoBehaviour
         targetPos = player.transform.position;
     }
 
+    private void LateUpdate()
+    {
+        LookPlayer();
+    }
+    protected virtual void LookPlayer()
+    {
+        if (player != null)
+        {
+            if (transform.position.x > player.transform.position.x)
+            {
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                //transform.localScale = new Vector3(-1, 1, 1); // 왼쪽 보기
+                //로컬스케일로도 구현가능
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                //transform.localScale = new Vector3(1, 1, 1); // 오른쪽 보기
+                //로컬스케일로도 구현가능
+            }
+        }
+    }
 
     protected IEnumerator MonsterStateRepeater(MonsterAiState nextState)
     {
-        StopAction("All");
-        yield return new WaitForSeconds(0.001f);
-
         Debug.Log("스테이트머신 가동");
         while (survive)
         {
-            Debug.Log("스테이트머신 루프 가동");
+            if (isSpawn)
+            {
+                yield return StartCoroutine(Idle());
+                Debug.Log($"아이들 작동");
+            }
             nowState = nextState;
+
             switch (nowState)
             {
-                case MonsterAiState.Idle:
-                    StopAction("All");
-                    yield return new WaitForSeconds(0.001f);
-
-                    yield return StartCoroutine(Idle());
-                    nextState = DecideNextState();
-                    Debug.Log($"상태결정 {nextState}");
-                    break;
-
                 case MonsterAiState.Spawn:
                     yield return StartCoroutine(Spawn());
-
-                    StopAction("All");
-                    yield return new WaitForSeconds(0.001f);
-
                     nextState = DecideNextState();
                     Debug.Log($"상태결정 {nowState}");
                     break;
 
                 case MonsterAiState.Chase:
-                    StopAction("All");
-                    yield return new WaitForSeconds(0.001f);
-
                     yield return StartCoroutine(Chase());
                     nextState = DecideNextState();
                     Debug.Log($"상태결정 {nowState}");
                     break;
 
                 case MonsterAiState.Attack:
-                    StopAction("All");
-                    yield return new WaitForSeconds(0.001f);
-
                     yield return StartCoroutine(Attack());
                     nextState = DecideNextState();
                     Debug.Log($"상태결정 {nowState}");
                     break;
 
                 case MonsterAiState.GetDamage:
-                    StopAction("All");
-                    yield return new WaitForSeconds(0.001f);
-
                     yield return StartCoroutine(GetDamage());
                     nextState = DecideNextState();
                     Debug.Log($"상태결정 {nowState}");
                     break;
 
                 case MonsterAiState.Dead:
-                    //StopAction("All");
-                    //yield return new WaitForSeconds(0.001f);
-
                     yield return StartCoroutine(Dead());
                     nextState = DecideNextState();
                     Debug.Log($"상태결정 {nowState}");
@@ -135,6 +138,12 @@ public class MonsterAi : MonoBehaviour
             return MonsterAiState.Dead;
         }
 
+        if (isAttacked)
+        {
+            nextState = MonsterAiState.GetDamage;
+            return MonsterAiState.GetDamage;
+        }
+
         if (distanceOfPlayer <= attackRange)
         {
             nextState = MonsterAiState.Attack;  
@@ -147,28 +156,21 @@ public class MonsterAi : MonoBehaviour
             return MonsterAiState.Chase;
         }
 
-        if (isAttacked)
-        {
-            nextState = MonsterAiState.GetDamage;
-            return MonsterAiState.GetDamage;
-        }
-
-        return MonsterAiState.Idle;
+        return MonsterAiState.Chase;
     }
-
-
-
 
     protected virtual IEnumerator Idle()
     {
-        yield return new WaitForSeconds(1f);
-
+        StopAction("All");
+        yield return new WaitForSeconds(0.0005f);
+        yield break;    
     }
 
     protected virtual IEnumerator Spawn()
     {
         StartAction("Spawn");
         yield return new WaitForSeconds(1f);
+        isSpawn = true; 
         yield break;
 
     }
@@ -180,24 +182,26 @@ public class MonsterAi : MonoBehaviour
         while (!isReadyToAttack)
         {
             float distanceOfPlayer = Vector2.Distance(transform.position, player.transform.position);
+
+            if (distanceOfPlayer <= attackRange)
+            {
+                isReadyToAttack = true;
+            }
+            if (isAttacked)
+            {
+                yield break;
+            }
+
             Vector2 playerPos = player.transform.position;
             Vector2 nowPos = transform.position;
             Vector2 direction = (playerPos - nowPos).normalized;
             Vector2 nextPos = direction * moveSpeed * Time.deltaTime;
 
             rigid.MovePosition(rigid.position + nextPos);
+            rigid.velocity = Vector2.zero;
 
             yield return new WaitForFixedUpdate();
 
-            if (distanceOfPlayer <= attackRange)
-            {
-                isReadyToAttack = true;
-            }
-            if (hp <= 0)
-            {
-                StopAction("All");
-                yield break;
-            }
         }
         Debug.Log("추격와일문 탈출");
         yield break;
@@ -205,16 +209,39 @@ public class MonsterAi : MonoBehaviour
 
     protected virtual IEnumerator Attack()
     {
-        StartAction("Attack");
-        yield return new WaitForSeconds(1f);
-        yield break;
+        Vector2 nowPos = transform.position;
+        float frameTimer = 0f;
 
+        StartAction("Attack");
+
+        while (frameTimer < attackDuration)
+            //정해진 시간 동안 반복문을 사용
+        {
+            if (isAttacked)
+            {
+                yield break ;
+            }
+
+            transform.position = nowPos;
+            rigid.velocity = Vector2.zero;
+
+            frameTimer += Time.fixedDeltaTime;
+            //Time.time은 게임이 시작된 후 흐른 총 시간
+            //픽스드 업데이트 주기에 맞춤
+            //time.deltaTime update주기에 맞춤
+            yield return new WaitForFixedUpdate();
+            //여기서는 픽스드업데이트 프레임 단위로 사용
+        }
+
+        yield break;
     }
 
     protected virtual IEnumerator GetDamage()
     {
-        yield return new WaitForSeconds(1f);
-
+        isAttacked = false;
+        StartAction("GetDamage");
+        yield return new WaitForSeconds(0.3f);
+        yield break;
     }
 
     protected virtual IEnumerator Dead()
@@ -222,7 +249,7 @@ public class MonsterAi : MonoBehaviour
         StartAction("Dead");
         yield return new WaitForSeconds(1f);
 
-        Destroy(this);
+        Destroy(this.gameObject);
         yield break;
     }
 
@@ -235,15 +262,11 @@ public class MonsterAi : MonoBehaviour
                 anim.SetInteger("StateNum", 0);
                 rigid.velocity = Vector2.zero;
                 break;
-            case "stopAttack":
-                anim.SetInteger("StateNum", 0);
-                rigid.velocity = Vector2.zero;
-                col.isTrigger = false;
-                break;
             case "All":
                 anim.SetInteger("StateNum", 0);
                 rigid.velocity = Vector2.zero;
-                weapon.MoveSet(false);
+                weapon.MoveAnimationSet(false);
+                weapon.AttackAnimationSet(false);
                 break;
         }
     }
@@ -253,23 +276,41 @@ public class MonsterAi : MonoBehaviour
         {
             case "Spawn":
                 anim.SetInteger("StateNum", 10);
+                weapon.SpawnSetting();
                 break;
             case "Chase":
                 anim.SetInteger("StateNum", 1);
-                weapon.MoveSet(true);
+                weapon.MoveAnimationSet(true);
                 break;
             case "GetDamage":
                 anim.SetInteger("StateNum", 2);
-                weapon.MoveSet(false);
+                weapon.MoveAnimationSet(false);
                 break;
             case "Attack":
                 anim.SetInteger("StateNum", 3);
-                weapon.AttackSet(true);
+                weapon.AttackAnimationSet(true);
                 break;
             case "Dead":
                 anim.SetInteger("StateNum", 4);
-                weapon.DeadSet(true);
+                weapon.DeadAnimationSet(true);
+                survive = false;
                 break;
+        }
+    }
+
+    public void TakeDamage(IBattleEntity attacker, int dmg)
+    {
+        if(!survive) { return; }    
+
+        hp -= dmg;
+
+        if (hp <= 0)
+        {
+            isAttacked = true;
+        }
+        else
+        {
+            isAttacked = true;
         }
     }
 }
