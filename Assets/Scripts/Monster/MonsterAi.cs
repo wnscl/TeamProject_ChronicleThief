@@ -84,13 +84,13 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
 
     protected IEnumerator MonsterStateRepeater(MonsterAiState nextState)
     {
-        Debug.Log("스테이트머신 가동");
+        //Debug.Log("스테이트머신 가동");
         while (survive)
         {
             if (isSpawn)
             {
                 yield return StartCoroutine(Idle());
-                Debug.Log($"아이들 작동");
+                //Debug.Log($"아이들 작동");
             }
             nowState = nextState;
 
@@ -99,31 +99,31 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
                 case MonsterAiState.Spawn:
                     yield return StartCoroutine(Spawn());
                     nextState = DecideNextState();
-                    Debug.Log($"상태결정 {nowState}");
+                    //Debug.Log($"상태결정 {nowState}");
                     break;
 
                 case MonsterAiState.Chase:
                     yield return StartCoroutine(Chase());
                     nextState = DecideNextState();
-                    Debug.Log($"상태결정 {nowState}");
+                    //Debug.Log($"상태결정 {nowState}");
                     break;
 
                 case MonsterAiState.Attack:
                     yield return StartCoroutine(Attack());
                     nextState = DecideNextState();
-                    Debug.Log($"상태결정 {nowState}");
+                    //Debug.Log($"상태결정 {nowState}");
                     break;
 
                 case MonsterAiState.GetDamage:
                     yield return StartCoroutine(GetDamage());
                     nextState = DecideNextState();
-                    Debug.Log($"상태결정 {nowState}");
+                    //Debug.Log($"상태결정 {nowState}");
                     break;
 
                 case MonsterAiState.Dead:
                     yield return StartCoroutine(Dead());
                     nextState = DecideNextState();
-                    Debug.Log($"상태결정 {nowState}");
+                    //Debug.Log($"상태결정 {nowState}");
                     break;
             }
         }
@@ -203,7 +203,7 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
             yield return new WaitForFixedUpdate();
 
         }
-        Debug.Log("추격와일문 탈출");
+        //Debug.Log("추격와일문 탈출");
         yield break;
     }
 
