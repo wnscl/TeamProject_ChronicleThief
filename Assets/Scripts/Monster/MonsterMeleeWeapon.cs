@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class MonsterMeleeWeapon : MonoBehaviour
 {
-    Animator weaponAnim;
-    BoxCollider2D weaponCol;
-    MonsterAi mob;
+    [SerializeField] Animator weaponAnim;
+    [SerializeField] BoxCollider2D weaponCol;
+    [SerializeField] MonsterAi mob;
+    [SerializeField] PlayerController playerController;
 
     private void Awake()
     {
@@ -65,8 +66,8 @@ public class MonsterMeleeWeapon : MonoBehaviour
     {
         if ( collision != null && (collision.gameObject.layer == LayerMask.NameToLayer("Player")) )
         {
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
-            BattleSystemManager.Instance.AttackOther(mob , player);
+            playerController = collision.gameObject.GetComponent<PlayerController>();
+            BattleSystemManager.Instance.AttackOther(mob , playerController);
         }
     }
 }

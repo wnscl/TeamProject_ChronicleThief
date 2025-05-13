@@ -182,6 +182,16 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
         while (!isReadyToAttack)
         {
             float distanceOfPlayer = Vector2.Distance(transform.position, player.transform.position);
+
+            if (distanceOfPlayer <= attackRange)
+            {
+                isReadyToAttack = true;
+            }
+            if (isAttacked)
+            {
+                yield break;
+            }
+
             Vector2 playerPos = player.transform.position;
             Vector2 nowPos = transform.position;
             Vector2 direction = (playerPos - nowPos).normalized;
@@ -192,14 +202,6 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
 
             yield return new WaitForFixedUpdate();
 
-            if (distanceOfPlayer <= attackRange)
-            {
-                isReadyToAttack = true;
-            }
-            if (isAttacked)
-            {
-                yield break;
-            }
         }
         Debug.Log("추격와일문 탈출");
         yield break;
@@ -215,7 +217,10 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
         while (frameTimer < attackDuration)
             //정해진 시간 동안 반복문을 사용
         {
-
+            if (isAttacked)
+            {
+                yield break ;
+            }
 
             transform.position = nowPos;
             rigid.velocity = Vector2.zero;
@@ -226,11 +231,6 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
             //time.deltaTime update주기에 맞춤
             yield return new WaitForFixedUpdate();
             //여기서는 픽스드업데이트 프레임 단위로 사용
-        }
-
-        if (isAttacked)
-        {
-            yield break;
         }
 
         yield break;
@@ -300,6 +300,8 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
 
     public void TakeDamage(IBattleEntity attacker, int dmg)
     {
+        if(!survive) { return; }    
+
         hp -= dmg;
 
         if (hp <= 0)

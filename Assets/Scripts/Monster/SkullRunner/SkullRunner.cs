@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkullRunner : MonsterAi
+public class SkullRunner : MonsterAi, IBattleEntity
 {
     GameObject theLine;
 
