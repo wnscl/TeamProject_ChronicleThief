@@ -3,19 +3,28 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class RangeMonsterAi : MonsterAi, IBattleEntity
+
+
+public abstract class RangeMonsterAi : MonsterAi, IBattleEntity
 {
-    
-    [SerializeField] TheStone stone;
-    [SerializeField] Vector2 playerPos;
-    [SerializeField] float distanceOfPlayer;
-    [SerializeField] Vector2 spawnPoint;
+    [SerializeField] protected MonsterRangeWeapon rangeWeapon;
+    [SerializeField] protected TheStone stone;
+    [SerializeField] protected Vector2 playerPos;
+    [SerializeField] protected float distanceOfPlayer;
+    [SerializeField] protected Vector2 spawnPoint;
+    [SerializeField] protected Vector2 arrowPos;
+    [SerializeField] public float arrowSpeed;
     public GameObject arrow;
 
 
-    private void Start()
+    protected override void Awake()
     {
-        spawnPoint = transform.position;
+        rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponentInChildren<Animator>();
+        col = GetComponent<BoxCollider2D>();
+        player = FindObjectOfType<PlayerController>().gameObject;
+        rangeWeapon = GetComponentInChildren<MonsterRangeWeapon>();
+
     }
 
     protected override void LateUpdate()
@@ -124,7 +133,7 @@ public class RangeMonsterAi : MonsterAi, IBattleEntity
         float frameTimer = 0f;
         int chance = Random.Range(0, 10); 
 
-        while (frameTimer < 1f)
+        while (frameTimer < attackDuration)
         {
             if (isAttacked)
             {
@@ -146,21 +155,91 @@ public class RangeMonsterAi : MonsterAi, IBattleEntity
 
             yield return new WaitForFixedUpdate();
         }
-        if (chance < 6)
-        {
-            targetPos = player.transform.position;
-            //원거리 공격 나가게 추가
-        }
-        else
-        {
-            targetPos = stone.transform.position;
-            //원거리 공격 나가게 추가
-        }
+        CreateArrow(chance);
 
         if (isAttacked)
         {
             yield break;
         }
         yield break;
+    }
+
+
+    public void CreateArrow(float chace)
+    {
+        if (chace < 6)
+        {
+            targetPos = player.transform.position;
+            Vector2 arrowDirection = (player.transform.position - transform.position).normalized;
+            float arrowAngle = Mathf.Atan2(arrowDirection.y, arrowDirection.x) * Mathf.Rad2Deg;
+            Debug.Log($"화살 각도: {arrowAngle}");
+            arrowPos = (Vector2)transform.position + (arrowDirection * 1.5f);
+            Instantiate(arrow, arrowPos, Quaternion.Euler(0,0, arrowAngle), this.transform);
+        }
+        else
+        {
+            targetPos = stone.transform.position;
+            Vector2 arrowDirection = (stone.transform.position - transform.position).normalized;
+            float arrowAngle = Mathf.Atan2(arrowDirection.y, arrowDirection.x) * Mathf.Rad2Deg;
+            Debug.Log($"화살 각도: {arrowAngle}");
+            arrowPos = (Vector2)transform.position + (arrowDirection * 1.5f);
+            Instantiate(arrow, arrowPos, Quaternion.Euler(0, 0, arrowAngle), this.transform);
+        }
+        arrowPos = Vector2.zero;
+    }
+
+    protected override IEnumerator Spawn()
+    {
+        StartAction("Spawn");
+        yield return new WaitForSeconds(1.02f);
+        isSpawn = true;
+        rangeWeapon.ShowWeapon();
+        yield break;
+
+    }
+
+
+    public override void StopAction(string action)
+    {
+        switch (action)
+        {
+            case "dontStopMove":
+                anim.SetInteger("StateNum", 0);
+                rigid.velocity = Vector2.zero;
+                break;
+            case "All":
+                anim.SetInteger("StateNum", 0);
+                rigid.velocity = Vector2.zero;
+                rangeWeapon.MoveAnimationSet(false);
+                rangeWeapon.AttackAnimationSet(false);
+                break;
+        }
+    }
+    public override void StartAction(string action)
+    {
+        switch (action)
+        {
+            case "Spawn":
+                anim.SetInteger("StateNum", 10);
+                rangeWeapon.SpawnSetting();
+                break;
+            case "Chase":
+                anim.SetInteger("StateNum", 1);
+                rangeWeapon.MoveAnimationSet(true);
+                break;
+            case "GetDamage":
+                anim.SetInteger("StateNum", 2);
+                rangeWeapon.MoveAnimationSet(false);
+                break;
+            case "Attack":
+                anim.SetInteger("StateNum", 3);
+                rangeWeapon.AttackAnimationSet(true);
+                break;
+            case "Dead":
+                anim.SetInteger("StateNum", 4);
+                rangeWeapon.DeadAnimationSet(true);
+                survive = false;
+                break;
+        }
     }
 }

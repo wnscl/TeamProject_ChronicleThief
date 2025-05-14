@@ -27,7 +27,7 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
 
 
     [Header("move")]
-    [SerializeField] protected Vector2 targetPos;
+    [SerializeField] public Vector2 targetPos;
     [SerializeField] protected float moveSpeed;
 
     [Header("stat")]
@@ -47,15 +47,18 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
     [SerializeField] protected Animator anim;
     [SerializeField] protected BoxCollider2D col;
     [SerializeField] protected GameObject player;
+
+
     [SerializeField] protected MonsterMeleeWeapon weapon;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         col = GetComponent<BoxCollider2D>();
         player = FindObjectOfType<PlayerController>().gameObject;
         weapon = GetComponentInChildren<MonsterMeleeWeapon>();
+
     }
 
     protected virtual void LateUpdate()
