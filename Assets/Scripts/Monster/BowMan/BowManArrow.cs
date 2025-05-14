@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class BowManArrow : MonoBehaviour
@@ -42,4 +43,34 @@ public class BowManArrow : MonoBehaviour
         rigid.velocity = direction * mob.arrowSpeed;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // 1. 지형/벽 충돌 시 이펙트 생성 후 파괴
+        //if ((levelCollisionLayer.value & (1 << collision.gameObject.layer)) != 0)
+        //{
+        //    Vector2 hitPoint = collision.ClosestPoint(transform.position) - direction * 0.2f;
+        //    DestroyProjectile(hitPoint, true); // FX 생성 활성화
+        //    return; // 이후 로직 무시
+        //}
+        //// 2. 몬스터 충돌
+        //if ((weaponHandler.target.value & (1 << collision.gameObject.layer)) != 0)
+        //{
+        //    IBattleEntity target = collision.GetComponent<IBattleEntity>();
+        //    if (target != null)
+        //    {
+        //        BattleSystemManager.Instance.AttackOther(attacker, target);
+        //    }
+        //    Destroy(gameObject); // 몬스터와 충돌 시 파괴
+        //}
+        if (collision != null && (collision.gameObject.layer == LayerMask.NameToLayer("Player")))
+        {
+            //playerController = collision.gameObject.GetComponent<PlayerController>();
+            BattleSystemManager.Instance.AttackPlayer(mob.Atk);
+            Destroy(this.gameObject);
+        }
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        {
+            Destroy(this.gameObject);
+        }
+    }
 }
