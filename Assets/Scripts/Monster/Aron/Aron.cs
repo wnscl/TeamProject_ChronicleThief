@@ -21,12 +21,12 @@ public class Aron : MonoBehaviour , IBattleEntity
 
 
     [Header("basic field")]
-    [SerializeField] Rigidbody2D rigid;
+    [SerializeField] protected Rigidbody2D rigid;
     public Animator anim;
     public Animator weaponAnim;
     public SpriteRenderer weaponSprite;
-    [SerializeField] BoxCollider2D col;
-    [SerializeField] GameObject player;
+    [SerializeField] protected BoxCollider2D col;
+    [SerializeField] protected GameObject player;
     public GameObject weapon;
     //[SerializeField] protected GameObject weaponScrips;
     public GameObject fallingSpearSkillPrefab;
@@ -34,28 +34,28 @@ public class Aron : MonoBehaviour , IBattleEntity
     public GameObject attackPrefabs3;
     [SerializeField] AronState nowState;
     [SerializeField] AronState nextState;
-    [SerializeField] bool isSpawn;
+    protected bool isSpawn;
 
     [Header("move")]
     public Vector2 playerPos;
     public Vector2 directionOfPlayer;
     public float distanceOfPlayer;
-    [SerializeField] private float moveSpeed;
+    [SerializeField] protected float moveSpeed;
     public float MoveSpeed => moveSpeed;
 
     [Header("stat")]
-    [SerializeField] private bool survive;
+    [SerializeField] protected bool survive;
     public bool Survive => survive;
-    [SerializeField] private bool isAttacked;
-    [SerializeField] private bool canAttack = false;
+    [SerializeField] protected bool isAttacked;
+    [SerializeField] protected bool canAttack = false;
     [SerializeField] public string name;
-    [SerializeField] private int hp;
+    protected int hp;
     public int Hp { get { return hp; } }
-    [SerializeField] private int atk;
+    protected int atk;
     public int Atk { get { return atk; } }
-    [SerializeField] private float attackRange;
-    [SerializeField] private float attackDuration;
-    private int SelectPrefabs = 0;
+    [SerializeField] protected float attackRange;
+    [SerializeField] protected float attackDuration;
+    protected int SelectPrefabs = 0;
 
 
 
@@ -66,13 +66,20 @@ public class Aron : MonoBehaviour , IBattleEntity
         player = FindObjectOfType<PlayerController>().gameObject;
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         AronFirstSetting();
         StartCoroutine(AronStateRepeater(AronState.Chase));
     }
+
+
+
     private void FixedUpdate()
     {
+        if (!survive)
+        {
+            StartCoroutine(AronDead());
+        }
         playerPos = player.transform.position;
         directionOfPlayer = (player.transform.position - transform.position).normalized;
         distanceOfPlayer = Vector2.Distance(transform.position, playerPos);
@@ -81,14 +88,15 @@ public class Aron : MonoBehaviour , IBattleEntity
         {
             LookPlayer();
         }
-        if (nowState == AronState.Chase)
+
+        if (nowState == AronState.Chase && survive)
         {
             AronMove();
         }
 
     }
 
-    private void AronFirstSetting()
+    protected virtual void AronFirstSetting()
     {
         name = "¾Æ·Ð";
         hp = 1500;
@@ -102,6 +110,7 @@ public class Aron : MonoBehaviour , IBattleEntity
 
     private void AronMove()
     {
+
         Vector2 nextPos = directionOfPlayer * moveSpeed * Time.fixedDeltaTime;
         rigid.MovePosition(rigid.position + nextPos);
         rigid.velocity = Vector2.zero;
@@ -136,28 +145,31 @@ public class Aron : MonoBehaviour , IBattleEntity
         while (survive)
         {
             nowState = nextState;
+            StopAction();
+            yield return new WaitForSeconds(0.005f);
 
             switch (nowState)
             {
                 case AronState.Chase:
                     StartAttackAnim("Move");
                     yield return new WaitForSeconds(0.005f);
-                    while (!canAttack)
+                    while (survive)
                     {
+                        if (canAttack)
+                        {
+                            break;
+                        }
+
                         yield return null;
                     }
                     nextState = DecideNextAronState();
                     break;
 
                 case AronState.Attack:
-                    StopAction();
-                    yield return new WaitForSeconds(0.005f);
                     yield return StartCoroutine(AronAttack());
                     nextState = DecideNextAronState();
                     break;
                 case AronState.Dead:
-                    StopAction();
-                    yield return new WaitForSeconds(0.005f);
                     yield return StartCoroutine(AronDead());
                     nextState = DecideNextAronState();
                     break;
@@ -167,7 +179,7 @@ public class Aron : MonoBehaviour , IBattleEntity
     }
     private AronState DecideNextAronState()
     {
-        if (hp <= 0)
+        if (hp <= 0 || !survive)
         {
             nextState = AronState.Dead;
             return AronState.Dead;
@@ -188,13 +200,21 @@ public class Aron : MonoBehaviour , IBattleEntity
 
     private IEnumerator AronDead()
     {
+        anim.SetBool("AnyAnimEnd", true);
+        weaponAnim.SetInteger("AttackNum", 0);
+        weaponAnim.SetBool("AnyAnimEnd", true);
+        yield return new WaitForSeconds(0.005f);
+        anim.SetBool("AnyAnimEnd", false);
+        weaponAnim.SetBool("AnyAnimEnd", false);
+        yield return new WaitForSeconds(0.005f);
+
         anim.SetBool("isDead", true);
         weaponAnim.SetBool("isDead", true);
         yield return new WaitForSeconds(1f);
 
         Destroy(this.gameObject);
     }
-    private IEnumerator AronAttack()
+    protected virtual IEnumerator AronAttack()
     {
         float aniTimer = 0f;
         float skillTimer = 0f;
@@ -206,6 +226,10 @@ public class Aron : MonoBehaviour , IBattleEntity
 
         while (aniTimer < 1)
         {
+            if (!survive)
+            {
+                yield break;
+            }
             aniTimer += Time.deltaTime;
             rigid.velocity = Vector3.zero;
             yield return null;
@@ -216,6 +240,10 @@ public class Aron : MonoBehaviour , IBattleEntity
 
         while (skillTimer < attackDuration)
         {
+            if (!survive)
+            {
+                yield break;
+            }
             skillTimer += Time.deltaTime;
             rigid.velocity = Vector3.zero;
             yield return null;
@@ -226,17 +254,12 @@ public class Aron : MonoBehaviour , IBattleEntity
         yield break;
     }
 
-    private string CheckAttackPattern(int choice)
+    protected virtual string CheckAttackPattern(int choice)
     {
-        if (choice < 4)
+        if (choice < 5)
         {
             attackDuration = 5f;
             return "FallingSpear"; 
-        }
-        else if (choice >= 4 && choice < 7)
-        {
-            attackDuration = 5f;
-            return "HeartAttack";
         }
         else
         {
@@ -245,7 +268,7 @@ public class Aron : MonoBehaviour , IBattleEntity
         }
     }
 
-    private void StartAttackAnim(string attackName)
+    protected virtual void StartAttackAnim(string attackName)
     {
         switch (attackName)
         {
@@ -270,9 +293,6 @@ public class Aron : MonoBehaviour , IBattleEntity
                 anim.SetInteger("AttackNum", 10);
                 weaponAnim.SetInteger("AttackNum", 10);
                 break;
-            //case "SpearRain":
-
-            //    break;
         }
     }
 
@@ -285,29 +305,6 @@ public class Aron : MonoBehaviour , IBattleEntity
         SelectPrefabs = 0;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void TakeDamage(IBattleEntity attacker, int dmg)
     {
         if (!survive) { return; }
@@ -316,7 +313,7 @@ public class Aron : MonoBehaviour , IBattleEntity
 
         if (hp <= 0)
         {
-            isAttacked = true;
+            survive = false;
         }
         else
         {

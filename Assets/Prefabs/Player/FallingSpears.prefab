@@ -48,7 +48,7 @@ MonoBehaviour:
   warningEffectPrefab: {fileID: 2881350585812499926, guid: 093d51692229de44f83855f1ae3ef2b0, type: 3}
   skillDuration: 4
   spawnInterval: 0.2
-  spawnRadius: 3
+  spawnRadius: 5
   height: 5
   spearsPerSpawn: 4
   warningDuration: 1

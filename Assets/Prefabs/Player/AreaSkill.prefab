@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3986e729aa797e428de52ac2b025d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 1.5
-  delay: 5
-  damage: 10
+  radius: 5
+  delay: 1
+  damage: 80
   targetLayer:
     serializedVersion: 2
     m_Bits: 64

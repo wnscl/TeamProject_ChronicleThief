@@ -26,10 +26,11 @@ public class HeartAttackRe : MonoBehaviour
         while (timer < 5f)
         {
             timer += 0.5f;
-            Vector2 spawnPos = new Vector2
-                (player.transform.position.x + 2.5f,
-                player.transform.position.y);
-            Instantiate(skill, spawnPos, Quaternion.identity,this.transform);
+            float angle = Random.Range(0f, 360f);
+            float rad = angle * Mathf.Deg2Rad;
+            Vector2 direction = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+            Vector2 spawnPos = (Vector2)player.transform.position + direction * 4f;
+            Instantiate(skill, spawnPos, Quaternion.identity);
             yield return new WaitForSeconds(0.5f);
         }
         yield break;
