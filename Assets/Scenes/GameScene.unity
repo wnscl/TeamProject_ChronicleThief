@@ -2685,6 +2685,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stage
       objectReference: {fileID: 0}
+    - target: {fileID: 7819815702505018905, guid: 0512eca541172184f9056164d5f43f59, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8026537925803047023, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: scrollSpeed
       value: 2
@@ -3766,6 +3770,10 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5311524882950943088, guid: f64c81b3b6ec1cf459bc67b88f4ec56f, type: 3}
+      propertyPath: fallingSpearSkillPrefab
+      value: 
+      objectReference: {fileID: 6785063941435873637, guid: c917a1e2a667e904eb857a79be8c01a4, type: 3}
     - target: {fileID: 5357555169264218661, guid: f64c81b3b6ec1cf459bc67b88f4ec56f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
