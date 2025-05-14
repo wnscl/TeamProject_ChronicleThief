@@ -112,6 +112,8 @@ namespace UI
         }
         public void ShowSkipOnly(UnityEngine.Events.UnityAction onSkip)
         {
+            useButton.gameObject.SetActive(false);
+
             // 기존 선택용 버튼 숨기기
             HideChoice();
 
@@ -147,6 +149,7 @@ namespace UI
             
             sp.Reset();
 
+            sp.spawnOnTrigger = true;
             sp.disableSpawnTimer = true;  // 자동 해제 없음
             currentLobbySpawner = sp;
         }

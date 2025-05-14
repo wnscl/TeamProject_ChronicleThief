@@ -37,7 +37,7 @@ public class BattleSystemManager : MonoBehaviour
     [SerializeField] int stageTimer;
 
     [Header("State")]
-    [SerializeField] int waveCount;
+    [SerializeField] public int waveCount = 1;
     [SerializeField] Stage currentStage;
     [SerializeField] Stage nextStage;
 
@@ -57,8 +57,6 @@ public class BattleSystemManager : MonoBehaviour
         isInReady = false;
         isInBoss = false;
         isGameOver = false;
-        waveCount = 1;
-
     }
 
     public void AttackOther(IBattleEntity attacker, IBattleEntity target)
