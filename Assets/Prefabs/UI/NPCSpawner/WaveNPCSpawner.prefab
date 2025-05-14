@@ -92,12 +92,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ef26112f5014e4c82bce44b2ef8580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disableSpawnTimer: 0
   npcPrefabs:
   - {fileID: 9151115914093552943, guid: 2ea306a4425cdd24eb62233f050b94c6, type: 3}
   - {fileID: 9151115914093552943, guid: 469e8f7bc6b812544b7f136dc4e00767, type: 3}
   spawnPoints:
   - {fileID: 7463788715810264593}
   - {fileID: 3582969678654446536}
+  spawnOnTrigger: 1
 --- !u!1 &527319334360881305
 GameObject:
   m_ObjectHideFlags: 0

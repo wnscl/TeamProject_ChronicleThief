@@ -45,6 +45,7 @@ public class NPCSpawner : MonoBehaviour
             // 플레이어가 스포너 위를 지나가기만 해도 여기서 SpawnWaveNPC 실행
             SpawnWaveNPC();
             PlayerTouched = true;
+            Destroy(gameObject);
         }
     }
 
