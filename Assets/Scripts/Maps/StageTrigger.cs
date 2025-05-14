@@ -25,5 +25,5 @@ public class StageTrigger : MonoBehaviour
                 Debug.LogError("잘못된 nextStageIndex 값: " + nextStageIndex);
             }
         }
-    }  
+    }
 }

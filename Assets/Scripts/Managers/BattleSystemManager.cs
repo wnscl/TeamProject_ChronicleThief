@@ -37,7 +37,7 @@ public class BattleSystemManager : MonoBehaviour
     [SerializeField] int stageTimer;
 
     [Header("State")]
-    [SerializeField] int waveCount;
+    [SerializeField] public int waveCount = 1;
     [SerializeField] Stage currentStage;
     [SerializeField] Stage nextStage;
 
@@ -57,8 +57,6 @@ public class BattleSystemManager : MonoBehaviour
         isInReady = false;
         isInBoss = false;
         isGameOver = false;
-        waveCount = 1;
-
     }
 
     public void AttackOther(IBattleEntity attacker, IBattleEntity target)
@@ -116,11 +114,20 @@ public class BattleSystemManager : MonoBehaviour
                         yield return StartCoroutine(WaitForMainSpawnerTouch(20));
                     }
 
-                    // 1~9, 11~19 웨이브의 일반 NPC
+                    // 강화 npc 소환
                     UIManager.Instance.SpawnWaveSpawner(waveCount);
                     yield return StartCoroutine(WaitForWaveSpawnerTouch());
 
                     yield return new WaitForSeconds(60f);
+
+                    if (waveCount == 9)
+                    {
+                        GimmickTrigger gimmickTrigger = FindObjectOfType<GimmickTrigger>();
+                        gimmickTrigger.StageOneFloorGimic();
+                        // fadeout()
+                        // map이동 관련 메서드()
+                        // fadein()
+                    }
 
                     waveCount++;
                     nextStage = Stage.InReadyWave;
@@ -184,10 +191,12 @@ public class BattleSystemManager : MonoBehaviour
         isInBattle = true;
         stageTimer = 0;
 
+        UIManager.Instance.ShowStageTimer();
+
         while (stageTimer < 10)
         {
             Debug.Log($"{stageTimer}초 경과");
-            //UIManager.Instance.시간흐르는메서드호출(stageTimer)
+            UIManager.Instance.UpdateStageTimer(60 - stageTimer);
             switch (stageTimer)
             {
                 case 0:
@@ -210,8 +219,10 @@ public class BattleSystemManager : MonoBehaviour
             stageTimer += 1;
             yield return new WaitForSeconds(1);
         }
+
         stageTimer = 0;
         waveCount++;
+        UIManager.Instance.HideStageTimer();
         isInBattle = false;
         yield break;
     }

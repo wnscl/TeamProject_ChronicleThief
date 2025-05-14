@@ -13,6 +13,8 @@ namespace NPC
         [SerializeField] private float despawnAnimationDuration = 0.3f; // 애니메이션 재생 시간
         private bool isActive = true;
 
+        public bool useCustomUI = false; // true면 Interact가 기본 ShowChoice를 호출하지 않고 INPCFunction.Execute 만 실행.
+
         private INPCFunction npcFunction;  // NPC 고유 기능
         private Animator animator;
 
@@ -59,6 +61,14 @@ namespace NPC
         {
             if (!isActive) return;
 
+            // --- 2. useCustomUI 가 켜져 있으면, 기본 ShowChoice 로직 대신 INPCFunction.Execute 만 호출 ---
+            if (useCustomUI && npcFunction != null)
+            {
+                npcFunction.Execute(interactor);
+                return;
+            }
+
+            // --- 3. 기본 UI 흐름: ShowChoice + HideDialogAfterDelay ---
             UIManager.Instance.ShowChoice(
                 npcName,
                 dialogueLines[0],
@@ -71,9 +81,7 @@ namespace NPC
                 // “건너뛰기” 선택 시
                 () =>
                 {
-                    // 1) 대사 보여주고
                     UIManager.Instance.ShowDialog(npcName, dialogueLines[2]);
-                    // 2) 1초 뒤 숨기기 시작
                     StartCoroutine(HideDialogAfterDelay(1f));
                 }
             );
