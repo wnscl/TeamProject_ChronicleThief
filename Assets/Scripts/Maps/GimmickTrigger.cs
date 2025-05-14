@@ -35,17 +35,17 @@ public class GimmickTrigger : MonoBehaviour
             StageOneFloorGimic();
         }
 
-        // if (Input.GetKeyDown(KeyCode.F))
-        // {
-        //     Debug.Log("FadeOut");
-        //     StartCoroutine(FadeInOutCoroutine(spriteRenderer, 0.3f));
-        // }
+    //    // if (Input.GetKeyDown(KeyCode.F))
+    //    // {
+    //    //     Debug.Log("FadeOut");
+    //    //     StartCoroutine(FadeInOutCoroutine(spriteRenderer, 0.3f));
+    //    // }
 
-        // if (Input.GetKeyDown(KeyCode.E))
-        // {
-        //     Debug.Log("FadeOut");
-        //     StartCoroutine(FadeOutCoroutine(spriteRenderer, 0.3f));
-        // }
+    //    // if (Input.GetKeyDown(KeyCode.E))
+    //    // {
+    //    //     Debug.Log("FadeOut");
+    //    //     StartCoroutine(FadeOutCoroutine(spriteRenderer, 0.3f));
+    //    // }
     }
 
     //테스트용
