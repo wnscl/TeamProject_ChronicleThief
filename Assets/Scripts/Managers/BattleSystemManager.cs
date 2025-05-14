@@ -380,6 +380,7 @@ public class BattleSystemManager : MonoBehaviour
             yield return null;
 
         // 이제 밟혔다 → 이 시점부터 1분 카운트다운 시작
+        Destroy(sp.gameObject);
     }
 
     // 스포너 터치 대기 (10/20 웨이브)
@@ -391,6 +392,7 @@ public class BattleSystemManager : MonoBehaviour
 
         while (sp == null || !sp.PlayerTouched)
             yield return null;
+        Destroy(sp.gameObject);
     }
 
 }
