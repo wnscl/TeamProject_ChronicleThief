@@ -31,11 +31,11 @@ public class GimmickTrigger : MonoBehaviour
 
     void Update() // 테스트용
     {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Debug.Log("지진 연출 개시");
-            StageOneFloorGimic();
-        }
+        // if (Input.GetKeyDown(KeyCode.M))
+        // {
+        //     Debug.Log("지진 연출 개시");
+        //     StageOneFloorGimic();
+        // }
 
         if (Input.GetKeyDown(KeyCode.N))
         {
@@ -117,7 +117,7 @@ public class GimmickTrigger : MonoBehaviour
     
 
     //화면 아웃 코루틴
-    public IEnumerator FadeOutCoroutine(SpriteRenderer sprite, float duration)
+    IEnumerator FadeOutCoroutine(SpriteRenderer sprite, float duration)
     {
         Debug.Log("페이드아웃 실행");
         if (sprite == null)
