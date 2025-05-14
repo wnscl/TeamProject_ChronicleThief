@@ -8,26 +8,28 @@ using UnityEngine.UI;
 public class GimmickTrigger : MonoBehaviour
 {
     private Animator animator;
-    public GameObject[] gimicFloorObj;
+    private GameObject[] gimicFloorObj;
     // private bool isTriggered = false;
     // public int nextFloorIndex = 0;
-
-    public CanvasGroup fadeCanvas;
-    public GameObject button;
+    private SpriteRenderer spriteRenderer;
+    public GameObject fadeObject;
+    // public GameObject button;
 
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // void Update() // 테스트용
-    // {
-    //     if (Input.GetKeyDown(KeyCode.F))
-    //     {
-    //         StageOneFloorGimic();
-    //     }
-    // }
+    void Update() // 테스트용
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("FadeIn");
+            StartCoroutine(FadeInCoroutine(spriteRenderer, 2f));
+        }
+    }
 
     //테스트용
     // private void OnTriggerEnter2D(Collider2D collision)
@@ -39,13 +41,6 @@ public class GimmickTrigger : MonoBehaviour
     //     }
     // }
 
-    //페이드인 테스트용 버튼
-    public void FadeInButton()
-    {
-        Debug.Log("FadeIn");
-        // button.SetActive(false);
-        StartCoroutine(FadeInCoroutine(fadeCanvas, 2f));
-    }
 
     // 배틀매니저에서 실행할 메서드.
     public void StageOneFloorGimic()
@@ -98,17 +93,17 @@ public class GimmickTrigger : MonoBehaviour
         yield break; // 코루틴 중첩 방지용.
     }
 
-    IEnumerator FadeInCoroutine(CanvasGroup canvasGroup, float duration)
+    IEnumerator FadeInCoroutine(SpriteRenderer sprite, float duration)
     {
         float time = 0;
 
         while (time < duration)
         {
-            canvasGroup.alpha = Mathf.Lerp(1, 0, time / duration);
+            sprite.color = new Color(0, 0, 0, Mathf.Lerp(1, 0, time / duration));
             time += Time.deltaTime;
             yield return null;
         }
-        canvasGroup.alpha = 0;
-        canvasGroup.gameObject.SetActive(false);
+        sprite.color = new Color(0, 0, 0, 0f);
+        sprite.gameObject.SetActive(false);
     } 
 }
