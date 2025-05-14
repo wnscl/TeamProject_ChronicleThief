@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour //IBattleEntity
     public bool IsBlink => isBlink;
     private Animator _animator;
 
+    //시범
+    //public GameObject fallingSpearSkillPrefab;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -72,7 +75,19 @@ public class PlayerController : MonoBehaviour //IBattleEntity
         //{
         //    _animator.Play("Dead"); // 강제 호출
         //}
+
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    CastFallingSpearSkill();
+        //}
     }
+
+    //void CastFallingSpearSkill()
+    //{
+    //    Vector3 targetPos = transform.position;
+    //    GameObject skill = Instantiate(fallingSpearSkillPrefab);
+    //    skill.GetComponent<FallingSpears>().Initialize(targetPos);
+    //}
 
     private bool CanBlink()
     {
