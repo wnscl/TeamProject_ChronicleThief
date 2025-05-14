@@ -45,7 +45,7 @@ public class HeartAttack : MonoBehaviour
         }
 
     }
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         nextPos = direction * 10f * Time.fixedDeltaTime;
 
