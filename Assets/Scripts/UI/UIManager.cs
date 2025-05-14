@@ -147,7 +147,6 @@ namespace UI
             
             sp.Reset();
 
-            sp.spawnOnTrigger = true;
             sp.disableSpawnTimer = true;  // 자동 해제 없음
             currentLobbySpawner = sp;
         }

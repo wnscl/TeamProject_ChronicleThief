@@ -159,4 +159,4 @@ MonoBehaviour:
   - {fileID: 9151115914093552943, guid: 441737022b1767f42acc4b8d028b603e, type: 3}
   spawnPoints:
   - {fileID: 3559976285130756759}
-  spawnOnTrigger: 0
+  spawnOnTrigger: 1

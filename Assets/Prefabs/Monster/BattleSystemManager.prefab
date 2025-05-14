@@ -44,8 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83c33556822b38c4799b8bad764df768, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skullRunner: {fileID: 3279446173402691790, guid: f748e294313b42740b35e749ede5e041, type: 3}
+  skullRunner: {fileID: 226171675661876122, guid: 60c4190b9dc5e3c45b410716760c51ee, type: 3}
   createPos: {x: 0, y: 0}
+  minPos: {x: 0, y: 0}
+  maxPos: {x: 0, y: 0}
 --- !u!1 &6143294534554698793
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,3 +93,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3107b301912723c45b3bebf17d1d3fd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  monsterFactory: {fileID: 0}
+  firstNpc: {fileID: 0}
+  isRunning: 0
+  isFirstGame: 0
+  isInBattle: 0
+  isInReady: 0
+  isInBoss: 0
+  isGameOver: 0
+  stageTimer: 0
+  waveCount: 0
+  currentStage: 0
+  nextStage: 0

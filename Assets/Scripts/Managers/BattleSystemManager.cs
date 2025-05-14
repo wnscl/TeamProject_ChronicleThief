@@ -103,7 +103,27 @@ public class BattleSystemManager : MonoBehaviour
             {
                 case Stage.InBattleWave:
                     yield return StartCoroutine(BattleWave());
-                    nextStage = DecideNextStage();
+
+                    // 10 or 20웨이브 먼저 체크해서 메인NPC만 소환
+                    if (waveCount == 10)
+                    {
+                        UIManager.Instance.SpawnWave10Spawner();
+                        yield return StartCoroutine(WaitForMainSpawnerTouch(10));
+                    }
+                    else if (waveCount == 20)
+                    {
+                        UIManager.Instance.SpawnFinalSpawner();
+                        yield return StartCoroutine(WaitForMainSpawnerTouch(20));
+                    }
+
+                    // 1~9, 11~19 웨이브의 일반 NPC
+                    UIManager.Instance.SpawnWaveSpawner(waveCount);
+                    yield return StartCoroutine(WaitForWaveSpawnerTouch());
+
+                    yield return new WaitForSeconds(60f);
+
+                    waveCount++;
+                    nextStage = Stage.InReadyWave;
                     break;
 
                 case Stage.InReadyWave:
@@ -116,6 +136,8 @@ public class BattleSystemManager : MonoBehaviour
 
                     break;
             }
+
+            yield return null;
         }
 
         yield break;
@@ -162,7 +184,7 @@ public class BattleSystemManager : MonoBehaviour
         isInBattle = true;
         stageTimer = 0;
 
-        while (stageTimer < 5)
+        while (stageTimer < 10)
         {
             Debug.Log($"{stageTimer}초 경과");
             //UIManager.Instance.시간흐르는메서드호출(stageTimer)
@@ -199,7 +221,7 @@ public class BattleSystemManager : MonoBehaviour
         isInReady = true;
         stageTimer = 0;
 
-        while (stageTimer < 5)
+        while (stageTimer < 3)
         {
             Debug.Log($"준비웨이브 {stageTimer}초경과");
             stageTimer += 1;
@@ -226,6 +248,36 @@ public class BattleSystemManager : MonoBehaviour
         stageTimer = 0;
         isInReady = false;
         yield break;
+    }
+
+    // 스포너 터치 대기 (일반 웨이브)
+    private IEnumerator WaitForWaveSpawnerTouch()
+    {
+        var sp = UIManager.Instance.currentWaveSpawner;
+
+        // spawner가 생성될 때까지 대기
+        while (sp == null)
+        {
+            yield return null;
+            sp = UIManager.Instance.currentWaveSpawner;
+        }
+
+        // 플레이어가 밟힌 순간까지 대기
+        while (!sp.PlayerTouched)
+            yield return null;
+
+        // 이제 밟혔다 → 이 시점부터 1분 카운트다운 시작
+    }
+
+    // 스포너 터치 대기 (10/20 웨이브)
+    IEnumerator WaitForMainSpawnerTouch(int wave)
+    {
+        NPCSpawner sp = (wave == 10)
+            ? UIManager.Instance.currentWave10Spawner
+            : UIManager.Instance.currentFinalSpawner;
+
+        while (sp == null || !sp.PlayerTouched)
+            yield return null;
     }
 
 }
