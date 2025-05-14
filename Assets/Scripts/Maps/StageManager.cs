@@ -11,6 +11,7 @@ public class StageManager : MonoBehaviour
     public GameObject[] stages;
     private int currentStageIndex = 0;
     public int nextStageIndex;
+    public GameObject player;
     
 
     private void Awake()

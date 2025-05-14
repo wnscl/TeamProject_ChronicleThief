@@ -26,15 +26,22 @@ public class GimmickTrigger : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Debug.Log("FadeIn");
-            StartCoroutine(FadeInCoroutine(spriteRenderer, 2f));
+            Debug.Log("지진 연출 개시");
+            StageOneFloorGimic();
+            StartCoroutine(FadeInOutCoroutine(spriteRenderer, 0.3f));
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("FadeOut");
-            StartCoroutine(FadeOutCoroutine(spriteRenderer, 2f));
-        }
+        // if (Input.GetKeyDown(KeyCode.F))
+        // {
+        //     Debug.Log("FadeOut");
+        //     StartCoroutine(FadeInOutCoroutine(spriteRenderer, 0.3f));
+        // }
+
+        // if (Input.GetKeyDown(KeyCode.E))
+        // {
+        //     Debug.Log("FadeOut");
+        //     StartCoroutine(FadeOutCoroutine(spriteRenderer, 0.3f));
+        // }
     }
 
     //테스트용
@@ -94,11 +101,10 @@ public class GimmickTrigger : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
         }
-        // StartCoroutine(FadeOutSprite(mySpriteRenderer, 2f));
-
-        yield break; // 코루틴 중첩 방지용.
+        // StartCoroutine(FadeInOutCoroutine(spriteRenderer, 0.3f));
     }
 
+    //화면 인 코루틴
     IEnumerator FadeInCoroutine(SpriteRenderer sprite, float duration)
     {
         float time = 0;
@@ -110,10 +116,25 @@ public class GimmickTrigger : MonoBehaviour
             yield return null;
         }
         sprite.color = new Color(0, 0, 0, 0f);
-        sprite.gameObject.SetActive(false);
+        // sprite.gameObject.SetActive(false);
     }
 
-    IEnumerator FadeOutCoroutine(SpriteRenderer sprite, float duration)
+    //화면 아웃 코루틴
+    // IEnumerator FadeOutCoroutine(SpriteRenderer sprite, float duration)
+    // {
+    //     float time = 0;
+
+    //     while (time < duration)
+    //     {
+    //         sprite.color = new Color(0, 0, 0, Mathf.Lerp(0, 1, time / duration));
+    //         time += Time.deltaTime;
+    //         yield return null;
+    //     }
+    //     sprite.color = new Color(0, 0, 0, 1f);
+    // }
+
+    //화면 인/아웃 코루틴
+    IEnumerator FadeInOutCoroutine(SpriteRenderer sprite, float duration)
     {
         float time = 0;
 
@@ -125,6 +146,9 @@ public class GimmickTrigger : MonoBehaviour
         }
         sprite.color = new Color(0, 0, 0, 1f);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
+        StartCoroutine(FadeInCoroutine(spriteRenderer, 2f));
     }
+
+
 }
