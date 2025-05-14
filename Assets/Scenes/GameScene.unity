@@ -2009,6 +2009,10 @@ PrefabInstance:
       propertyPath: m_ColliderPaths.Array.data[21].m_ColliderPaths.Array.data[0].Array.data[3].Y
       value: -80000000
       objectReference: {fileID: 0}
+    - target: {fileID: 6020748715773312994, guid: 0512eca541172184f9056164d5f43f59, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6363064798972111285, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: m_ColliderPaths.Array.size
       value: 1
@@ -2677,6 +2681,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7212612307884463466, guid: 0512eca541172184f9056164d5f43f59, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 1167335164}
     - target: {fileID: 7629105759562313401, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -2687,7 +2695,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7819815702505018905, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8026537925803047023, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: scrollSpeed
@@ -3816,7 +3824,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6443820856758281112, guid: f64c81b3b6ec1cf459bc67b88f4ec56f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -3878,7 +3886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6228602427603112611, guid: 01399a036ce9a2549b535f71123b8a20, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4079,7 +4087,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6143294534554698793, guid: 399f739cf864a914d939d316b25afae0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4100,7 +4108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 992967906652120695, guid: 750b6161fd99af4418711285c6647c28, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4791979482111187879, guid: 750b6161fd99af4418711285c6647c28, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4255,6 +4263,11 @@ BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 7557165986818815760, guid: 0512eca541172184f9056164d5f43f59, type: 3}
   m_PrefabInstance: {fileID: 103977298}
   m_PrefabAsset: {fileID: 0}
+--- !u!212 &1167335164 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4471074851362799485, guid: 0512eca541172184f9056164d5f43f59, type: 3}
+  m_PrefabInstance: {fileID: 103977298}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1167890068 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6174686600268123490, guid: 71fdd7c53565d7748a82d82a9be845dd, type: 3}
@@ -4328,7 +4341,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5139645819784655536, guid: 71fdd7c53565d7748a82d82a9be845dd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8867914759948870588, guid: 71fdd7c53565d7748a82d82a9be845dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4675,7 +4688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7867627597641342764, guid: d976d66b1811f2d4bb453fb37213c927, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
