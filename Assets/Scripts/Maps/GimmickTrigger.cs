@@ -29,6 +29,12 @@ public class GimmickTrigger : MonoBehaviour
             Debug.Log("FadeIn");
             StartCoroutine(FadeInCoroutine(spriteRenderer, 2f));
         }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("FadeOut");
+            StartCoroutine(FadeOutCoroutine(spriteRenderer, 2f));
+        }
     }
 
     //테스트용
@@ -105,5 +111,20 @@ public class GimmickTrigger : MonoBehaviour
         }
         sprite.color = new Color(0, 0, 0, 0f);
         sprite.gameObject.SetActive(false);
-    } 
+    }
+
+    IEnumerator FadeOutCoroutine(SpriteRenderer sprite, float duration)
+    {
+        float time = 0;
+
+        while (time < duration)
+        {
+            sprite.color = new Color(0, 0, 0, Mathf.Lerp(0, 1, time / duration));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        sprite.color = new Color(0, 0, 0, 1f);
+
+        yield return new WaitForSeconds(2f);
+    }
 }
