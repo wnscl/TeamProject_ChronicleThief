@@ -2,28 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class GimmickTrigger : MonoBehaviour
 {
     private Animator animator;
-    public GameObject[] gimicFloorObj;
+    private GameObject[] gimicFloorObj;
     // private bool isTriggered = false;
     // public int nextFloorIndex = 0;
+    private SpriteRenderer spriteRenderer;
+    public GameObject fadeObject;
+    // public GameObject button;
 
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // void Update() // 테스트용
-    // {
-    //     if (Input.GetKeyDown(KeyCode.F))
-    //     {
-    //         StageOneFloorGimic();
-    //     }
-    // }
+    void Update() // 테스트용
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("FadeIn");
+            StartCoroutine(FadeInCoroutine(spriteRenderer, 2f));
+        }
+    }
 
     //테스트용
     // private void OnTriggerEnter2D(Collider2D collision)
@@ -34,6 +40,7 @@ public class GimmickTrigger : MonoBehaviour
     //         animator.SetTrigger("FloorShake");
     //     }
     // }
+
 
     // 배틀매니저에서 실행할 메서드.
     public void StageOneFloorGimic()
@@ -86,37 +93,17 @@ public class GimmickTrigger : MonoBehaviour
         yield break; // 코루틴 중첩 방지용.
     }
 
-    // IEnumerator FadeOutSprite(SpriteRenderer sprite, float duration)
-    // {
-    //     float time = 0;
-    //     Color startColor = sprite.color;
+    IEnumerator FadeInCoroutine(SpriteRenderer sprite, float duration)
+    {
+        float time = 0;
 
-    //     while (time < duration)
-    //     {
-    //         sprite.color = new Color(startColor.r, startColor.g, startColor.b, Mathf.Lerp(0f, 1f, time / duration));
-    //         time += Time.deltaTime;
-    //         yield return null;
-    //     }
-    //     sprite.color = new Color(startColor.r, startColor.g, startColor.b, 1f);
-
-    //     yield break;
-    // }
-
-    // Trigger 메서드를 통해 이동할 인덱스를 입력하면 다음 스테이지로 이동할 수 있는 로직.
-    // 기믹 연출로는 별로 좋은 방법은 아닌 듯...
-    // public void ActiveGimic(int newIndex)
-    // {
-    //     if (newIndex >= 0 && newIndex < gimicFloorObj.Length)
-    //     {
-    //         if (gimicFloorObj[currentFloorIndex] != null){
-    //             gimicFloorObj[currentFloorIndex].SetActive(false);
-    //         }
-    //         gimicFloorObj[newIndex].SetActive(true);
-    //         currentFloorIndex = newIndex;
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning("잘못된 Floor 인덱스:" + newIndex);
-    //     }
-    // }
+        while (time < duration)
+        {
+            sprite.color = new Color(0, 0, 0, Mathf.Lerp(1, 0, time / duration));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        sprite.color = new Color(0, 0, 0, 0f);
+        sprite.gameObject.SetActive(false);
+    } 
 }
