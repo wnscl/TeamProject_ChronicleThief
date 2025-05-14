@@ -40,6 +40,10 @@ namespace UI
         public GameObject spawnTimerPrefab;   // Inspector에 연결할 SpawnTimerUI 프리팹
         private SpawnTimer spawnTimer;
 
+        [Header("스테이지 타이머")]
+        public GameObject stageTimerPrefab;     // Inspector에 연결할 StageTimerPanel 프리팹
+        private StageTimer stageTimer;          // 생성된 인스턴스 참조
+
         void Awake()
         {
             if (Instance == null)
@@ -59,11 +63,16 @@ namespace UI
                 return;
             }
 
-            // (2) Canvas 하위에 SpawnTimerUI 인스턴스 생성
+            // Canvas 하위에 SpawnTimerUI 인스턴스 생성
             var go = Instantiate(spawnTimerPrefab, canvas.transform, false); // worldPositionStays 값은 false로 해줘야 RectTransform 값 그대로 유지됨
             spawnTimer = go.GetComponent<SpawnTimer>();
             if (spawnTimer == null)
                 Debug.LogError("UIManager: SpawnTimer 컴포넌트가 없습니다!");
+
+            // StageTimerUI 인스턴스 생성
+            var timerGO = Instantiate(stageTimerPrefab, canvas.transform, false);
+            stageTimer = timerGO.GetComponent<StageTimer>();
+            timerGO.SetActive(false);  // 기본은 숨김
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -132,6 +141,28 @@ namespace UI
         {
             useButton.gameObject.SetActive(false);
             skipButton.gameObject.SetActive(false);
+        }
+
+
+        public void ShowStageTimer()
+        {
+            if (stageTimer != null)
+                stageTimer.gameObject.SetActive(true);
+        }
+
+
+        // 남은 시간을 업데이트
+        public void UpdateStageTimer(int seconds)
+        {
+            if (stageTimer != null)
+                stageTimer.SetTime(seconds);
+        }
+
+        // 전투 종료 후 호출해서 타이머 숨기기
+        public void HideStageTimer()
+        {
+            if (stageTimer != null)
+                stageTimer.gameObject.SetActive(false);
         }
 
         // 1) 로비에서 바로 스포너 생성 (스폰만)

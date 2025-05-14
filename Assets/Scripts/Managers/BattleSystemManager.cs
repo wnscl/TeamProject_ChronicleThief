@@ -12,6 +12,9 @@ enum Stage
     FirstStart,
     InBattleWave,
     InReadyWave,
+    In5Wave,
+    In10Wave,
+    In20Wave,
     GameOver
 }
 
@@ -35,9 +38,12 @@ public class BattleSystemManager : MonoBehaviour
     [SerializeField] bool isInBoss;
     [SerializeField] bool isGameOver;
     [SerializeField] int stageTimer;
+    [SerializeField] bool boss1;
+    [SerializeField] bool boss2;
+    [SerializeField] bool boss3;
 
     [Header("State")]
-    [SerializeField] public int waveCount = 1;
+    [SerializeField] public int waveCount = 0;
     [SerializeField] Stage currentStage;
     [SerializeField] Stage nextStage;
 
@@ -102,33 +108,66 @@ public class BattleSystemManager : MonoBehaviour
                 case Stage.InBattleWave:
                     yield return StartCoroutine(BattleWave());
 
-                    // 10 or 20웨이브 먼저 체크해서 메인NPC만 소환
-                    if (waveCount == 10)
+                    Debug.Log($"{waveCount}wave 끝.");
+
+                    // 강화 npc 소환
+                    if (waveCount != 20)
                     {
-                        UIManager.Instance.SpawnWave10Spawner();
-                        yield return StartCoroutine(WaitForMainSpawnerTouch(10));
-                    }
-                    else if (waveCount == 20)
-                    {
-                        UIManager.Instance.SpawnFinalSpawner();
-                        yield return StartCoroutine(WaitForMainSpawnerTouch(20));
+                        UIManager.Instance.SpawnWaveSpawner(waveCount);
+                        yield return StartCoroutine(WaitForWaveSpawnerTouch());
                     }
 
-                    // 1~9, 11~19 웨이브의 일반 NPC
-                    UIManager.Instance.SpawnWaveSpawner(waveCount);
-                    yield return StartCoroutine(WaitForWaveSpawnerTouch());
+                    yield return new WaitForSeconds(5f);
 
-                    yield return new WaitForSeconds(60f);
-
-                    waveCount++;
-                    nextStage = Stage.InReadyWave;
+                    if (waveCount == 9)
+                    {
+                        GimmickTrigger gimmickTrigger = FindObjectOfType<GimmickTrigger>();
+                        gimmickTrigger.StageOneFloorGimic();
+                        yield return new WaitForSeconds(3f);
+                        // fadeout()
+                        StageManager.instance.FloorChange(StageManager.instance.player);
+                        // fadein()
+                    }
+                    nextStage = DecideNextStage();
                     break;
 
                 case Stage.InReadyWave:
+                    waveCount++;
+                    Debug.Log($"{waveCount}wave 시작.");
                     yield return StartCoroutine(ReadyWave());
                     nextStage = DecideNextStage();
                     break;
 
+                case Stage.In5Wave:
+                    yield return StartCoroutine(BossBattleWave());
+                    UIManager.Instance.SpawnWaveSpawner(waveCount);
+                    yield return StartCoroutine(WaitForWaveSpawnerTouch());
+                    yield return new WaitForSeconds(5f);
+                    Debug.Log($"{waveCount}wave 끝.");
+                    nextStage = DecideNextStage();
+                    break;
+
+                case Stage.In10Wave:
+                    yield return StartCoroutine(BossBattleWave());
+                    // StageManager.Instance.FloorChange~ 
+                    // fadeout();
+                    // yield return new WaitForSeconds(3f);
+                    // fadein();
+
+                    UIManager.Instance.SpawnWave10Spawner();
+                    yield return StartCoroutine(WaitForMainSpawnerTouch(10));
+                    UIManager.Instance.SpawnWaveSpawner(waveCount);
+                    yield return StartCoroutine(WaitForWaveSpawnerTouch());
+                    yield return new WaitForSeconds(5f);
+                    nextStage = DecideNextStage();
+                    break;
+
+                case Stage.In20Wave:
+                    yield return StartCoroutine(BossBattleWave());
+                    UIManager.Instance.SpawnFinalSpawner();
+                    yield return StartCoroutine(WaitForMainSpawnerTouch(20));
+                    nextStage = DecideNextStage();
+                    break;
                 case Stage.GameOver:
                     
 
@@ -147,7 +186,26 @@ public class BattleSystemManager : MonoBehaviour
             return Stage.GameOver;
         }
 
-        if (stageTimer <= 0 && currentStage == Stage.InBattleWave)
+        if (boss1)
+        {
+            boss1 = false;
+            return Stage.In5Wave;
+        }
+        if (boss2)
+        {
+            boss2 = false;
+            return Stage.In10Wave;
+        }
+        if (boss3)
+        {
+            boss3 = false;
+            return Stage.In20Wave;
+        }
+
+        if (stageTimer <= 0 && (currentStage == Stage.InBattleWave ||
+            currentStage == Stage.In5Wave ||
+            currentStage == Stage.In10Wave ||
+            currentStage == Stage.In20Wave))
         {
             return Stage.InReadyWave;
         }
@@ -176,16 +234,46 @@ public class BattleSystemManager : MonoBehaviour
     }
 
 
+    private IEnumerator BossBattleWave()
+    {
+        isInBattle = true;
+        stageTimer = 0;
+
+        UIManager.Instance.ShowStageTimer();
+        monsterFactory.OnMakeBossMonster();
+
+        while (stageTimer < 5)
+        {
+            Debug.Log($"{stageTimer}초 경과");
+            UIManager.Instance.UpdateStageTimer(60 - stageTimer);
+
+            if (CheckGameOver())
+            {
+                yield break;
+            }
+
+            stageTimer += 1;
+            yield return new WaitForSeconds(1);
+        }
+
+        stageTimer = 0;
+        UIManager.Instance.HideStageTimer();
+        isInBattle = false;
+        yield break;
+    }
+
 
     private IEnumerator BattleWave()
     {
         isInBattle = true;
         stageTimer = 0;
 
-        while (stageTimer < 10)
+        UIManager.Instance.ShowStageTimer();
+
+        while (stageTimer < 5)
         {
             Debug.Log($"{stageTimer}초 경과");
-            //UIManager.Instance.시간흐르는메서드호출(stageTimer)
+            UIManager.Instance.UpdateStageTimer(60 - stageTimer);
             switch (stageTimer)
             {
                 case 0:
@@ -208,8 +296,9 @@ public class BattleSystemManager : MonoBehaviour
             stageTimer += 1;
             yield return new WaitForSeconds(1);
         }
+
         stageTimer = 0;
-        waveCount++;
+        UIManager.Instance.HideStageTimer();
         isInBattle = false;
         yield break;
     }
@@ -218,6 +307,19 @@ public class BattleSystemManager : MonoBehaviour
     {
         isInReady = true;
         stageTimer = 0;
+
+        if (waveCount == 5)
+        {
+            boss1 = true;
+        }
+        if (waveCount == 10)
+        {
+            boss2 = true;
+        }
+        if (waveCount == 20)
+        {
+            boss3 = true;
+        }
 
         while (stageTimer < 3)
         {
@@ -231,22 +333,22 @@ public class BattleSystemManager : MonoBehaviour
         yield break;
     }
 
-    private IEnumerator BossWave()
-    {
-        isInReady = true;
-        stageTimer = 0;
+    //private IEnumerator BossWave()
+    //{
+    //    isInReady = true;
+    //    stageTimer = 0;
 
-        while (stageTimer < 60)
-        {
-            Debug.Log($"보스웨이브 {stageTimer}초경과");
-            stageTimer += 1;
+    //    while (stageTimer < 60)
+    //    {
+    //        Debug.Log($"보스웨이브 {stageTimer}초경과");
+    //        stageTimer += 1;
 
-            yield return new WaitForSeconds(1);
-        }
-        stageTimer = 0;
-        isInReady = false;
-        yield break;
-    }
+    //        yield return new WaitForSeconds(1);
+    //    }
+    //    stageTimer = 0;
+    //    isInReady = false;
+    //    yield break;
+    //}
 
     // 스포너 터치 대기 (일반 웨이브)
     private IEnumerator WaitForWaveSpawnerTouch()
