@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7348811815506389397}
   - component: {fileID: 4327014070147302987}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5036766454591666776}
   - component: {fileID: 3704664073721726818}
   - component: {fileID: 4198678421603288621}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TheStone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,3 +175,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ea99f233b690554995fe23779d65311, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHp: 100
+  currentHp: 0

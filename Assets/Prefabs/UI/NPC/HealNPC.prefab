@@ -165,7 +165,7 @@ MonoBehaviour:
     \uC218 \uC788\uC2B5\uB2C8\uB2E4."
   - "\uAC01 \uBB3C\uC57D\uC740 \uD55C \uBC88\uC529\uB9CC \uC0AC\uC6A9\uAC00\uB2A5\uD569\uB2C8\uB2E4.."
   - "\uC2E0\uC758 \uAC00\uD638\uAC00 \uD568\uAED8\uD558\uAE38.."
-  activeTime: 5
+  activeTime: 1
   despawnAnimationDuration: 0.3
   useCustomUI: 0
 --- !u!114 &1898808269979418461

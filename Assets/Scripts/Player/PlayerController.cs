@@ -41,7 +41,8 @@ public class PlayerController : MonoBehaviour //IBattleEntity
     private Animator _animator;
 
     //시범
-    //public GameObject fallingSpearSkillPrefab;
+    //public GameObject areaSkillPrefab;
+    //public float skillDistance = 3f;
 
     private void Awake()
     {
@@ -78,15 +79,19 @@ public class PlayerController : MonoBehaviour //IBattleEntity
 
         //if (Input.GetKeyDown(KeyCode.Q))
         //{
-        //    CastFallingSpearSkill();
+        //    CastAreaSkill();
         //}
     }
 
-    //void CastFallingSpearSkill()
+    //void CastAreaSkill()
     //{
-    //    Vector3 targetPos = transform.position;
-    //    GameObject skill = Instantiate(fallingSpearSkillPrefab);
-    //    skill.GetComponent<FallingSpears>().Initialize(targetPos);
+    //    Vector3 forward = Vector3.right; // 기본 오른쪽 (탑다운 게임에서 방향 시스템이 있다면 수정 필요)
+
+    //    // 장판 생성 위치 계산: 플레이어 앞쪽 일정 거리
+    //    Vector3 spawnPos = transform.position + forward * skillDistance;
+
+    //    // 스킬 프리팹 생성
+    //    Instantiate(areaSkillPrefab, spawnPos, Quaternion.identity);
     //}
 
     private bool CanBlink()
@@ -262,6 +267,9 @@ public class PlayerController : MonoBehaviour //IBattleEntity
     private IEnumerator HandleDeathAfterAnimation()
     {
         yield return new WaitForSeconds(2f); // 사망 애니메이션 길이만큼 대기
+
+        DeathPanelController.Instance.Show();
+
         Destroy(gameObject); // 
     }
 }

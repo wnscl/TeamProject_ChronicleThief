@@ -19,11 +19,27 @@ public class FallingSpears : MonoBehaviour
     public void Initialize(Vector3 center)
     {
         targetPosition = center;
-        StartCoroutine(ExecuteSkill());
+
     }
 
+    private void Start()
+    {
+        // 플레이어를 찾아서 자동으로 실행
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-    private IEnumerator ExecuteSkill()
+        if (player != null)
+        {
+            Vector3 targetPosition = player.transform.position;
+            StartCoroutine(ExecuteSkill(targetPosition));
+        }
+        else
+        {
+            Debug.LogWarning("플레이어를 찾을 수 없습니다. FallingSpearSkill 작동 중단.");
+            Destroy(gameObject);
+        }
+    }
+
+    private IEnumerator ExecuteSkill(Vector3 targetPosition)
     {
         GameObject warning = Instantiate(warningEffectPrefab, targetPosition, Quaternion.identity); // 경고 이펙트 생성
         warning.transform.localScale = Vector3.one * spawnRadius * 2f; // 원크기 조절

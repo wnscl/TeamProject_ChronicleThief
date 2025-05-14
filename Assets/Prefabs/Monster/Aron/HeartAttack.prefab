@@ -337,8 +337,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7361435291111858551}
-  - component: {fileID: 4619468135671335079}
   - component: {fileID: 8876117016084148636}
+  - component: {fileID: 7155314771874988382}
   m_Layer: 0
   m_Name: HeartAttack
   m_TagString: Untagged
@@ -365,26 +365,6 @@ Transform:
   - {fileID: 3308623859521837845}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4619468135671335079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7733542683869294529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7edeabb1ed77863479c7e5bef897556b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  line: {fileID: 5329192960740075480}
-  rigid: {fileID: 8876117016084148636}
-  hitBox: {fileID: 2839786439428337084}
-  aron: {fileID: 3282777237998693258}
-  weapon: {fileID: 6999580863296201421}
-  playerPos: {x: 0, y: 0}
-  direction: {x: 0, y: 0}
-  nextPos: {x: 0, y: 0}
 --- !u!50 &8876117016084148636
 Rigidbody2D:
   serializedVersion: 4
@@ -412,6 +392,26 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &7155314771874988382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7733542683869294529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7edeabb1ed77863479c7e5bef897556b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  line: {fileID: 5329192960740075480}
+  rigid: {fileID: 8876117016084148636}
+  hitBox: {fileID: 2839786439428337084}
+  theAron: {fileID: 3282777237998693258}
+  weapon: {fileID: 6999580863296201421}
+  playerPos: {x: 0, y: 0}
+  direction: {x: 0, y: 0}
+  nextPos: {x: 0, y: 0}
 --- !u!1 &8691705151955319997
 GameObject:
   m_ObjectHideFlags: 0

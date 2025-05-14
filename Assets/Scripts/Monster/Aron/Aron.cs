@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -21,13 +22,15 @@ public class Aron : MonoBehaviour , IBattleEntity
 
     [Header("basic field")]
     [SerializeField] Rigidbody2D rigid;
-    [SerializeField] Animator anim;
+    public Animator anim;
+    public Animator weaponAnim;
+    public SpriteRenderer weaponSprite;
     [SerializeField] BoxCollider2D col;
     [SerializeField] GameObject player;
-    [SerializeField] GameObject weapon;
+    public GameObject weapon;
     //[SerializeField] protected GameObject weaponScrips;
-    public GameObject attackPrefabs1;
-    public GameObject attackPrefabs2;
+    public GameObject fallingSpearSkillPrefab;
+    public GameObject HeartAttackSkillPrefab;
     public GameObject attackPrefabs3;
     [SerializeField] AronState nowState;
     [SerializeField] AronState nextState;
@@ -44,6 +47,7 @@ public class Aron : MonoBehaviour , IBattleEntity
     [SerializeField] private bool survive;
     public bool Survive => survive;
     [SerializeField] private bool isAttacked;
+    [SerializeField] private bool canAttack = false;
     [SerializeField] public string name;
     [SerializeField] private int hp;
     public int Hp { get { return hp; } }
@@ -51,20 +55,21 @@ public class Aron : MonoBehaviour , IBattleEntity
     public int Atk { get { return atk; } }
     [SerializeField] private float attackRange;
     [SerializeField] private float attackDuration;
+    private int SelectPrefabs = 0;
 
 
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
-        anim = GetComponentInChildren<Animator>();
         col = GetComponent<BoxCollider2D>();
         player = FindObjectOfType<PlayerController>().gameObject;
     }
 
     private void Start()
     {
-        
+        AronFirstSetting();
+        StartCoroutine(AronStateRepeater(AronState.Chase));
     }
     private void FixedUpdate()
     {
@@ -76,30 +81,53 @@ public class Aron : MonoBehaviour , IBattleEntity
         {
             LookPlayer();
         }
-
+        if (nowState == AronState.Chase)
+        {
+            AronMove();
+        }
 
     }
 
     private void AronFirstSetting()
     {
-
+        name = "아론";
+        hp = 1500;
+        atk = 95;
+        survive = true;
+        isAttacked = false;
+        isSpawn = false;
+        moveSpeed = 7;
+        attackRange = 2f;
     }
 
-
+    private void AronMove()
+    {
+        Vector2 nextPos = directionOfPlayer * moveSpeed * Time.fixedDeltaTime;
+        rigid.MovePosition(rigid.position + nextPos);
+        rigid.velocity = Vector2.zero;
+        if (distanceOfPlayer <= attackRange)
+        {
+            canAttack = true;
+        }
+    }
     private void LookPlayer()
     {
+        float weaponAngle = Mathf.Atan2(directionOfPlayer.y, directionOfPlayer.x) * Mathf.Rad2Deg;
+
+
         if (player != null)
         {
             if (transform.position.x > player.transform.position.x)
             {
                 transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-                //무기가 플레이어를 향하게
+
             }
             else
             {
                 transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-                //무기가 플레이어를 향하게
+
             }
+            //weapon.transform.rotation = Quaternion.Euler(0, 0, weaponAngle);
         }
     }
 
@@ -112,20 +140,26 @@ public class Aron : MonoBehaviour , IBattleEntity
             switch (nowState)
             {
                 case AronState.Chase:
-                    //yield return StartCoroutine(Chase());
+                    StartAttackAnim("Move");
+                    yield return new WaitForSeconds(0.005f);
+                    while (!canAttack)
+                    {
+                        yield return null;
+                    }
                     nextState = DecideNextAronState();
-                    //Debug.Log($"상태결정 {nowState}");
                     break;
 
                 case AronState.Attack:
-                    //yield return StartCoroutine(Attack());
+                    StopAction();
+                    yield return new WaitForSeconds(0.005f);
+                    yield return StartCoroutine(AronAttack());
                     nextState = DecideNextAronState();
-                    //Debug.Log($"상태결정 {nowState}");
                     break;
                 case AronState.Dead:
-                    //yield return StartCoroutine(Dead());
+                    StopAction();
+                    yield return new WaitForSeconds(0.005f);
+                    yield return StartCoroutine(AronDead());
                     nextState = DecideNextAronState();
-                    //Debug.Log($"상태결정 {nowState}");
                     break;
             }
             yield return null;
@@ -133,52 +167,62 @@ public class Aron : MonoBehaviour , IBattleEntity
     }
     private AronState DecideNextAronState()
     {
-
-/*        if (hp <= 0)
+        if (hp <= 0)
         {
-            nextState = MonsterAiState.Dead;
-            return MonsterAiState.Dead;
+            nextState = AronState.Dead;
+            return AronState.Dead;
         }
-
-        if (isAttacked)
+        if (canAttack)
         {
-            nextState = MonsterAiState.GetDamage;
-            return MonsterAiState.GetDamage;
+            nextState = AronState.Attack;
+            return AronState.Attack;
         }
+        //if (nowState == AronState.Attack)
+        //{
+        //    nextState = AronState.Chase;
+        //    return AronState.Chase;
+        //}
 
-        if (distanceOfPlayer <= attackRange)
-        {
-            nextState = MonsterAiState.Attack;
-            return MonsterAiState.Attack;
-        }
-
-        if (distanceOfPlayer <= chaseRange)
-        {
-            nextState = MonsterAiState.Chase;
-            return MonsterAiState.Chase;
-        }
-*/
         return AronState.Chase;
     }
 
+    private IEnumerator AronDead()
+    {
+        anim.SetBool("isDead", true);
+        weaponAnim.SetBool("isDead", true);
+        yield return new WaitForSeconds(1f);
+
+        Destroy(this.gameObject);
+    }
     private IEnumerator AronAttack()
     {
+        float aniTimer = 0f;
+        float skillTimer = 0f;
         int choice = Random.Range(0, 10);
         string attackName = CheckAttackPattern(choice);
+
         StartAttackAnim(attackName);
+        yield return new WaitForSeconds(0.005f);
 
-
-
-        while (!survive)
+        while (aniTimer < 1)
         {
-            //그 애니메이션이 실행되는 시간만큼 공격시간
+            aniTimer += Time.deltaTime;
+            rigid.velocity = Vector3.zero;
             yield return null;
         }
 
+        if (SelectPrefabs == 1) Instantiate(fallingSpearSkillPrefab, playerPos, Quaternion.identity, this.transform);
+        else if (SelectPrefabs == 2) Instantiate(HeartAttackSkillPrefab, playerPos, Quaternion.identity, this.transform);
 
-        //어택프리팹생성
+        while (skillTimer < attackDuration)
+        {
+            skillTimer += Time.deltaTime;
+            rigid.velocity = Vector3.zero;
+            yield return null;
+        }
 
         attackDuration = 0f;
+        canAttack = false;
         yield break;
     }
 
@@ -187,7 +231,7 @@ public class Aron : MonoBehaviour , IBattleEntity
         if (choice < 4)
         {
             attackDuration = 5f;
-            return "SpearStrike"; 
+            return "FallingSpear"; 
         }
         else if (choice >= 4 && choice < 7)
         {
@@ -197,7 +241,7 @@ public class Aron : MonoBehaviour , IBattleEntity
         else
         {
             attackDuration = 5f;
-            return "SpearRain";
+            return "HeartAttack";
         }
     }
 
@@ -205,20 +249,41 @@ public class Aron : MonoBehaviour , IBattleEntity
     {
         switch (attackName)
         {
-            case "SpearStrike":
-                
+            case "FallingSpear":
+                anim.SetBool("AnyAnimEnd", false);
+                weaponAnim.SetBool("AnyAnimEnd", false);
+                anim.SetInteger("AttackNum", 1);
+                weaponAnim.SetInteger("AttackNum", 1);
+                SelectPrefabs = 1;
                 break;
 
             case "HeartAttack":
-
+                anim.SetBool("AnyAnimEnd", false);
+                weaponAnim.SetBool("AnyAnimEnd", false);
+                anim.SetInteger("AttackNum", 2);
+                weaponAnim.SetInteger("AttackNum", 2);
+                SelectPrefabs = 2;
                 break;
-
-            case "SpearRain":
-
+            case "Move":
+                anim.SetBool("AnyAnimEnd", false);
+                weaponAnim.SetBool("AnyAnimEnd", false);
+                anim.SetInteger("AttackNum", 10);
+                weaponAnim.SetInteger("AttackNum", 10);
                 break;
+            //case "SpearRain":
+
+            //    break;
         }
     }
 
+    private void StopAction()
+    {
+        anim.SetBool("AnyAnimEnd", true);
+        weaponAnim.SetBool("AnyAnimEnd", true);
+        anim.SetInteger("AttackNum", 0);
+        weaponAnim.SetInteger("AttackNum", 0);
+        SelectPrefabs = 0;
+    }
 
 
 
