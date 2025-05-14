@@ -143,7 +143,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1307419320798616370, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1324648663009915478, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: m_LocalPosition.x
@@ -787,7 +787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2488527064505008632, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2630589397421551892, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: scrollSpeed
@@ -2011,7 +2011,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6363064798972111285, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: m_ColliderPaths.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6904041171712198260, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: m_ColliderPaths.Array.size
@@ -2691,7 +2691,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8536109665506162072, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: m_ColliderPaths.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8536109665506162072, guid: 0512eca541172184f9056164d5f43f59, type: 3}
       propertyPath: m_ColliderPaths.Array.data[0].m_Collider
@@ -3772,7 +3772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5357555169264218661, guid: f64c81b3b6ec1cf459bc67b88f4ec56f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -31
       objectReference: {fileID: 0}
     - target: {fileID: 5357555169264218661, guid: f64c81b3b6ec1cf459bc67b88f4ec56f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3987,7 +3987,7 @@ Transform:
   m_GameObject: {fileID: 1504785301}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: -31, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4586,7 +4586,7 @@ Transform:
   m_GameObject: {fileID: 1970978937}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: -31, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

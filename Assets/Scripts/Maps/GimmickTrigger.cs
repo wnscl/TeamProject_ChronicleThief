@@ -19,6 +19,8 @@ public class GimmickTrigger : MonoBehaviour
     public SpriteRenderer spriteRenderer; // << 참조를 하지 못하는 상황.
     public GameObject fadeObject;
 
+    
+
 
     private void Start()
     {
@@ -105,7 +107,7 @@ public class GimmickTrigger : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
-        StartCoroutine(FadeInCoroutine(spriteRenderer, 0.3f));
+        StartCoroutine(FadeOutInCoroutine(spriteRenderer, 0.3f));
         yield return new WaitForSeconds(3f);
 
         StageManager.instance.FloorChange(StageManager.instance.player);
@@ -151,19 +153,19 @@ public class GimmickTrigger : MonoBehaviour
 
     //화면 인/아웃 코루틴
     
-    // public IEnumerator FadeOutInCoroutine(SpriteRenderer sprite, float duration)
-    // {
-    //     float time = 0;
+    public IEnumerator FadeOutInCoroutine(SpriteRenderer sprite, float duration)
+    {
+        float time = 0;
 
-    //     while (time < duration)
-    //     {
-    //         sprite.color = new Color(0, 0, 0, Mathf.Lerp(0, 1, time / duration));
-    //         time += Time.deltaTime;
-    //         yield return null;
-    //     }
-    //     sprite.color = new Color(0, 0, 0, 1f);
+        while (time < duration)
+        {
+            sprite.color = new Color(0, 0, 0, Mathf.Lerp(0, 1, time / duration));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        sprite.color = new Color(0, 0, 0, 1f);
 
-    //     yield return new WaitForSeconds(2f);
-    //     StartCoroutine(FadeInCoroutine(spriteRenderer, 2f));
-    // }
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(FadeInCoroutine(spriteRenderer, 2f));
+    }
 }

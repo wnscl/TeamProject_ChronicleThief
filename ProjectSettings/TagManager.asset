@@ -8,6 +8,8 @@ TagManager:
   - ManaSprite
   - HealthSprite
   - Stage1_Floor
+  - FirePoint
+  - FireGimic
   layers:
   - Default
   - TransparentFX
