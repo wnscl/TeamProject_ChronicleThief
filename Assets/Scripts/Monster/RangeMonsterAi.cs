@@ -147,7 +147,7 @@ public abstract class RangeMonsterAi : MonsterAi, IBattleEntity
                 );
             Vector2 nowPos = transform.position;    
             Vector2 direction = (movePos - nowPos).normalized;
-            Vector2 nextPos = direction * 1f * Time.fixedDeltaTime;
+            Vector2 nextPos = direction * 2f * Time.fixedDeltaTime;
 
             rigid.MovePosition(rigid.position + nextPos);
             rigid.velocity = Vector2.zero;

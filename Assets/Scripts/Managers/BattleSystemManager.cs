@@ -149,7 +149,7 @@ public class BattleSystemManager : MonoBehaviour
 
                 case Stage.In10Wave:
                     yield return StartCoroutine(BossBattleWave());
-                    // StageManager.Instance.FloorChange~ 
+                    StageManager.instance.FloorChange(StageManager.instance.player);
                     // fadeout();
                     // yield return new WaitForSeconds(3f);
                     // fadein();
@@ -161,6 +161,7 @@ public class BattleSystemManager : MonoBehaviour
 
 
                     yield return new WaitForSeconds(5f);
+
                     nextStage = DecideNextStage();
                     break;
 
@@ -284,10 +285,20 @@ public class BattleSystemManager : MonoBehaviour
                 case 30:
                 case 40:
                 case 50:
-                    monsterFactory.OnMakeMonster();
-                    yield return new WaitForSeconds(0.001f);
-                    Debug.Log("몬스터 공장이 일합니다.");
+                    if (waveCount > 10)
+                    {
+                        monsterFactory.OnMakeStage2Monster();
+                        yield return new WaitForSeconds(0.001f);
+                        Debug.Log("몬스터 공장이 일합니다.");
+                    }
+                    else
+                    {
+                        monsterFactory.OnMakeMonster();
+                        yield return new WaitForSeconds(0.001f);
+                        Debug.Log("몬스터 공장이 일합니다.");
+                    }
                     break;
+
             }
 
             if (CheckGameOver())

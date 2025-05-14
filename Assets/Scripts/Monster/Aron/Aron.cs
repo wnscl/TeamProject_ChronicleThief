@@ -106,22 +106,23 @@ public class Aron : MonoBehaviour , IBattleEntity
             switch (nowState)
             {
                 case AronState.Chase:
-                    yield return StartCoroutine(Chase());
+                    //yield return StartCoroutine(Chase());
                     nextState = DecideNextAronState();
                     //Debug.Log($"상태결정 {nowState}");
                     break;
 
                 case AronState.Attack:
-                    yield return StartCoroutine(Attack());
+                    //yield return StartCoroutine(Attack());
                     nextState = DecideNextAronState();
                     //Debug.Log($"상태결정 {nowState}");
                     break;
                 case AronState.Dead:
-                    yield return StartCoroutine(Dead());
+                    //yield return StartCoroutine(Dead());
                     nextState = DecideNextAronState();
                     //Debug.Log($"상태결정 {nowState}");
                     break;
             }
+            yield return null;
         }
     }
     private AronState DecideNextAronState()
