@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class GimmickTrigger : MonoBehaviour
@@ -10,6 +11,9 @@ public class GimmickTrigger : MonoBehaviour
     public GameObject[] gimicFloorObj;
     // private bool isTriggered = false;
     // public int nextFloorIndex = 0;
+
+    public CanvasGroup fadeCanvas;
+    public GameObject button;
 
 
     private void Start()
@@ -34,6 +38,14 @@ public class GimmickTrigger : MonoBehaviour
     //         animator.SetTrigger("FloorShake");
     //     }
     // }
+
+    //페이드인 테스트용 버튼
+    public void FadeInButton()
+    {
+        Debug.Log("FadeIn");
+        // button.SetActive(false);
+        StartCoroutine(FadeInCoroutine(fadeCanvas, 2f));
+    }
 
     // 배틀매니저에서 실행할 메서드.
     public void StageOneFloorGimic()
@@ -86,37 +98,17 @@ public class GimmickTrigger : MonoBehaviour
         yield break; // 코루틴 중첩 방지용.
     }
 
-    // IEnumerator FadeOutSprite(SpriteRenderer sprite, float duration)
-    // {
-    //     float time = 0;
-    //     Color startColor = sprite.color;
+    IEnumerator FadeInCoroutine(CanvasGroup canvasGroup, float duration)
+    {
+        float time = 0;
 
-    //     while (time < duration)
-    //     {
-    //         sprite.color = new Color(startColor.r, startColor.g, startColor.b, Mathf.Lerp(0f, 1f, time / duration));
-    //         time += Time.deltaTime;
-    //         yield return null;
-    //     }
-    //     sprite.color = new Color(startColor.r, startColor.g, startColor.b, 1f);
-
-    //     yield break;
-    // }
-
-    // Trigger 메서드를 통해 이동할 인덱스를 입력하면 다음 스테이지로 이동할 수 있는 로직.
-    // 기믹 연출로는 별로 좋은 방법은 아닌 듯...
-    // public void ActiveGimic(int newIndex)
-    // {
-    //     if (newIndex >= 0 && newIndex < gimicFloorObj.Length)
-    //     {
-    //         if (gimicFloorObj[currentFloorIndex] != null){
-    //             gimicFloorObj[currentFloorIndex].SetActive(false);
-    //         }
-    //         gimicFloorObj[newIndex].SetActive(true);
-    //         currentFloorIndex = newIndex;
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning("잘못된 Floor 인덱스:" + newIndex);
-    //     }
-    // }
+        while (time < duration)
+        {
+            canvasGroup.alpha = Mathf.Lerp(1, 0, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        canvasGroup.alpha = 0;
+        canvasGroup.gameObject.SetActive(false);
+    } 
 }
