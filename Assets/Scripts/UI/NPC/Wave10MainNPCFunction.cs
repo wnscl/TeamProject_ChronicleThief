@@ -43,8 +43,8 @@ public class Wave10MainNPCFunction : MonoBehaviour, INPCFunction
             ui.ShowSkipOnly(() =>
             {
                 // 맵 스크롤 활성화
-                if (mapScrollA != null) mapScrollA.scrollSpeed = 1f;
-                if (mapScrollB != null) mapScrollB.scrollSpeed = 1f;
+                if (mapScrollA != null) mapScrollA.scrollSpeed = 2f;
+                if (mapScrollB != null) mapScrollB.scrollSpeed = 2f;
 
                 // 대화창에 [1]로 업데이트
                 ui.ShowDialog(speaker, npcController.dialogueLines[1]);
