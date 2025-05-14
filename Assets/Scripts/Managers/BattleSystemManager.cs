@@ -142,7 +142,7 @@ public class BattleSystemManager : MonoBehaviour
                     yield return StartCoroutine(BossBattleWave());
                     UIManager.Instance.SpawnWaveSpawner(waveCount);
                     yield return StartCoroutine(WaitForWaveSpawnerTouch());
-                    yield return new WaitForSeconds(5f);
+                    yield return new WaitForSeconds(1f);
                     Debug.Log($"{waveCount}wave 끝.");
                     nextStage = DecideNextStage();
                     break;
@@ -160,7 +160,7 @@ public class BattleSystemManager : MonoBehaviour
                     yield return StartCoroutine(WaitForMainSpawnerTouch(10));
 
 
-                    yield return new WaitForSeconds(5f);
+                    yield return new WaitForSeconds(1f);
 
                     nextStage = DecideNextStage();
                     break;
@@ -245,7 +245,7 @@ public class BattleSystemManager : MonoBehaviour
         UIManager.Instance.ShowStageTimer();
         monsterFactory.OnMakeBossMonster();
 
-        while (stageTimer < 5)
+        while (stageTimer < 1)
         {
             Debug.Log($"{stageTimer}초 경과");
             UIManager.Instance.UpdateStageTimer(60 - stageTimer);
@@ -273,7 +273,7 @@ public class BattleSystemManager : MonoBehaviour
 
         UIManager.Instance.ShowStageTimer();
 
-        while (stageTimer < 5)
+        while (stageTimer < 1)
         {
             Debug.Log($"{stageTimer}초 경과");
             UIManager.Instance.UpdateStageTimer(60 - stageTimer);
@@ -334,7 +334,7 @@ public class BattleSystemManager : MonoBehaviour
             boss3 = true;
         }
 
-        while (stageTimer < 3)
+        while (stageTimer < 1)
         {
             Debug.Log($"준비웨이브 {stageTimer}초경과");
             stageTimer += 1;

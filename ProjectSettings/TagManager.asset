@@ -8,6 +8,8 @@ TagManager:
   - ManaSprite
   - HealthSprite
   - Stage1_Floor
+  - FirePoint
+  - FireGimic
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - Obstacle
   - Enemy
   - MonsterAttackRange
-  - 
+  - TheStone
   - 
   - 
   - 

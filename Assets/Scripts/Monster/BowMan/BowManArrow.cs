@@ -9,7 +9,7 @@ public class BowManArrow : MonoBehaviour
     [SerializeField] Rigidbody2D rigid;
     [SerializeField] RangeMonsterAi mob;
     [SerializeField] PlayerController player;
-    [SerializeField] TheStone stone; 
+    [SerializeField] TheStone stone;
 
     [SerializeField] Vector2 targetPosition;
     [SerializeField] Vector2 direction;
@@ -45,9 +45,9 @@ public class BowManArrow : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision != null && 
-            (collision.gameObject.layer == 
-            LayerMask.NameToLayer("Player")) 
+        if (collision != null &&
+            (collision.gameObject.layer ==
+            LayerMask.NameToLayer("Player"))
             ||
             (collision.gameObject.layer ==
             LayerMask.NameToLayer("TheStone")))
@@ -60,8 +60,9 @@ public class BowManArrow : MonoBehaviour
             {
                 //여기에 더 스톤 데미지 받는 메서드
                 //더 스톤은 이미 어웨이크에서 참조
+                TheStone.instance.TakeDamage(mob.Atk);
             }
-            
+
             Destroy(this.gameObject);
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Obstacle"))

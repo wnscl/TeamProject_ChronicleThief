@@ -262,6 +262,9 @@ public class PlayerController : MonoBehaviour //IBattleEntity
     private IEnumerator HandleDeathAfterAnimation()
     {
         yield return new WaitForSeconds(2f); // 사망 애니메이션 길이만큼 대기
+
+        DeathPanelController.Instance.Show();
+
         Destroy(gameObject); // 
     }
 }

@@ -36,10 +36,10 @@ public class MonsterFactory : MonoBehaviour
         {
             int chance = Random.Range(0, 10);
 
-            minPos = new Vector2(-16, 12.5f);
-            maxPos = new Vector2(16,15);
-            Vector2 minPos1 = new Vector2(-16, -13);
-            Vector2 maxPos1 = new Vector2(16, -10);
+            minPos = new Vector2(-16, 12.7f);
+            maxPos = new Vector2(16,14.9f);
+            Vector2 minPos1 = new Vector2(-16, -13f);
+            Vector2 maxPos1 = new Vector2(16, -10.8f);
             float randomPosX = Random.Range(minPos.x, maxPos.x);
             float randomPosY = Random.Range(minPos.y, maxPos.y);
             float randomPosX1 = Random.Range(minPos1.x, maxPos1.x);
@@ -48,13 +48,13 @@ public class MonsterFactory : MonoBehaviour
             createPos = new Vector2(randomPosX, randomPosY);
             Vector2 createPos1 = new Vector2(randomPosX1, randomPosY1);
 
-            if (chance < 0)
+            if (chance < 5)
             {
                 Instantiate(bowMan, createPos, Quaternion.identity, this.transform);
             }
             else
             {
-                Instantiate(bowMan, createPos, Quaternion.identity, this.transform);
+                Instantiate(bowMan, createPos1, Quaternion.identity, this.transform);
             }
 
         }

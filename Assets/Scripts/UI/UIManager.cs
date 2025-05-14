@@ -49,7 +49,6 @@ namespace UI
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
                 SceneManager.sceneLoaded += OnSceneLoaded;
                 // 처음 씬도 찾아 주기
                 OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
