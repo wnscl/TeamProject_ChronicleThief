@@ -14,6 +14,7 @@ public abstract class RangeMonsterAi : MonsterAi, IBattleEntity
     [SerializeField] protected Vector2 spawnPoint;
     [SerializeField] protected Vector2 arrowPos;
     [SerializeField] public float arrowSpeed;
+    [SerializeField] public bool isTargetPlayer;
     public GameObject arrow;
 
 
@@ -146,7 +147,7 @@ public abstract class RangeMonsterAi : MonsterAi, IBattleEntity
                 );
             Vector2 nowPos = transform.position;    
             Vector2 direction = (movePos - nowPos).normalized;
-            Vector2 nextPos = direction * 0.02f * Time.fixedDeltaTime;
+            Vector2 nextPos = direction * 1f * Time.fixedDeltaTime;
 
             rigid.MovePosition(rigid.position + nextPos);
             rigid.velocity = Vector2.zero;
@@ -169,6 +170,7 @@ public abstract class RangeMonsterAi : MonsterAi, IBattleEntity
     {
         if (chace < 6)
         {
+            isTargetPlayer = true;
             targetPos = player.transform.position;
             Vector2 arrowDirection = (player.transform.position - transform.position).normalized;
             float arrowAngle = Mathf.Atan2(arrowDirection.y, arrowDirection.x) * Mathf.Rad2Deg;
@@ -178,6 +180,7 @@ public abstract class RangeMonsterAi : MonsterAi, IBattleEntity
         }
         else
         {
+            isTargetPlayer = false;
             targetPos = stone.transform.position;
             Vector2 arrowDirection = (stone.transform.position - transform.position).normalized;
             float arrowAngle = Mathf.Atan2(arrowDirection.y, arrowDirection.x) * Mathf.Rad2Deg;

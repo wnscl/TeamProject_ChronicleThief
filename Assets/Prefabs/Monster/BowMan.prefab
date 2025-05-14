@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 4534931598732347601}
   - component: {fileID: 6132479133281942819}
   - component: {fileID: 2816108251212635864}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BowMan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,11 +244,14 @@ MonoBehaviour:
   col: {fileID: 0}
   player: {fileID: 0}
   weapon: {fileID: 0}
+  rangeWeapon: {fileID: 0}
   stone: {fileID: 0}
   playerPos: {x: 0, y: 0}
   distanceOfPlayer: 0
   spawnPoint: {x: 0, y: 0}
   arrowPos: {x: 0, y: 0}
+  arrowSpeed: 0
+  isTargetPlayer: 0
   arrow: {fileID: 1102965994518609639, guid: d8a480b70b9c94240935cada474a9d09, type: 3}
 --- !u!1 &8580780203228580544
 GameObject:

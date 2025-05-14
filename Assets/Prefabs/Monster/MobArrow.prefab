@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.5596459, y: -16.63095, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2276247045367978966}
@@ -123,6 +123,7 @@ MonoBehaviour:
   rigid: {fileID: 0}
   mob: {fileID: 0}
   player: {fileID: 0}
+  stone: {fileID: 0}
   targetPosition: {x: 0, y: 0}
   direction: {x: 0, y: 0}
 --- !u!1 &2701495127765096186

@@ -8,6 +8,7 @@ public class BowManArrow : MonoBehaviour
     [SerializeField] Rigidbody2D rigid;
     [SerializeField] RangeMonsterAi mob;
     [SerializeField] PlayerController player;
+    [SerializeField] TheStone stone;
 
     [SerializeField] Vector2 targetPosition;
     [SerializeField] Vector2 direction;
@@ -18,8 +19,16 @@ public class BowManArrow : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         mob = GetComponentInParent<RangeMonsterAi>();
         player = FindObjectOfType<PlayerController>();
+        stone = FindObjectOfType<TheStone>();
 
-        targetPosition = player.transform.position;
+        if (mob.isTargetPlayer)
+        {
+            targetPosition = player.transform.position;
+        }
+        else
+        {
+            targetPosition = stone.transform.position;
+        }
         
         Vector2 goPos = new Vector2(targetPosition.x, targetPosition.y);
         Vector2 nowPos = new Vector2(transform.position.x, transform.position.y);
