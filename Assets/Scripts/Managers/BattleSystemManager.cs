@@ -114,23 +114,33 @@ public class BattleSystemManager : MonoBehaviour
                         yield return StartCoroutine(WaitForMainSpawnerTouch(20));
                     }
 
+                    waveCount++;
+                    Debug.Log($"{waveCount}wave 끝.");
+
                     // 강화 npc 소환
                     UIManager.Instance.SpawnWaveSpawner(waveCount);
                     yield return StartCoroutine(WaitForWaveSpawnerTouch());
 
-                    yield return new WaitForSeconds(60f);
+                    yield return new WaitForSeconds(10f);
 
                     if (waveCount == 9)
                     {
                         GimmickTrigger gimmickTrigger = FindObjectOfType<GimmickTrigger>();
                         gimmickTrigger.StageOneFloorGimic();
+                        yield return new WaitForSeconds(3f);
                         // fadeout()
-                        // map이동 관련 메서드()
+                        StageManager.instance.FloorChange(StageManager.instance.player);
                         // fadein()
                     }
 
-                    waveCount++;
-                    nextStage = Stage.InReadyWave;
+                    //if (waveCount == 9 || waveCount == 19)
+                    //{
+                    //    // nesxtStage = Stage.Boss~
+                    //}
+                    //else
+                    //{
+                        nextStage = Stage.InReadyWave;
+                    //}
                     break;
 
                 case Stage.InReadyWave:
@@ -221,7 +231,6 @@ public class BattleSystemManager : MonoBehaviour
         }
 
         stageTimer = 0;
-        waveCount++;
         UIManager.Instance.HideStageTimer();
         isInBattle = false;
         yield break;

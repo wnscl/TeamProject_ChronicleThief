@@ -166,8 +166,9 @@ MonoBehaviour:
   - "\uBAA8\uB4E0 \uAC15\uD654\uB294 \uD69F\uC218 \uC81C\uD55C\uC774 \uC788\uACE0
     \uD560 \uB54C \uB9C8\uB2E4 \uBE44\uC6A9\uC774 \uC99D\uAC00\uD569\uB2C8\uB2E4."
   - "\uB2E4\uC74C\uC5D0 \uB610 \uBCF4\uC790\uAD6C\uC694!"
-  activeTime: 60
+  activeTime: 10
   despawnAnimationDuration: 0.3
+  useCustomUI: 0
 --- !u!114 &238301429207171175
 MonoBehaviour:
   m_ObjectHideFlags: 0
