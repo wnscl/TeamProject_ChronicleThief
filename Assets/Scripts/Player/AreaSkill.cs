@@ -14,15 +14,31 @@ public class AreaSkill : MonoBehaviour
     public GameObject skillEffect;
 
     private Vector3 targetPosition;
+    private bool initialized = false;
 
-    //public void Initialize(Vector3 center)
-    //{
-    //    targetPosition = center;
-    //    StartCoroutine(TriggerArea());
-    //}
+    public void Initialize(Vector3 center)
+    {
+        targetPosition = center;
+        initialized = true;
+        StartCoroutine(TriggerArea());
+    }
     private void Start()
     {
-        StartCoroutine(TriggerArea());
+        if (!initialized)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+            if (player != null)
+            {
+                targetPosition = player.transform.position;
+                StartCoroutine(TriggerArea());
+            }
+            else
+            {
+                Debug.LogWarning("플레이어를 찾을 수 없습니다. AreaSkill 작동 중단.");
+                Destroy(gameObject);
+            }
+        }
     }
 
     private IEnumerator TriggerArea()
@@ -43,7 +59,6 @@ public class AreaSkill : MonoBehaviour
         }
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radius, targetLayer);
-
         foreach (var hit in hits)
         {
             if (hit.gameObject.layer == LayerMask.NameToLayer("Player"))
