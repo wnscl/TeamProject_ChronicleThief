@@ -41,6 +41,7 @@ public class BattleSystemManager : MonoBehaviour
     [SerializeField] bool boss1;
     [SerializeField] bool boss2;
     [SerializeField] bool boss3;
+    [SerializeField] int bossCount;
 
     [Header("State")]
     [SerializeField] public int waveCount = 0;
@@ -125,8 +126,14 @@ public class BattleSystemManager : MonoBehaviour
                         gimmickTrigger.StageOneFloorGimic();
                         yield return new WaitForSeconds(3f);
                         // fadeout()
+
                         StageManager.instance.FloorChange(StageManager.instance.player);
                         // fadein()
+                    }
+
+                    if (waveCount == 19)
+                    {
+                        StageManager.instance.FloorChange(StageManager.instance.player);
                     }
                     nextStage = DecideNextStage();
                     break;
@@ -166,6 +173,7 @@ public class BattleSystemManager : MonoBehaviour
                     break;
 
                 case Stage.In20Wave:
+                    yield return new WaitForSeconds(30f);
                     yield return StartCoroutine(BossBattleWave());
                     UIManager.Instance.SpawnFinalSpawner();
                     yield return StartCoroutine(WaitForMainSpawnerTouch(20));
@@ -191,16 +199,19 @@ public class BattleSystemManager : MonoBehaviour
 
         if (boss1)
         {
+            bossCount = 1;
             boss1 = false;
             return Stage.In5Wave;
         }
         if (boss2)
         {
+            bossCount = 2;
             boss2 = false;
             return Stage.In10Wave;
         }
         if (boss3)
         {
+            bossCount = 3;
             boss3 = false;
             return Stage.In20Wave;
         }
@@ -239,11 +250,15 @@ public class BattleSystemManager : MonoBehaviour
 
     private IEnumerator BossBattleWave()
     {
+        if (waveCount == 20)
+        {
+            yield break;
+        }
         isInBattle = true;
         stageTimer = 0;
 
         UIManager.Instance.ShowStageTimer();
-        monsterFactory.OnMakeBossMonster();
+        monsterFactory.OnMakeBossMonster(bossCount);
 
         while (stageTimer < 1)
         {

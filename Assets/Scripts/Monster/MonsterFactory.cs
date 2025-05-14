@@ -10,6 +10,8 @@ public class MonsterFactory : MonoBehaviour
     [SerializeField] private GameObject skullRunner;
     [SerializeField] private GameObject skullGiant;
     [SerializeField] private GameObject bowMan;
+    [SerializeField] private GameObject bossAron;
+    [SerializeField] private GameObject lastBossAron;
     [SerializeField] Vector2 createPos;
     [SerializeField] Vector2 minPos;
     [SerializeField] Vector2 maxPos;
@@ -60,11 +62,27 @@ public class MonsterFactory : MonoBehaviour
         }
     }
 
-    public void OnMakeBossMonster()
+    public void OnMakeBossMonster(int bossCount)
     {
         Vector2 spawnPos = new Vector2(0, 7);
+        Vector2 aronPos = new Vector2(0, 7);
+        Vector2 lastAronPos = new Vector2(0, 7);
 
-        Instantiate(skullGiant, spawnPos, Quaternion.identity, this.transform);
+        switch (bossCount)
+        {
+            case 1:
+                Instantiate(skullGiant, spawnPos, Quaternion.identity, this.transform);
+                break;
+
+            case 2:
+                Instantiate(bossAron, aronPos, Quaternion.identity, this.transform);
+                break;
+
+            case 3:
+                Instantiate(lastBossAron, lastAronPos, Quaternion.identity, this.transform);
+                break;
+        }
+
     }
 
     void ClearAllMonsterByName(string name)
