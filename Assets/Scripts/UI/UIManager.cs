@@ -185,7 +185,7 @@ namespace UI
             currentLobbySpawner = sp;
         }
 
-        // 2) 웨이브용 스포너 (1~9,11~19)
+        // 2) 웨이브용 스포너
         public void SpawnWaveSpawner(int wave)
         {
             if (currentWaveSpawner != null)
