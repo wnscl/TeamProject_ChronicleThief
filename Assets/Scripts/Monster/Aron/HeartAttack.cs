@@ -7,7 +7,8 @@ public class HeartAttack : MonoBehaviour
     public GameObject line;
     public Rigidbody2D rigid;
     public BoxCollider2D hitBox;
-    public GameObject aron;
+    [SerializeField] public GameObject theAron;
+    private Aron aron;
     public GameObject weapon;
     Aron boss;
     private PlayerController player;
@@ -21,11 +22,13 @@ public class HeartAttack : MonoBehaviour
     public Vector2 nextPos = Vector2.zero;
     private void Awake()
     {
+        aron = FindObjectOfType<Aron>();
         player = FindObjectOfType<PlayerController>();
         playerPos = player.transform.position;  
         direction = (player.transform.position - transform.position).normalized;
         angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
+
     }
 
     private void Update()
@@ -62,7 +65,7 @@ public class HeartAttack : MonoBehaviour
         {
             line.SetActive(false);
             hitBox.enabled = true;
-            aron.SetActive(true);
+            theAron.SetActive(true);
             weapon.SetActive(true);
             isActive = true;
         }
@@ -72,7 +75,7 @@ public class HeartAttack : MonoBehaviour
     {
         if (collision != null && (collision.gameObject.layer == LayerMask.NameToLayer("Player")))
         {
-            //BattleSystemManager.Instance.AttackPlayer();
+            BattleSystemManager.Instance.AttackPlayer(aron.Atk);
         }
     }
 
