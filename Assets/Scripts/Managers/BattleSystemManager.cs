@@ -117,6 +117,8 @@ public class BattleSystemManager : MonoBehaviour
                     break;
             }
         }
+
+        yield break;
     }
     private Stage DecideNextStage()
     {
@@ -173,6 +175,7 @@ public class BattleSystemManager : MonoBehaviour
                 case 40:
                 case 50:
                     monsterFactory.OnMakeMonster();
+                    yield return new WaitForSeconds(0.001f);
                     Debug.Log("몬스터 공장이 일합니다.");
                     break;
             }

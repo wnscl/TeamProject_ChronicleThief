@@ -23,8 +23,9 @@ public class MonsterFactory : MonoBehaviour
             float randomPosY = Random.Range(minPos.y, maxPos.y);
 
             createPos = new Vector2(randomPosX, randomPosY);
-            Instantiate(skullRunner, createPos, Quaternion.identity, this.transform);
 
+            Instantiate(skullRunner, createPos, Quaternion.identity, this.transform);
+            
         }
     }
 

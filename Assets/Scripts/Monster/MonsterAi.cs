@@ -21,8 +21,8 @@ public enum MonsterAiState
 public abstract class MonsterAi : MonoBehaviour, IBattleEntity
 {
 
-    [SerializeField] MonsterAiState nowState;
-    [SerializeField] MonsterAiState nextState;
+    [SerializeField] protected MonsterAiState nowState;
+    [SerializeField] protected MonsterAiState nextState;
     [SerializeField] protected bool isSpawn;
 
 
@@ -56,12 +56,14 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
         col = GetComponent<BoxCollider2D>();
         player = FindObjectOfType<PlayerController>().gameObject;
         weapon = GetComponentInChildren<MonsterMeleeWeapon>();
-        targetPos = player.transform.position;
     }
 
-    private void LateUpdate()
+    protected virtual void LateUpdate()
     {
-        LookPlayer();
+        if (survive)
+        {
+            LookPlayer();
+        }
     }
     protected virtual void LookPlayer()
     {
@@ -128,7 +130,7 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
             }
         }
     }
-    private MonsterAiState DecideNextState()
+    protected virtual MonsterAiState DecideNextState()
     {
         float distanceOfPlayer = Vector2.Distance(transform.position, player.transform.position);
 
@@ -169,7 +171,7 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
     protected virtual IEnumerator Spawn()
     {
         StartAction("Spawn");
-        yield return new WaitForSeconds(1.05f);
+        yield return new WaitForSeconds(1.02f);
         isSpawn = true; 
         yield break;
 
