@@ -55,6 +55,7 @@ public class AreaSkill : MonoBehaviour
         if (skillEffect != null)
         {
             GameObject effect = Instantiate(skillEffect, transform.position, Quaternion.identity);
+            effect.transform.localScale = Vector3.one * radius;
             Destroy(effect, 5f);
         }
 
