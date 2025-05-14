@@ -12,7 +12,10 @@ public class StageManager : MonoBehaviour
     private int currentStageIndex = 0;
     public int nextStageIndex;
     public GameObject player;
-    
+
+    // public GameObject fadeGimicObject;
+
+
 
     private void Awake()
     {
@@ -86,5 +89,20 @@ public class StageManager : MonoBehaviour
         {
             Debug.LogWarning($"잘못된 스테이지 인덱스: {nextStageIndex}");
         }
+        // StartFadeOut(fadeGimicObject.GetComponent<SpriteRenderer>());
     }
+
+    // void StartFadeOut(SpriteRenderer sprite)
+    // {
+    //     GimmickTrigger gimic = FindObjectOfType<GimmickTrigger>();
+
+    //     if (gimic != null)
+    //     {
+    //         StartCoroutine(gimic.FadeOutCoroutine(sprite, 2f));
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError("GimmickTrigger를 찾을 수 없음.");
+    //     }
+    // }
 }
