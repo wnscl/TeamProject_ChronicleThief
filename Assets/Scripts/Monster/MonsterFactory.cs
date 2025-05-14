@@ -8,6 +8,7 @@ using static UnityEditor.PlayerSettings;
 public class MonsterFactory : MonoBehaviour
 {
     [SerializeField] private GameObject skullRunner;
+    [SerializeField] private GameObject skullGiant;
     [SerializeField] Vector2 createPos;
     [SerializeField] Vector2 minPos;
     [SerializeField] Vector2 maxPos;
@@ -28,7 +29,12 @@ public class MonsterFactory : MonoBehaviour
             
         }
     }
+    public void OnMakeBossMonster()
+    {
+        Vector2 spawnPos = new Vector2(0, 7);
 
+        Instantiate(skullGiant, spawnPos, Quaternion.identity, this.transform);
+    }
 
     void ClearAllMonsterByName(string name)
     {
