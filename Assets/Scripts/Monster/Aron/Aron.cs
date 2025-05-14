@@ -12,6 +12,12 @@ enum AronState
 
 public class Aron : MonoBehaviour , IBattleEntity
 {
+    //창쓰는 첫번째보스
+    //1. 위로 점프를 엄청 크게 한 다음 내려오면서 콱 찍음
+    //2. 투명되고 잠시 대기 프리팹소환 프리팹은 창을 앞으로 내지르는 프리팹
+    //3. 창이 존나게 떨어지는거 
+
+
 
     [Header("basic field")]
     [SerializeField] Rigidbody2D rigid;
@@ -155,10 +161,63 @@ public class Aron : MonoBehaviour , IBattleEntity
         return AronState.Chase;
     }
 
+    private IEnumerator AronAttack()
+    {
+        int choice = Random.Range(0, 10);
+        string attackName = CheckAttackPattern(choice);
+        StartAttackAnim(attackName);
 
 
 
+        while (!survive)
+        {
+            //그 애니메이션이 실행되는 시간만큼 공격시간
+            yield return null;
+        }
 
+
+        //어택프리팹생성
+
+        attackDuration = 0f;
+        yield break;
+    }
+
+    private string CheckAttackPattern(int choice)
+    {
+        if (choice < 4)
+        {
+            attackDuration = 5f;
+            return "SpearStrike"; 
+        }
+        else if (choice >= 4 && choice < 7)
+        {
+            attackDuration = 5f;
+            return "HeartAttack";
+        }
+        else
+        {
+            attackDuration = 5f;
+            return "SpearRain";
+        }
+    }
+
+    private void StartAttackAnim(string attackName)
+    {
+        switch (attackName)
+        {
+            case "SpearStrike":
+                
+                break;
+
+            case "HeartAttack":
+
+                break;
+
+            case "SpearRain":
+
+                break;
+        }
+    }
 
 
 
