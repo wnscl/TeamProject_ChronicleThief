@@ -154,10 +154,12 @@ public class BattleSystemManager : MonoBehaviour
                     // yield return new WaitForSeconds(3f);
                     // fadein();
 
-                    UIManager.Instance.SpawnWave10Spawner();
-                    yield return StartCoroutine(WaitForMainSpawnerTouch(10));
                     UIManager.Instance.SpawnWaveSpawner(waveCount);
                     yield return StartCoroutine(WaitForWaveSpawnerTouch());
+                    UIManager.Instance.SpawnWave10Spawner();
+                    yield return StartCoroutine(WaitForMainSpawnerTouch(10));
+
+
                     yield return new WaitForSeconds(5f);
                     nextStage = DecideNextStage();
                     break;

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1032719451120142208}
   m_Layer: 0
-  m_Name: Wave10SpawnPos
+  m_Name: Wave10MainSpawnPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 691283737719120123}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 0, z: 0}
+  m_LocalPosition: {x: -2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2721,6 +2721,7 @@ Transform:
   - {fileID: 4075838633014761180}
   - {fileID: 4604100320772318095}
   - {fileID: 1032719451120142208}
+  - {fileID: 6174686600268123490}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4016762467782630427
@@ -2747,15 +2748,15 @@ MonoBehaviour:
   - {fileID: 4604100320772318095}
   - {fileID: 4604100320772318095}
   - {fileID: 1032719451120142208}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 6174686600268123490}
+  - {fileID: 6174686600268123490}
+  - {fileID: 6174686600268123490}
+  - {fileID: 6174686600268123490}
+  - {fileID: 6174686600268123490}
+  - {fileID: 6174686600268123490}
+  - {fileID: 6174686600268123490}
+  - {fileID: 6174686600268123490}
+  - {fileID: 6174686600268123490}
   currentWaveSpawner: {fileID: 0}
   lobbySpawnerPrefab: {fileID: 8732568039885270726, guid: 9849c0fe39a3b8f478560b49a4c3c3fb, type: 3}
   lobbySpawnPosition: {fileID: 4075838633014761180}
@@ -2773,6 +2774,7 @@ MonoBehaviour:
   useButton: {fileID: 1969090188719512116}
   skipButton: {fileID: 3348906482768739064}
   spawnTimerPrefab: {fileID: 570299359551628605, guid: a7161931d23cd3f49a18dc57b4eb5cc1, type: 3}
+  stageTimerPrefab: {fileID: 8253225527201804176}
 --- !u!114 &3847938090227557789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4061,6 +4063,37 @@ MonoBehaviour:
   regenUpdateInterval: 1
   GodMode: 0
   playerStats: {fileID: 0}
+--- !u!1 &7687660639360953450
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6174686600268123490}
+  m_Layer: 0
+  m_Name: Wave10SpawnPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6174686600268123490
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7687660639360953450}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8867914759948870588}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7814602530367961735
 GameObject:
   m_ObjectHideFlags: 0
@@ -4349,13 +4382,14 @@ GameObject:
   m_Component:
   - component: {fileID: 6538204939378067165}
   - component: {fileID: 6351065535514333391}
+  - component: {fileID: 4136205230373660325}
   m_Layer: 0
   m_Name: StageTimerPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6538204939378067165
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4384,6 +4418,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8253225527201804176}
   m_CullTransparentMesh: 1
+--- !u!114 &4136205230373660325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8253225527201804176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6410f7f3483ef784683b07cbab604a8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeText: {fileID: 8691425851876843097}
 --- !u!1 &8272910828727533288
 GameObject:
   m_ObjectHideFlags: 0
