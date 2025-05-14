@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,6 +70,20 @@ public class StageManager : MonoBehaviour
         else
         {
             Debug.LogWarning("잘못된 스테이지 인덱스: " + newIndex);
+        }
+    }
+
+    public void FloorChange(GameObject player)
+    {
+        int nextStageIndex = currentStageIndex + 1;
+
+        if (nextStageIndex >= 0 && nextStageIndex < stages.Length)
+        {
+            ChangeStage(nextStageIndex, player);
+        }
+        else
+        {
+            Debug.LogWarning($"잘못된 스테이지 인덱스: {nextStageIndex}");
         }
     }
 }
