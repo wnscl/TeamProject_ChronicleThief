@@ -1,63 +1,110 @@
 using UnityEngine;
 using NPC;
 using UI;
+using System.Collections;
 
-// 10웨이브 종료 후 소환되는 메인NPC의 기능 스크립트.
-// ‘Use’ 버튼을 눌렀을 때 현재 웨이브가 19이고 Ready 상태라면
-// 추후 구현할 기능(지금은 빈 메서드)을 호출하고,
-// 그렇지 않으면 Use/Skip 각각 다른 대사를 출력.
 public class Wave10MainNPCFunction : MonoBehaviour, INPCFunction
 {
     private NPCController npcController;
+    private Animator animator;
+    private bool firstTriggered = false;
+
+    private MapScroll mapScrollA;
+    private MapScroll mapScrollB;
+    private GameObject mapInteraction;
 
     void Awake()
     {
         npcController = GetComponent<NPCController>();
+        animator = GetComponent<Animator>();
+
+        var goA = GameObject.Find("InfitMap");
+        if (goA != null) mapScrollA = goA.GetComponent<MapScroll>();
+
+        var goB = GameObject.Find("InfitMap (1)");
+        if (goB != null) mapScrollB = goB.GetComponent<MapScroll>();
+
+        mapInteraction = GameObject.Find("MapInteraction");
     }
 
     public void Execute(GameObject interactor)
     {
-        // 1) 대화창에 첫 번째 대사만 띄우고, 선택창 노출
+        var ui = UIManager.Instance;
+        var bsm = BattleSystemManager.Instance;
         string speaker = npcController.npcName;
-        string line = npcController.dialogueLines[0];
-        UIManager.Instance.ShowChoice(
-            speaker,
-            line,
 
-            // “Use” 선택 시
-            () =>
+        // 첫 상호작용 전
+        if (!firstTriggered)
+        {
+            // 1) 대화창 [0]으로 열기
+            ui.ShowDialog(speaker, npcController.dialogueLines[0]);
+
+            // 2) Skip 버튼만
+            ui.ShowSkipOnly(() =>
             {
-                //// 2) 조건 검사: 현재 웨이브가 19이고 Ready 단계인지
-                //bool isReadyForUpgrade =
-                //    BattleSystemManager.Instance.CurrentWave == 19 &&
-                //    BattleSystemManager.Instance.IsInReady;
+                // 맵 스크롤 활성화
+                if (mapScrollA != null) mapScrollA.scrollSpeed = 1f;
+                if (mapScrollB != null) mapScrollB.scrollSpeed = 1f;
 
-                //if (isReadyForUpgrade)
-                //{
-                //    // TODO: 실제 기능 구현 자리
-                //    PerformSpecialFunction(interactor);
-                //}
-                //else
-                //{
-                //    // 준비가 안 됐을 때 대사
-                //    UIManager.Instance.ShowDialog(
-                //        speaker,
-                //        "아직 강화할 준비가 되지 않았습니다.");
-                //}
-            },
+                // 대화창에 [1]로 업데이트
+                ui.ShowDialog(speaker, npcController.dialogueLines[1]);
 
-            // “Skip” 선택 시
-            () =>
+                firstTriggered = true;
+
+                // 1초 뒤 대화창 닫기
+                StartCoroutine(HideDialogAfterDelay(1f));
+            });
+        }
+        // 두 번째 이후, 19웨이브 이전
+        else if (bsm.waveCount < 19)
+        {
+            // 1) 대화창 [2]로 열기
+            ui.ShowDialog(speaker, npcController.dialogueLines[2]);
+
+            // 2) Skip 버튼만
+            ui.ShowSkipOnly(() =>
             {
-                UIManager.Instance.ShowDialog(
-                    speaker,
-                    "스킵 대사.");
-            }
-        );
+                ui.ShowDialog(speaker, npcController.dialogueLines[3]);
+                StartCoroutine(HideDialogAfterDelay(1f));
+            });
+        }
+        // 19웨이브 클리어 시
+        else
+        {
+            // 1) 대화창 [4]로 열기
+            ui.ShowDialog(speaker, npcController.dialogueLines[4]);
+
+            // 2) Use + Skip 모두
+            ui.ShowChoice(
+                speaker,
+                npcController.dialogueLines[4],
+                // Use 버튼 콜백
+                () =>
+                {
+                    if (mapInteraction != null)
+                        mapInteraction.SetActive(true);
+
+                    ui.ShowDialog(speaker, npcController.dialogueLines[5]);
+
+                    // 소환 해제 애니메이터 트리거
+                    if (animator != null)
+                        animator.SetTrigger("SpawnReleased");
+
+                    StartCoroutine(HideDialogAfterDelay(1f));
+                },
+                // Skip 버튼 콜백
+                () =>
+                {
+                    ui.ShowDialog(speaker, npcController.dialogueLines[6]);
+                    StartCoroutine(HideDialogAfterDelay(1f));
+                }
+            );
+        }
     }
 
-    private void PerformSpecialFunction(GameObject interactor)
+    private IEnumerator HideDialogAfterDelay(float delay)
     {
-        Debug.Log("Wave10MainNPC: PerformSpecialFunction 호출됨");
+        yield return new WaitForSeconds(delay);
+        UIManager.Instance.HideDialog();
     }
 }
