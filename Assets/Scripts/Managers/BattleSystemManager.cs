@@ -36,7 +36,7 @@ public class BattleSystemManager : MonoBehaviour
     [SerializeField] bool isInBattle;
     [SerializeField] bool isInReady;
     [SerializeField] bool isInBoss;
-    [SerializeField] bool isGameOver;
+    [SerializeField] public bool isGameOver;
     [SerializeField] int stageTimer;
     [SerializeField] bool boss1;
     [SerializeField] bool boss2;
@@ -180,7 +180,7 @@ public class BattleSystemManager : MonoBehaviour
                     nextStage = DecideNextStage();
                     break;
                 case Stage.GameOver:
-                    
+                    //DeathPanelController.Instance.Show();
 
                     break;
             }

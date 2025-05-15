@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Spear : MonoBehaviour
 {
-    public int damage = 10;
+    public int damage = 80;
     public float destroyDelay = 2f;
 
     private void Start()
@@ -16,7 +16,7 @@ public class Spear : MonoBehaviour
     {
         if (collision != null && (collision.gameObject.layer == LayerMask.NameToLayer("Player")))
         {
-            //
+            BattleSystemManager.Instance.AttackPlayer(damage);
             Destroy(this.gameObject);
         }
 
