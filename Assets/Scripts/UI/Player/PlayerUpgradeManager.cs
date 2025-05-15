@@ -84,7 +84,7 @@ public class PlayerUpgradeManager : MonoBehaviour
         if (!TrySpend(healthCost)) return false;
 
         // 최대 체력을 5씩 증가 (HealthSystem과 연동)
-        HealthSystem.Instance.SetMaxHealth(5);
+        HealthSystem.Instance.SetMaxHealth(50);
         healthCount++;
         healthCost = Mathf.CeilToInt(healthCost * costMultiplier);
         return true;
@@ -95,7 +95,7 @@ public class PlayerUpgradeManager : MonoBehaviour
         if (speedCount >= maxUpgradesPerStat) return false;
         if (!TrySpend(speedCost)) return false;
 
-        stats.Speed += 0.5f;                                          // 이동속도 강화
+        stats.Speed += 0.2f;                                          // 이동속도 강화
         speedCount++;
         speedCost = Mathf.CeilToInt(speedCost * costMultiplier);
         return true;

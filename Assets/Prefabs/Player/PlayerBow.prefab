@@ -189,7 +189,7 @@ MonoBehaviour:
   duration: 10
   attackSpeed: 15
   spread: 1
-  perShot: 150
+  perShot: 5
   shotAngle: 5
   projectileSpawnPosition: {fileID: 7319934926604328805}
   target:
