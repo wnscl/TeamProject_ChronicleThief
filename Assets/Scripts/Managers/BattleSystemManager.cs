@@ -36,13 +36,12 @@ public class BattleSystemManager : MonoBehaviour
     [SerializeField] bool isInBattle;
     [SerializeField] bool isInReady;
     [SerializeField] bool isInBoss;
-    [SerializeField] bool isGameOver;
+    [SerializeField] public bool isGameOver;
     [SerializeField] int stageTimer;
     [SerializeField] bool boss1;
     [SerializeField] bool boss2;
     [SerializeField] bool boss3;
     [SerializeField] int bossCount;
-    [SerializeField] bool fadeOver = false;
 
     [Header("State")]
     [SerializeField] public int waveCount = 0;
@@ -134,7 +133,6 @@ public class BattleSystemManager : MonoBehaviour
 
                     //if (waveCount == 19)
                     //{
-
                     //    StageManager.instance.FloorChange(StageManager.instance.player);
                     //}
                     nextStage = DecideNextStage();
@@ -166,7 +164,7 @@ public class BattleSystemManager : MonoBehaviour
                     UIManager.Instance.SpawnWaveSpawner(waveCount);
                     yield return StartCoroutine(WaitForWaveSpawnerTouch());
                     UIManager.Instance.SpawnWave10Spawner();
-                    yield return StartCoroutine(WaitForMainSpawnerTouch(10));
+                    yield return StartCoroutine(WaitForWave10SpawnerTouch());
 
 
                     yield return new WaitForSeconds(1f);
@@ -175,22 +173,14 @@ public class BattleSystemManager : MonoBehaviour
                     break;
 
                 case Stage.In20Wave:
-                    while (!fadeOver)
-                    {
-                        if (fadeOver)
-                        {
-                            break;
-                        }
-
-                        yield return null;
-                    }
+                    yield return new WaitForSeconds(30f);
                     yield return StartCoroutine(BossBattleWave());
-                    UIManager.Instance.SpawnFinalSpawner();
-                    yield return StartCoroutine(WaitForMainSpawnerTouch(20));
+                    //UIManager.Instance.SpawnFinalSpawner();
+                    //yield return StartCoroutine(WaitForMainSpawnerTouch(20));
                     nextStage = DecideNextStage();
                     break;
                 case Stage.GameOver:
-                    
+                    //DeathPanelController.Instance.Show();
 
                     break;
             }
@@ -408,14 +398,16 @@ public class BattleSystemManager : MonoBehaviour
         Destroy(sp.gameObject);
     }
 
-    // 스포너 터치 대기 (10/20 웨이브)
-    IEnumerator WaitForMainSpawnerTouch(int wave)
+    // 스포너 터치 대기 (10웨이브)
+    private IEnumerator WaitForWave10SpawnerTouch()
     {
-        NPCSpawner sp = (wave == 10)
-            ? UIManager.Instance.currentWave10Spawner
-            : UIManager.Instance.currentFinalSpawner;
-
-        while (sp == null || !sp.PlayerTouched)
+        var sp = UIManager.Instance.currentWave10Spawner;
+        while (sp == null)
+        {
+            yield return null;
+            sp = UIManager.Instance.currentWave10Spawner;
+        }
+        while (!sp.PlayerTouched)
             yield return null;
         Destroy(sp.gameObject);
     }
