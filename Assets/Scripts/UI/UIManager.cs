@@ -25,9 +25,9 @@ namespace UI
         public Transform wave10SpawnPosition;
         [HideInInspector] public NPCSpawner currentWave10Spawner;
 
-        public GameObject finalSpawnerPrefab;      // 20웨이브용
-        public Transform finalSpawnPosition;
-        [HideInInspector] public NPCSpawner currentFinalSpawner;
+        //public GameObject finalSpawnerPrefab;      // 20웨이브용
+        //public Transform finalSpawnPosition;
+        //[HideInInspector] public NPCSpawner currentFinalSpawner;
 
         [Header("대화 UI")]
         public GameObject dialogPanel;  // 대화창 패널
@@ -223,22 +223,22 @@ namespace UI
         }
 
         // 4) 최종 20웨이브 전용 스포너
-        public void SpawnFinalSpawner()
-        {
-            if (currentFinalSpawner != null)
-                Destroy(currentFinalSpawner.gameObject);
+        //public void SpawnFinalSpawner()
+        //{
+        //    if (currentFinalSpawner != null)
+        //        Destroy(currentFinalSpawner.gameObject);
 
-            var go = Instantiate(
-                finalSpawnerPrefab,
-                finalSpawnPosition.position,
-                Quaternion.identity,
-                transform);
-            var sp = go.GetComponent<NPCSpawner>();
-            sp.Reset();
-            sp.spawnOnTrigger = true;
-            sp.disableSpawnTimer = true;
-            currentFinalSpawner = sp;
-        }
+        //    var go = Instantiate(
+        //        finalSpawnerPrefab,
+        //        finalSpawnPosition.position,
+        //        Quaternion.identity,
+        //        transform);
+        //    var sp = go.GetComponent<NPCSpawner>();
+        //    sp.Reset();
+        //    sp.spawnOnTrigger = true;
+        //    sp.disableSpawnTimer = true;
+        //    currentFinalSpawner = sp;
+        //}
 
         private void Start()
         {
