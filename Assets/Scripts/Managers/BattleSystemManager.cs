@@ -180,7 +180,7 @@ public class BattleSystemManager : MonoBehaviour
                     nextStage = DecideNextStage();
                     break;
                 case Stage.GameOver:
-                    DeathPanelController.Instance.Show();
+                    //DeathPanelController.Instance.Show();
 
                     break;
             }
