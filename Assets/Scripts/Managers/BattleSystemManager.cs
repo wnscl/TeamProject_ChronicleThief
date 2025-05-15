@@ -112,13 +112,13 @@ public class BattleSystemManager : MonoBehaviour
                     Debug.Log($"{waveCount}wave 끝.");
 
                     // 강화 npc 소환
-                    if (waveCount != 20)
+                    if (waveCount < 20)
                     {
                         UIManager.Instance.SpawnWaveSpawner(waveCount);
                         yield return StartCoroutine(WaitForWaveSpawnerTouch());
                     }
 
-                    yield return new WaitForSeconds(5f);
+                    yield return new WaitForSeconds(20f);
 
                     if (waveCount == 9)
                     {
@@ -149,7 +149,7 @@ public class BattleSystemManager : MonoBehaviour
                     yield return StartCoroutine(BossBattleWave());
                     UIManager.Instance.SpawnWaveSpawner(waveCount);
                     yield return StartCoroutine(WaitForWaveSpawnerTouch());
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(20f);
                     Debug.Log($"{waveCount}wave 끝.");
                     nextStage = DecideNextStage();
                     break;
@@ -167,7 +167,7 @@ public class BattleSystemManager : MonoBehaviour
                     yield return StartCoroutine(WaitForWave10SpawnerTouch());
 
 
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(20f);
 
                     nextStage = DecideNextStage();
                     break;
@@ -260,7 +260,7 @@ public class BattleSystemManager : MonoBehaviour
         UIManager.Instance.ShowStageTimer();
         monsterFactory.OnMakeBossMonster(bossCount);
 
-        while (stageTimer < 1)
+        while (stageTimer < 60)
         {
             Debug.Log($"{stageTimer}초 경과");
             UIManager.Instance.UpdateStageTimer(60 - stageTimer);
@@ -288,7 +288,7 @@ public class BattleSystemManager : MonoBehaviour
 
         UIManager.Instance.ShowStageTimer();
 
-        while (stageTimer < 1)
+        while (stageTimer < 20)
         {
             Debug.Log($"{stageTimer}초 경과");
             UIManager.Instance.UpdateStageTimer(60 - stageTimer);
@@ -349,7 +349,7 @@ public class BattleSystemManager : MonoBehaviour
             boss3 = true;
         }
 
-        while (stageTimer < 1)
+        while (stageTimer < 2)
         {
             Debug.Log($"준비웨이브 {stageTimer}초경과");
             stageTimer += 1;
