@@ -26,6 +26,7 @@ public class BowMan : RangeMonsterAi, IBattleEntity
         attackDuration = 1f;
         arrowSpeed = 20f;
         spawnPoint = transform.position;
+        mobGold = 150 + (BattleSystemManager.Instance.waveCount * 5);
 
         StartCoroutine(MonsterStateRepeater(MonsterAiState.Spawn));
     }

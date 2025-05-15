@@ -21,6 +21,7 @@ public class SkullGiant : MonsterAi, IBattleEntity
         attackRange = 1.9f;
         chaseRange = 12f;
         attackDuration = 1f;
+        mobGold = 500;
 
         StartCoroutine(MonsterStateRepeater(MonsterAiState.Spawn));
     }
