@@ -17,7 +17,7 @@ public class FireGimicTrigger : MonoBehaviour
         {
             isActivated = true;
             OneStepGimic();
-            StartCoroutine(ActivateFirePointsOneStep(1.5f));
+            StartCoroutine(ActivateFirePointsOneStep(1.2f));
         }
     }
 
@@ -95,7 +95,7 @@ public class FireGimicTrigger : MonoBehaviour
             Debug.Log("FirePoint 오브젝트를 찾을 수 없음.");
         }
 
-        StartCoroutine(ActivateFirePointCircle(1.5f, 0.2f));
+        StartCoroutine(ActivateFirePointCircle(1f, 0.2f));
     }
 
     IEnumerator ActivateFirePointCircle(float initialDelay, float minDelay)
@@ -126,7 +126,6 @@ public class FireGimicTrigger : MonoBehaviour
         {
             Debug.LogError("검은 화면을 찾을 수 없음.");
         }
-        
     }
 
 
@@ -144,5 +143,6 @@ public class FireGimicTrigger : MonoBehaviour
             Debug.LogError("FadeInOut 찾을 수 없음. 오브젝트 추가됬는지 확인.");
         }
     }
+    
     
 }

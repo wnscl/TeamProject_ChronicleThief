@@ -13,9 +13,25 @@ public class InteractionTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            ExitObject.SetActive(true);
-            EnterObject.SetActive(false);
-            if (!isEnterObject) //�ϴ� �ѹ���
+            if (ExitObject != null)
+            {
+                ExitObject.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("ExitObject가 설정되지 않음!");
+            }
+
+            if (EnterObject != null)
+            {
+                EnterObject.SetActive(false);
+            }
+            else
+            {
+                Debug.LogError("EnterObject가 설정되지 않음!");
+            }
+            
+            if (!isEnterObject) //�ϴ� �ѹ���
             {
                 IsEnterObject();
             }

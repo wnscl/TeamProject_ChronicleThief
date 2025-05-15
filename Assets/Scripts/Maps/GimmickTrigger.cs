@@ -16,49 +16,17 @@ public class GimmickTrigger : MonoBehaviour
 
     // public GameObject button;
 
-    public SpriteRenderer spriteRenderer; // << 참조를 하지 못하는 상황.
-    public GameObject fadeObject;
+    // public SpriteRenderer spriteRenderer; // << 참조를 하지 못하는 상황.
+    // public GameObject fadeObject;
 
-    
 
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         // spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer = fadeObject.transform.GetComponentInChildren<SpriteRenderer>(); // 객체를 자식 오브젝트에서 가져와야 한다.
+        // spriteRenderer = fadeObject.transform.GetComponentInChildren<SpriteRenderer>(); // 객체를 자식 오브젝트에서 가져와야 한다.
     }
-
-    void Update() // 테스트용
-    {
-        // if (Input.GetKeyDown(KeyCode.M))
-        // {
-        //     Debug.Log("지진 연출 개시");
-        //     StageOneFloorGimic();
-        // }
-
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            Debug.Log("FadeOut");
-            StartCoroutine(FadeInCoroutine(spriteRenderer, 2f));
-        }
-
-    //    // if (Input.GetKeyDown(KeyCode.E))
-    //    // {
-    //    //     Debug.Log("FadeOut");
-    //    //     StartCoroutine(FadeOutCoroutine(spriteRenderer, 0.3f));
-    //    // }
-    }
-
-    //테스트용
-    // private void OnTriggerEnter2D(Collider2D collision)
-    // {
-    //     if (collision.CompareTag("Player") && !isTriggered)
-    //     {
-    //         isTriggered = true;
-    //         animator.SetTrigger("FloorShake");
-    //     }
-    // }
 
 
     // 배틀매니저에서 실행할 메서드.
@@ -107,65 +75,54 @@ public class GimmickTrigger : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
-        StartCoroutine(FadeOutInCoroutine(spriteRenderer, 0.3f));
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.5f);
+
+        SpriteRenderer blackBox = GameObject.Find("Fade_In_BlackBox")?.GetComponent<SpriteRenderer>();
+
+        if (blackBox != null)
+        {
+            TriggerFadeIn(blackBox);
+        }
+        else
+        {
+            Debug.LogError("blackBox 찾을 수 없음.");
+        }
+
+        yield return new WaitForSeconds(2f);
 
         StageManager.instance.FloorChange(StageManager.instance.player);
+        TriggerFadeOut(blackBox);
 
         yield break;
     }
-    
 
-    //화면 아웃 코루틴
-    IEnumerator FadeOutCoroutine(SpriteRenderer sprite, float duration)
+    void TriggerFadeIn(SpriteRenderer spriteRenderer)
     {
-        Debug.Log("페이드아웃 실행");
-        if (sprite == null)
-        {
-            Debug.Log("sprite렌더러가 없음");
-            yield break; //코루틴 종료 키워드
-        }        
+        FadeInOut fadeScript = FindObjectOfType<FadeInOut>();
 
-        float time = 0;
-
-        while (time < duration)
+        if (fadeScript != null)
         {
-            sprite.color = new Color(0, 0, 0, Mathf.Lerp(0, 1, time / duration));
-            time += Time.deltaTime;
-            yield return null;
+            Debug.Log("FadeInCoroutine 실행.");
+            fadeScript.StartCoroutine(fadeScript.FadeInCoroutine(spriteRenderer, 2f));
         }
-        sprite.color = new Color(0, 0, 0, 1f);
+        else
+        {
+            Debug.LogError("FadeInOut 찾을 수 없음. 오브젝트 추가됐는지 확인 필요요.");
+        }
     }
 
-    IEnumerator FadeInCoroutine(SpriteRenderer sprite, float duration)
+    void TriggerFadeOut(SpriteRenderer spriteRenderer)
     {
-        float time = 0;
+        FadeInOut fadeScript = FindObjectOfType<FadeInOut>();
 
-        while (time < duration)
+        if (fadeScript != null)
         {
-            sprite.color = new Color(0, 0, 0, Mathf.Lerp(1, 0, time / duration));
-            time += Time.deltaTime;
-            yield return new WaitForFixedUpdate();
+            Debug.Log("FadeOutCoroutine 실행.");
+            fadeScript.StartCoroutine(fadeScript.FadeOutCoroutine(spriteRenderer, 2f));
         }
-        sprite.color = new Color(0, 0, 0, 0f);
-        // sprite.gameObject.SetActive(false);
-    }
-
-    //화면 인/아웃 코루틴
-    
-    public IEnumerator FadeOutInCoroutine(SpriteRenderer sprite, float duration)
-    {
-        float time = 0;
-
-        while (time < duration)
+        else
         {
-            sprite.color = new Color(0, 0, 0, Mathf.Lerp(0, 1, time / duration));
-            time += Time.deltaTime;
-            yield return null;
+            Debug.LogError("FadeInOut 찾을 수 없음. 오브젝트 추가됐는지 확인 필요.");
         }
-        sprite.color = new Color(0, 0, 0, 1f);
-
-        yield return new WaitForSeconds(2f);
-        StartCoroutine(FadeInCoroutine(spriteRenderer, 2f));
     }
 }
