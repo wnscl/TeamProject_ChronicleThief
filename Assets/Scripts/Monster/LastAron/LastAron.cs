@@ -24,10 +24,10 @@ public class LastAron : Aron, IBattleEntity
 
     protected override IEnumerator AronAttack()
     {
-        int choice = Random.Range(0, 10);
+        int chance = Random.Range(0, 10);
         float aniTimer = 0f;
         float skillTimer = 0f;
-        string attackName = CheckAttackPattern(choice);
+        string attackName = CheckAttackPattern(chance);
 
         StartAttackAnim(attackName);
         yield return new WaitForSeconds(0.005f);
@@ -45,7 +45,7 @@ public class LastAron : Aron, IBattleEntity
 
         if (SelectPrefabs == 1) Instantiate(fallingSpearSkillPrefab, playerPos, Quaternion.identity, this.transform);
         else if (SelectPrefabs == 2) Instantiate(HeartAttackSkillPrefab, playerPos, Quaternion.identity, this.transform);
-        else Instantiate(attackPrefabs3, playerPos, Quaternion.identity, this.transform);
+        else if (SelectPrefabs == 3) Instantiate(attackPrefabs3, playerPos, Quaternion.identity, this.transform);
 
         while (skillTimer < attackDuration)
         {
@@ -65,12 +65,12 @@ public class LastAron : Aron, IBattleEntity
 
     protected override string CheckAttackPattern(int choice)
     {
-        if (choice < 4)
+        if (choice < 3)
         {
             attackDuration = 5f;
             return "FallingSpear";
         }
-        else if (choice >= 4 || choice < 7)
+        else if (choice >= 3 && choice < 6)
         {
             attackDuration = 5f;
             return "HeartAttack";

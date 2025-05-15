@@ -24,6 +24,7 @@ public abstract class RangeMonsterAi : MonsterAi, IBattleEntity
         anim = GetComponentInChildren<Animator>();
         col = GetComponent<BoxCollider2D>();
         player = FindObjectOfType<PlayerController>().gameObject;
+        playerResource = FindObjectOfType<ResourcesHandler>();
         rangeWeapon = GetComponentInChildren<MonsterRangeWeapon>();
 
     }

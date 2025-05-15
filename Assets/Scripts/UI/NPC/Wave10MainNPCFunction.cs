@@ -24,7 +24,7 @@ public class Wave10MainNPCFunction : MonoBehaviour, INPCFunction
         var goB = GameObject.Find("InfitMap (1)");
         if (goB != null) mapScrollB = goB.GetComponent<MapScroll>();
 
-        mapInteraction = GameObject.Find("MapInteraction");
+        mapInteraction = GameObject.Find("Stage/Stage 2 - DungeonFloor2/InfitMap (1)/MapInteraction");
     }
 
     public void Execute(GameObject interactor)

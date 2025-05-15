@@ -32,6 +32,7 @@ public class SkullRunner : MonsterAi, IBattleEntity
         attackRange = 1f;
         chaseRange = 12f;
         attackDuration = 1f;
+        mobGold = 50 + (BattleSystemManager.Instance.waveCount * 5);
 
         StartCoroutine(MonsterStateRepeater(MonsterAiState.Spawn));
     }

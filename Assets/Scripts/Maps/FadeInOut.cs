@@ -36,5 +36,6 @@ public class FadeInOut : MonoBehaviour
         }
         sprite.color = new Color(0, 0, 0, 0f);
         Debug.Log("페이드 인 완료.");
+
     }
 }

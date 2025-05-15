@@ -41,12 +41,14 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
     [SerializeField] protected float attackRange;
     [SerializeField] protected float chaseRange;
     [SerializeField] protected float attackDuration;
+    [SerializeField] protected int mobGold;
     
     [Header("basic field")]
     [SerializeField] protected Rigidbody2D rigid;
     [SerializeField] protected Animator anim;
     [SerializeField] protected BoxCollider2D col;
     [SerializeField] protected GameObject player;
+    [SerializeField] protected ResourcesHandler playerResource;
 
 
     [SerializeField] protected MonsterMeleeWeapon weapon;
@@ -57,6 +59,7 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
         anim = GetComponentInChildren<Animator>();
         col = GetComponent<BoxCollider2D>();
         player = FindObjectOfType<PlayerController>().gameObject;
+        playerResource = FindObjectOfType<ResourcesHandler>();
         weapon = GetComponentInChildren<MonsterMeleeWeapon>();
 
     }
@@ -135,7 +138,8 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
     }
     protected virtual MonsterAiState DecideNextState()
     {
-        float distanceOfPlayer = Vector2.Distance(transform.position, player.transform.position);
+        float distanceOfPlayer = 
+            Vector2.Distance(transform.position, player.transform.position);
 
         if (hp <= 0)
         {
@@ -252,6 +256,7 @@ public abstract class MonsterAi : MonoBehaviour, IBattleEntity
     protected virtual IEnumerator Dead()
     {
         StartAction("Dead");
+        playerResource.AddGold(mobGold);
         yield return new WaitForSeconds(1f);
 
         Destroy(this.gameObject);

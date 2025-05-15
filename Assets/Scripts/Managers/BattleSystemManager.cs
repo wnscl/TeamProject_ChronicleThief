@@ -42,6 +42,7 @@ public class BattleSystemManager : MonoBehaviour
     [SerializeField] bool boss2;
     [SerializeField] bool boss3;
     [SerializeField] int bossCount;
+    [SerializeField] bool fadeOver = false;
 
     [Header("State")]
     [SerializeField] public int waveCount = 0;
@@ -131,10 +132,11 @@ public class BattleSystemManager : MonoBehaviour
                         // fadein()
                     }
 
-                    if (waveCount == 19)
-                    {
-                        StageManager.instance.FloorChange(StageManager.instance.player);
-                    }
+                    //if (waveCount == 19)
+                    //{
+
+                    //    StageManager.instance.FloorChange(StageManager.instance.player);
+                    //}
                     nextStage = DecideNextStage();
                     break;
 
@@ -173,7 +175,15 @@ public class BattleSystemManager : MonoBehaviour
                     break;
 
                 case Stage.In20Wave:
-                    yield return new WaitForSeconds(30f);
+                    while (!fadeOver)
+                    {
+                        if (fadeOver)
+                        {
+                            break;
+                        }
+
+                        yield return null;
+                    }
                     yield return StartCoroutine(BossBattleWave());
                     UIManager.Instance.SpawnFinalSpawner();
                     yield return StartCoroutine(WaitForMainSpawnerTouch(20));
