@@ -116,4 +116,29 @@ public class LastAron : Aron, IBattleEntity
                 break;
         }
     }
+
+    protected override IEnumerator AronDead()
+    {
+        anim.SetBool("AnyAnimEnd", true);
+        weaponAnim.SetInteger("AttackNum", 0);
+        weaponAnim.SetBool("AnyAnimEnd", true);
+        yield return new WaitForSeconds(0.005f);
+        anim.SetBool("AnyAnimEnd", false);
+        weaponAnim.SetBool("AnyAnimEnd", false);
+        yield return new WaitForSeconds(0.005f);
+
+        anim.SetBool("isDead", true);
+        weaponAnim.SetBool("isDead", true);
+        yield return new WaitForSeconds(1f);
+
+        Debug.Log("최종 보스 사망!");
+
+        if (BattleSystemManager.Instance != null && BattleSystemManager.Instance.waveCount == 20)
+        {
+            BattleSystemManager.Instance.isGameOver = true;
+        }
+
+        Destroy(this.gameObject);
+        DeathPanelController.Instance.Show();
+    } 
 }

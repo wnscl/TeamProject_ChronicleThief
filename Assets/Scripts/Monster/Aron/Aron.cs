@@ -198,7 +198,7 @@ public class Aron : MonoBehaviour , IBattleEntity
         return AronState.Chase;
     }
 
-    private IEnumerator AronDead()
+    protected virtual IEnumerator AronDead()
     {
         anim.SetBool("AnyAnimEnd", true);
         weaponAnim.SetInteger("AttackNum", 0);
