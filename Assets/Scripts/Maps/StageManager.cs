@@ -49,11 +49,28 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    void UpdateCurrentStage()
+    {
+        for (int i = 0; i < stages.Length; i++)
+        {
+            if (stages[i].activeSelf)
+            {
+                currentStageIndex = i;
+                Debug.Log($"스테이지 업데이트: {currentStageIndex}");
+                return;
+            }
+        }
+        Debug.LogError("활성화된 스테이지를 찾을 수 없음!: UpdateCurrentStage");
+    }
+
     public void ChangeStage(int newIndex, GameObject player)
     {
+        UpdateCurrentStage();
+        
         if (newIndex >= 0 && newIndex < stages.Length)
         {
-            if (stages[currentStageIndex] != null) {
+            if (stages[currentStageIndex] != null)
+            {
                 stages[currentStageIndex].SetActive(false);
             }
             stages[newIndex].SetActive(true);
@@ -89,20 +106,5 @@ public class StageManager : MonoBehaviour
         {
             Debug.LogWarning($"잘못된 스테이지 인덱스: {nextStageIndex}");
         }
-        // StartFadeOut(fadeGimicObject.GetComponent<SpriteRenderer>());
     }
-
-    // void StartFadeOut(SpriteRenderer sprite)
-    // {
-    //     GimmickTrigger gimic = FindObjectOfType<GimmickTrigger>();
-
-    //     if (gimic != null)
-    //     {
-    //         StartCoroutine(gimic.FadeOutCoroutine(sprite, 2f));
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("GimmickTrigger를 찾을 수 없음.");
-    //     }
-    // }
 }
